@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm | AnhTu Store Authentic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> 
+        .font-sport { font-family: 'Oswald', sans-serif; } 
+        body { font-family: 'Inter', sans-serif; }
+        .size-btn { transition: all 0.3s ease; border-color: #d1d5db; color: #1f2937; }
+        .size-btn.active { background-color: #111827; color: white; border-color: #111827; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .size-btn.out-of-stock { position: relative; opacity: 0.4; cursor: not-allowed; color: #9ca3af; }
+        .size-btn.out-of-stock::after { content: ''; position: absolute; width: 100%; height: 1.5px; background: #9ca3af; transform: rotate(-45deg); top: 50%; left: 0; }
+        #cart-sidebar.invisible { pointer-events: none; }
+        .star-btn { cursor: pointer; transition: transform 0.1s; }
+        .star-btn:hover { transform: scale(1.2); }
+    </style>
+</head>
+<body class="bg-white text-gray-900 antialiased overflow-x-hidden">
+
+    <header class="bg-black text-white p-6 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center max-w-7xl">
+            <h1 class="font-sport text-3xl font-bold tracking-tighter">
+                <a href="index.html">ARSENAL <span class="text-gray-500 font-normal">DIRECT</span></a>
+            </h1>
+            <div class="flex items-center space-x-6">
+                <a href="index.html" class="text-xs font-bold uppercase tracking-widest hover:text-red-500 transition hidden md:block">❮ Quay lại</a>
+                <button id="open-cart-btn" class="hover:text-gray-400 transition text-red-500 font-bold relative flex items-center outline-none">
+                    GIỎ HÀNG <span id="cart-count" class="ml-2 bg-red-600 text-white text-[10px] rounded-full px-2 py-0.5 min-w-[18px] text-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 px-4 max-w-7xl">
+        <div id="product-details-container" class="flex flex-col">
+            <p class="font-sport text-2xl text-center w-full py-20 animate-pulse text-gray-400">Đang tải dữ liệu sản phẩm...</p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 text-gray-500 py-6 mt-16 text-center text-xs">
+        <p>© 2026 ARSENAL DIRECT CLONE - BY ANHTU STORE Authentic</p>
+    </footer>
+
+    <div id="cart-sidebar" class="fixed inset-0 z-[100] invisible overflow-hidden">
+        <div id="cart-overlay" class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"></div>
+        <div id="cart-content" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col text-black">
+            <div class="p-6 border-b flex justify-between items-center bg-black text-white">
+                <h3 class="font-sport text-2xl font-bold uppercase tracking-tight">Giỏ hàng của bạn</h3>
+                <button id="close-cart" class="text-white text-3xl outline-none hover:text-red-500">&times;</button>
+            </div>
+            <div id="sidebar-cart-items" class="flex-grow overflow-y-auto p-6 space-y-6"></div>
+            <div class="p-6 border-t bg-gray-50 mt-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="font-bold uppercase text-gray-400 text-sm">Tổng tiền:</span>
+                    <span id="sidebar-cart-total" class="font-sport text-3xl font-bold text-black">0₫</span>
+                </div>
+                <button onclick="window.location.href='checkout.html'" class="w-full bg-red-700 text-white py-5 font-bold uppercase tracking-[0.2em] hover:bg-black transition shadow-xl outline-none text-lg flex justify-center items-center">
+                    THANH TOÁN NGAY
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        
+        let currentProduct = null;
+        let selectedSize = 'M'; 
+        let selectedQty = 1;
+        let reviewStars = 5; 
+
+        // 1. Khởi tạo
+        async function fetchProduct() {
+            try {
+                const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+                if (!response.ok) throw new Error('Sản phẩm không tồn tại');
+                currentProduct = await response.json();
+                renderProductDetails();
+                renderReviews();
+            } catch (error) {
+                document.getElementById('product-details-container').innerHTML = `<p class="text-red-600 font-bold text-center w-full text-2xl pt-20">Lỗi: Không tìm thấy sản phẩm!</p>`;
+            }
+        }
+
+        // 2. Render Giao diện chính
+        function renderProductDetails() {
+            const container = document.getElementById('product-details-container');
+            container.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-10 lg:gap-16">
+                    <div class="md:w-3/5">
+                        <div class="bg-gray-100 p-2 relative group aspect-[4/5]">
+                            <img src="${currentProduct.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                        </div>
+                    </div>
+                    <div class="md:w-2/5 flex flex-col pt-4 md:pt-0 text-left">
+                        <p class="text-gray-500 uppercase tracking-widest text-[10px] mb-1 font-bold">${currentProduct.category} | Authentic</p>
+                        <h2 class="font-bold text-3xl md:text-4xl leading-tight mb-2 text-gray-950">${currentProduct.name}</h2>
+                        <p class="text-2xl font-bold text-red-700 mb-8">${currentProduct.price.toLocaleString('vi-VN')}₫</p>
+                        
+                        <div class="mb-6">
+                            <span class="block uppercase font-bold text-xs text-gray-700 tracking-wide mb-3">Size <span id="size-label" class="text-red-700 font-medium ml-1">M</span></span>
+                            <div class="flex flex-wrap gap-2.5">
+                                <button onclick="selectSize('S')" class="size-btn w-14 h-14 border font-bold uppercase hover:border-black transition text-sm">S</button>
+                                <button onclick="selectSize('M')" class="size-btn w-14 h-14 border font-bold uppercase hover:border-black transition text-sm active">M</button>
+                                <button onclick="selectSize('L')" class="size-btn w-14 h-14 border font-bold uppercase hover:border-black transition text-sm">L</button>
+                                <button onclick="selectSize('XL')" class="size-btn w-14 h-14 border font-bold uppercase hover:border-black transition text-sm">XL</button>
+                                <button onclick="selectSize('2XL')" class="size-btn w-14 h-14 border font-bold uppercase hover:border-black transition text-sm">2XL</button>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 mb-10 items-stretch">
+                            <select onchange="selectedQty = parseInt(this.value)" class="w-20 border-2 border-gray-300 font-bold px-3 text-lg outline-none focus:border-red-700">
+                                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                            </select>
+                            <button onclick="addDetailToCart()" class="flex-grow bg-red-700 text-white py-5 font-bold uppercase tracking-[0.2em] hover:bg-red-800 transition shadow-lg text-lg outline-none">
+                                ADD TO BAG
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-20 border-t border-gray-200 pt-16 w-full">
+                    <h3 class="font-sport text-3xl font-bold uppercase mb-8">Đánh giá khách hàng</h3>
+                    <div class="flex flex-col lg:flex-row gap-12">
+                        <div class="lg:w-1/3 bg-gray-50 p-6 rounded-lg h-fit border border-gray-200">
+                            <h4 class="font-bold text-lg mb-4 uppercase">Viết đánh giá của bạn</h4>
+                            ${userInfo ? `
+                                <form onsubmit="submitReview(event)">
+                                    <div class="mb-4">
+                                        <label class="block text-xs font-bold text-gray-600 mb-2 uppercase">Chất lượng sản phẩm</label>
+                                        <div class="flex space-x-1 text-2xl text-gray-300" id="star-selector">
+                                            ${[1, 2, 3, 4, 5].map(i => `<span onclick="setRating(${i})" class="star-btn ${i<=5?'text-yellow-400':''}" data-value="${i}">★</span>`).join('')}
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-xs font-bold text-gray-600 mb-2 uppercase">Nhận xét chi tiết</label>
+                                        <textarea id="review-text" rows="4" required placeholder="Áo mặc mát không bạn?" class="w-full p-3 border outline-none focus:border-red-700 text-sm"></textarea>
+                                    </div>
+                                    <button type="submit" class="w-full bg-black text-white font-bold uppercase py-3 hover:bg-red-700 transition tracking-widest text-sm">Gửi đánh giá</button>
+                                </form>
+                            ` : `
+                                <p class="text-sm text-gray-600 mb-4">Đăng nhập để đánh giá sản phẩm này.</p>
+                                <a href="login.html" class="block w-full text-center bg-black text-white font-bold py-3 uppercase">Đăng nhập ngay</a>
+                            `}
+                        </div>
+                        <div class="lg:w-2/3" id="reviews-list-container"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // LOGIC ĐÁNH GIÁ (LIKE, DISLIKE, ADMIN REPLY, DELETE)
+        // ==========================================
+
+        window.setRating = function(stars) {
+            reviewStars = stars;
+            document.querySelectorAll('#star-selector span').forEach(el => {
+                const val = parseInt(el.getAttribute('data-value'));
+                el.className = `star-btn ${val <= stars ? 'text-yellow-400' : 'text-gray-300'}`;
+            });
+        }
+
+        window.submitReview = function(e) {
+            e.preventDefault();
+            const text = document.getElementById('review-text').value;
+            // Tạo Cấu trúc dữ liệu có ID, Like, Dislike, Replies
+            const newReview = {
+                id: Date.now(), // ID duy nhất
+                name: userInfo.name,
+                rating: reviewStars,
+                comment: text,
+                date: new Date().toLocaleDateString('vi-VN'),
+                likes: 0,
+                dislikes: 0,
+                replies: []
+            };
+
+            const storageKey = 'reviews_' + productId;
+            let productReviews = JSON.parse(localStorage.getItem(storageKey)) || [];
+            productReviews.unshift(newReview); 
+            
+            localStorage.setItem(storageKey, JSON.stringify(productReviews));
+            document.getElementById('review-text').value = '';
+            setRating(5);
+            renderReviews();
+        }
+
+        // Like / Dislike Đánh giá
+        window.voteReview = function(revId, type) {
+            const storageKey = 'reviews_' + productId;
+            let productReviews = JSON.parse(localStorage.getItem(storageKey)) || [];
+            let rev = productReviews.find(r => r.id === revId);
+            
+            if(rev) {
+                if(type === 'like') rev.likes = (rev.likes || 0) + 1;
+                if(type === 'dislike') rev.dislikes = (rev.dislikes || 0) + 1;
+                localStorage.setItem(storageKey, JSON.stringify(productReviews));
+                renderReviews();
+            }
+        }
+
+        // Admin Xóa Đánh giá
+        window.deleteReview = function(revId) {
+            if(confirm("Bạn có chắc chắn muốn xóa đánh giá này?")) {
+                const storageKey = 'reviews_' + productId;
+                let productReviews = JSON.parse(localStorage.getItem(storageKey)) || [];
+                productReviews = productReviews.filter(r => r.id !== revId);
+                localStorage.setItem(storageKey, JSON.stringify(productReviews));
+                renderReviews();
+            }
+        }
+
+        // Hiện ô nhập trả lời cho Admin
+        window.toggleReplyInput = function(revId) {
+            const box = document.getElementById(`reply-box-${revId}`);
+            box.classList.toggle('hidden');
+        }
+
+        // Admin Gửi Trả lời
+        window.submitAdminReply = function(revId) {
+            const input = document.getElementById(`reply-input-${revId}`).value;
+            if(!input) return;
+
+            const storageKey = 'reviews_' + productId;
+            let productReviews = JSON.parse(localStorage.getItem(storageKey)) || [];
+            let rev = productReviews.find(r => r.id === revId);
+            
+            if(rev) {
+                if(!rev.replies) rev.replies = [];
+                rev.replies.push({
+                    text: input,
+                    date: new Date().toLocaleDateString('vi-VN')
+                });
+                localStorage.setItem(storageKey, JSON.stringify(productReviews));
+                renderReviews();
+            }
+        }
+
+        // Render toàn bộ Đánh giá
+        function renderReviews() {
+            const storageKey = 'reviews_' + productId;
+            let productReviews = JSON.parse(localStorage.getItem(storageKey)) || [];
+            const container = document.getElementById('reviews-list-container');
+
+            if (productReviews.length === 0) {
+                container.innerHTML = `<p class="text-gray-500 italic p-6 bg-gray-50 border text-sm">Chưa có đánh giá nào.</p>`;
+                return;
+            }
+
+            const isAdmin = userInfo && userInfo.isAdmin;
+
+            container.innerHTML = productReviews.map(rev => {
+                const starsHtml = Array(5).fill(0).map((_, i) => `<span class="text-xl ${i < rev.rating ? 'text-yellow-400' : 'text-gray-300'}">★</span>`).join('');
+                
+                // HTML cho câu trả lời của Admin
+                const repliesHtml = (rev.replies || []).map(rep => `
+                    <div class="mt-3 ml-6 md:ml-10 bg-red-50 p-3 border-l-4 border-red-700 rounded-sm">
+                        <div class="flex items-center mb-1">
+                            <span class="bg-red-700 text-white px-2 py-0.5 text-[9px] font-bold uppercase rounded shadow-sm mr-2">Cửa hàng</span>
+                            <span class="text-[10px] text-gray-500">${rep.date}</span>
+                        </div>
+                        <p class="text-sm text-gray-800 font-medium">${rep.text}</p>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="border-b border-gray-200 pb-6 mb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-bold font-sport uppercase">${rev.name.charAt(0)}</div>
+                                <span class="font-bold text-sm uppercase">${rev.name}</span>
+                            </div>
+                            <span class="text-xs text-gray-400">${rev.date}</span>
+                        </div>
+                        <div class="flex mb-2">${starsHtml}</div>
+                        <p class="text-gray-700 text-sm leading-relaxed mb-3">${rev.comment}</p>
+                        
+                        <div class="flex items-center space-x-6 text-sm text-gray-500">
+                            <button onclick="voteReview(${rev.id}, 'like')" class="flex items-center hover:text-green-600 transition">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg>
+                                Hữu ích (${rev.likes || 0})
+                            </button>
+                            <button onclick="voteReview(${rev.id}, 'dislike')" class="flex items-center hover:text-red-600 transition">
+                                <svg class="w-4 h-4 mr-1 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg>
+                                (${rev.dislikes || 0})
+                            </button>
+                            
+                            ${isAdmin ? `
+                                <button onclick="toggleReplyInput(${rev.id})" class="text-blue-600 font-bold hover:underline border-l pl-6 border-gray-300">Trả lời</button>
+                                <button onclick="deleteReview(${rev.id})" class="text-red-600 font-bold hover:underline border-l pl-6 border-gray-300">Xóa</button>
+                            ` : ''}
+                        </div>
+
+                        ${isAdmin ? `
+                            <div id="reply-box-${rev.id}" class="mt-3 ml-6 md:ml-10 hidden flex items-start gap-2">
+                                <input type="text" id="reply-input-${rev.id}" class="flex-grow border border-gray-300 p-2 text-sm outline-none focus:border-red-700" placeholder="Phản hồi của cửa hàng...">
+                                <button onclick="submitAdminReply(${rev.id})" class="bg-black text-white px-4 py-2 font-bold text-sm uppercase hover:bg-red-700 transition">Gửi</button>
+                            </div>
+                        ` : ''}
+
+                        ${repliesHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Các hàm chọn Size và Giỏ hàng (đã được rút gọn để tương tự bản cũ)
+        window.selectSize = function(size) {
+            selectedSize = size;
+            document.getElementById('size-label').innerText = size;
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText === size && !btn.classList.contains('out-of-stock')) btn.classList.add('active');
+            });
+        }
+
+        window.addDetailToCart = function() {
+            const nameWithSize = `${currentProduct.name} (Size ${selectedSize})`;
+            addToCartWithQty(currentProduct._id + selectedSize, nameWithSize, currentProduct.price, currentProduct.image, selectedQty);
+        }
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartContent = document.getElementById('cart-content');
+
+        function updateCartCount() {
+            const countElement = document.getElementById('cart-count');
+            if (countElement) countElement.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+        }
+
+        function addToCartWithQty(id, name, price, image, qty) {
+            const existItem = cart.find(x => x.id === id);
+            if (existItem) existItem.qty += qty;
+            else cart.push({ id, name, price, image, qty });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            openCart();
+        }
+
+        window.renderSidebarCart = function() {
+            const container = document.getElementById('sidebar-cart-items');
+            const totalElement = document.getElementById('sidebar-cart-total');
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-gray-400 font-sport uppercase">Giỏ trống</div>`;
+                totalElement.innerText = "0₫";
+                return;
+            }
+            let total = 0;
+            container.innerHTML = cart.map((item) => {
+                total += item.price * item.qty;
+                return `
+                    <div class="flex items-center space-x-4 border-b border-gray-100 pb-4">
+                        <img src="${item.image}" class="w-16 h-20 object-cover grayscale">
+                        <div class="flex-grow">
+                            <h4 class="font-sport font-bold uppercase text-xs leading-tight">${item.name}</h4>
+                            <p class="text-xs text-gray-500 mb-2">${item.price.toLocaleString('vi-VN')}₫</p>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="updateQty('${item.id}', -1)" class="w-6 h-6 border hover:bg-black hover:text-white">-</button>
+                                <span class="text-sm font-bold w-4 text-center">${item.qty}</span>
+                                <button onclick="updateQty('${item.id}', 1)" class="w-6 h-6 border hover:bg-black hover:text-white">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart('${item.id}')" class="text-gray-300 hover:text-red-600 text-xs uppercase font-bold">Xóa</button>
+                    </div>`;
+            }).join('');
+            totalElement.innerText = total.toLocaleString('vi-VN') + '₫';
+        }
+
+        window.updateQty = function(id, delta) {
+            const item = cart.find(x => x.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) return removeFromCart(id);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                renderSidebarCart();
+            }
+        }
+
+        window.removeFromCart = function(id) {
+            cart = cart.filter(x => x.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderSidebarCart();
+        }
+
+        function openCart() {
+            cartSidebar.classList.remove('invisible');
+            cartOverlay.classList.replace('opacity-0', 'opacity-100');
+            cartContent.classList.replace('translate-x-full', 'translate-x-0');
+            renderSidebarCart();
+        }
+
+        function closeCart() {
+            cartOverlay.classList.replace('opacity-100', 'opacity-0');
+            cartContent.classList.replace('translate-x-0', 'translate-x-full');
+            setTimeout(() => cartSidebar.classList.add('invisible'), 300);
+        }
+
+        document.getElementById('open-cart-btn').addEventListener('click', openCart);
+        document.getElementById('close-cart').addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // Khởi chạy
+        if(productId) fetchProduct(); else window.location.href = 'index.html';
+        updateCartCount();
+    </script>
+</body>
+</html>

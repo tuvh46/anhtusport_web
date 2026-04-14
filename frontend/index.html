@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Store | AnhTu Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-sport { font-family: 'Oswald', sans-serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .product-card img { transition: transform 0.5s ease; }
+        .product-card:hover img { transform: scale(1.1); }
+        #cart-sidebar.invisible { pointer-events: none; }
+        .group-hover\:block { display: none; }
+        .group:hover .group-hover\:block { display: block; }
+    </style>
+</head>
+<body class="bg-white text-black antialiased overflow-x-hidden font-sans">
+
+    <nav class="bg-black text-white p-5 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="font-sport text-3xl font-bold tracking-tighter">
+                <a href="index.html">ARSENAL <span class="text-gray-500 font-normal">DIRECT</span></a>
+            </h1>
+            <div class="space-x-8 font-sport uppercase text-sm tracking-widest hidden md:flex items-center">
+                <a href="index.html" class="hover:text-gray-400 transition font-bold">Trang chủ</a>
+                <a href="#" class="hover:text-gray-400 transition">Sản phẩm</a>
+                
+                <button id="open-cart-btn" class="hover:text-gray-400 transition text-red-500 font-bold relative flex items-center outline-none">
+                    Giỏ hàng
+                    <span id="cart-count" class="ml-2 bg-red-600 text-white text-[10px] rounded-full px-2 py-0.5 min-w-[18px] text-center">0</span>
+                </button>
+
+                <div id="user-nav" class="text-gray-400 text-[10px]">
+                    <a href="login.html" class="hover:text-white">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative bg-black overflow-hidden shadow-2xl">
+        <div id="carousel-slides" class="relative flex transition-transform duration-700 ease-out" style="transform: translateX(0%);">
+            
+            <div class="min-w-full relative aspect-[16/7] md:aspect-[21/9]">
+                <img src="https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/adidas_AW24_L_v4.jpg?itok=8L1L_K_5" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-red-900 bg-opacity-60 flex flex-col items-center justify-center text-center p-10 md:p-16">
+                    <div class="text-white max-w-2xl">
+                        <h2 class="font-sport text-5xl md:text-7xl font-bold uppercase italic leading-none mb-3">AnhTu Store</h2>
+                        <p class="text-xs md:text-sm text-gray-200 uppercase tracking-[0.2em] mb-6">Đẳng cấp tối giản • Sức mạnh Pháo thủ</p>
+                        <a href="#product-list-section" class="bg-white text-red-700 px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-gray-200 transition shadow-lg">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="min-w-full relative aspect-[16/7] md:aspect-[21/9]">
+                <img src="https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/AW24_AWAY_L_v2.jpg?itok=yR-I8Q9z" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-red-900 bg-opacity-70 flex flex-col items-center justify-center text-center p-10 md:p-16">
+                    <div class="text-white max-w-3xl">
+                        <h2 class="font-sport text-6xl md:text-8xl font-bold uppercase leading-none mb-4 tracking-tighter">Away Kit</h2>
+                        <p class="text-xs md:text-sm text-gray-200 uppercase tracking-[0.3em] mb-8 font-bold">Chinh phục mọi sân đấu</p>
+                        <a href="#product-list-section" class="bg-white text-red-700 px-10 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-gray-200 transition shadow-lg">Khám phá</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 transition z-10 outline-none">❮</button>
+        <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 transition z-10 outline-none">❯</button>
+        
+        <div id="carousel-indicators" class="absolute bottom-5 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+            <button class="w-3 h-3 rounded-full bg-white transition-opacity outline-none" data-slide="0"></button>
+            <button class="w-3 h-3 rounded-full bg-white bg-opacity-50 transition-opacity outline-none" data-slide="1"></button>
+        </div>
+    </section>
+
+    <main id="product-list-section" class="container mx-auto py-16 px-4">
+        <div class="flex justify-between items-end mb-12 border-b-2 border-black pb-4">
+            <h3 class="font-sport text-4xl font-bold uppercase">Sản phẩm mới</h3>
+            <span class="text-sm font-bold uppercase text-gray-400">Shop all</span>
+        </div>
+        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <p class="col-span-full text-center py-20 font-sport text-xl animate-pulse">Đang tải sản phẩm...</p>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white py-10 mt-20">
+        <div class="container mx-auto text-center">
+            <p class="font-sport text-sm tracking-[0.2em] text-gray-500">© 2026 ARSENAL DIRECT CLONE - BY ANHTU STORE</p>
+        </div>
+    </footer>
+
+    <div id="cart-sidebar" class="fixed inset-0 z-[100] invisible">
+        <div id="cart-overlay" class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"></div>
+        <div id="cart-content" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col text-black overflow-hidden">
+            <div class="p-6 border-b flex justify-between items-center bg-black text-white">
+                <h3 class="font-sport text-2xl font-bold uppercase">Giỏ hàng của bạn</h3>
+                <button id="close-cart" class="text-white text-3xl hover:text-red-500 transition outline-none">&times;</button>
+            </div>
+            <div id="sidebar-cart-items" class="flex-grow overflow-y-auto p-6 space-y-6">
+                </div>
+            <div class="p-6 border-t bg-gray-50">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="font-bold uppercase text-gray-400">Tổng tiền:</span>
+                    <span id="sidebar-cart-total" class="font-sport text-2xl font-bold text-black">0₫</span>
+                </div>
+                <button onclick="window.location.href='checkout.html'" class="w-full bg-black text-white py-4 font-bold uppercase tracking-widest hover:bg-red-700 transition shadow-lg outline-none">
+                    Thanh toán ngay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        
+        // Logic ẩn chấm đỏ thông báo
+        function markNotificationsRead() {
+            localStorage.setItem('notificationsRead', 'true');
+            const redDot = document.getElementById('notification-dot');
+            const badgeCount = document.getElementById('notification-badge');
+            if(redDot) redDot.style.display = 'none';
+            if(badgeCount) badgeCount.style.display = 'none';
+        }
+
+        if (userInfo) {
+            const hasRead = localStorage.getItem('notificationsRead') === 'true';
+
+            document.getElementById('user-nav').innerHTML = `
+                <div class="flex items-center h-full">
+                    ${userInfo.isAdmin ? `
+                        <div class="relative group mr-5 border-l border-gray-700 pl-5 flex items-center h-10">
+                            <button onclick="markNotificationsRead()" class="relative flex items-center hover:text-white transition outline-none text-gray-300 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                ${!hasRead ? `
+                                <span id="notification-dot" class="absolute -top-1.5 -right-1.5 flex h-3 w-3">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-600 border-2 border-black"></span>
+                                </span>` : ''}
+                            </button>
+                            
+                            <div class="absolute right-0 top-full pt-4 w-80 hidden group-hover:block z-50 cursor-default">
+                                <div class="bg-white text-black shadow-2xl rounded-xl overflow-hidden border border-gray-200 font-sans">
+                                    <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
+                                        <span class="font-bold text-sm text-gray-800">THÔNG BÁO MỚI</span>
+                                        ${!hasRead ? `<span id="notification-badge" class="bg-red-600 text-white px-2.5 py-0.5 rounded-full text-xs font-bold shadow-sm">2</span>` : ''}
+                                    </div>
+                                    <div class="max-h-80 overflow-y-auto">
+                                        
+                                        <a href="admin.html" onclick="markNotificationsRead()" class="block p-4 border-b border-gray-100 hover:bg-red-50 transition duration-200 cursor-pointer">
+                                            <p class="text-sm font-bold text-red-600 mb-1 flex items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                                Đơn hàng mới!
+                                            </p>
+                                            <p class="text-[13px] text-gray-600 leading-relaxed mt-1.5">Khách hàng <span class="font-bold text-gray-900">Nguyễn Văn A</span> vừa đặt một đơn hàng trị giá <span class="font-bold text-red-600">4.300.000₫</span>.</p>
+                                            <p class="text-[11px] text-gray-400 mt-2 font-medium">Vừa xong</p>
+                                        </a>
+
+                                        <a href="product.html?id=1#reviews-list-container" onclick="markNotificationsRead()" class="block p-4 border-b border-gray-100 hover:bg-yellow-50 transition duration-200 cursor-pointer">
+                                            <p class="text-sm font-bold text-yellow-500 mb-1 flex items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                                Đánh giá 5 sao!
+                                            </p>
+                                            <p class="text-[13px] text-gray-600 leading-relaxed mt-1.5">Khách hàng <span class="font-bold text-gray-900">Anh Tú</span> vừa để lại một đánh giá tuyệt vời.</p>
+                                            <p class="text-[11px] text-gray-400 mt-2 font-medium">10 phút trước</p>
+                                        </a>
+
+                                    </div>
+                                    <a href="admin.html" class="block w-full text-center p-3 text-sm font-bold text-red-700 hover:bg-gray-100 transition uppercase bg-white">Xem toàn bộ</a>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="admin.html" class="mr-4 font-sport text-yellow-500 font-bold hover:text-yellow-400 transition uppercase text-sm tracking-wide">Admin Panel</a>
+                    ` : ''}
+
+                    <a href="profile.html" class="text-white border-l ${!userInfo.isAdmin ? 'border-gray-700' : 'border-gray-700 pl-4'} pl-4 font-sport uppercase font-bold text-sm tracking-widest hover:text-red-500 transition">HELLO, ${userInfo.name}</a>
+                    <button onclick="localStorage.removeItem('userInfo'); location.reload();" class="ml-4 hover:text-red-500 uppercase font-bold text-red-700 text-xs font-sport tracking-widest">[Thoát]</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

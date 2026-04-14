@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Arsenal Direct Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f4f4; }
+        .font-arsenal { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
+        .btn-arsenal { background-color: #9c0213; transition: all 0.3s; }
+        .btn-arsenal:hover { background-color: #7a020f; transform: translateY(-1px); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="p-6 bg-white border-b shadow-sm">
+        <div class="container mx-auto text-center md:text-left">
+            <a href="index.html">
+                <img src="https://as2.ftcdn.net/v2/jpg/19/04/59/47/1000_F_1904594794_SFJBd5mWPvRHCnGjjgdKFKp8mKsrdodE.jpg" alt="Arsenal Logo" class="h-12 mx-auto md:mx-0">
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-[500px] p-8 md:p-12 shadow-md border-t-4 border-[#9c0213]">
+            
+            <div class="text-center mb-10">
+                <h2 class="font-arsenal text-4xl mb-4 text-black italic">Tạo tài khoản</h2>
+                <p class="text-gray-500 text-sm">
+                    Join the Arsenal family to get the best experience
+                </p>
+            </div>
+
+            <form id="register-form" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Họ và tên</label>
+                    <input type="text" id="name" required placeholder="Enter your name"
+                        class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Địa chỉ email</label>
+                    <input type="email" id="email" required placeholder="example@gmail.com"
+                        class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Mật khẩu</label>
+                    <input type="password" id="password" required placeholder="••••••••"
+                        class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
+                </div>
+
+                <div class="flex items-start py-2">
+                    <input type="checkbox" required class="mt-1 mr-2">
+                    <p class="text-[10px] text-gray-400 leading-tight uppercase">
+                        Tôi đồng ý với các điều khoản và điều kiện cũng như chính sách bảo mật của AnhTuStore..
+                    </p>
+                </div>
+
+                <button type="submit" class="w-full btn-arsenal text-white font-bold py-4 rounded-full uppercase tracking-[0.2em] text-sm mt-4 shadow-lg">
+                    ĐĂNG KÝ
+                </button>
+            </form>
+
+            <div class="text-center text-sm border-t border-gray-100 pt-6 mt-8">
+                <span class="text-gray-400 italic">Đã có tài khoản?</span>
+                <a href="login.html" class="font-bold underline ml-1 hover:text-[#9c0213]">Đăng nhập</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Gửi yêu cầu Đăng ký tới Backend
+                const response = await fetch('http://localhost:5000/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Đăng ký thành công! Chào mừng ' + data.name);
+                    // Sau khi đăng ký xong, chuyển sang trang Login
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            } catch (error) {
+                alert('Không thể kết nối tới Server!');
+            }
+        });
+    </script>
+</body>
+</html>

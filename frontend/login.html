@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Arsenal Direct Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f4f4; }
+        .font-arsenal { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
+        .btn-arsenal { background-color: #9c0213; transition: all 0.3s; }
+        .btn-arsenal:hover { background-color: #7a020f; transform: translateY(-1px); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="p-6 bg-white border-b shadow-sm">
+        <div class="container mx-auto">
+            <a href="index.html">
+                <img src="https://as2.ftcdn.net/v2/jpg/19/04/59/47/1000_F_1904594794_SFJBd5mWPvRHCnGjjgdKFKp8mKsrdodE.jpg" alt="Arsenal Logo" class="h-12 mx-auto md:mx-0">
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-[500px] p-8 md:p-12 shadow-md border-t-4 border-[#9c0213]">
+            
+            <div class="text-center mb-10">
+                <h2 class="font-arsenal text-4xl mb-4 text-black">Đăng nhập</h2>
+                <p class="text-gray-500 text-sm">
+                    Dùng tên đăng nhập hoặc email của bạn để đăng nhập!
+                </p>
+            </div>
+
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Tên đăng nhập</label>
+                    <input type="email" id="email" required 
+                        class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Mật khẩu</label>
+                    <div class="relative">
+                        <input type="password" id="password" required 
+                            class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
+                    </div>
+                    <a href="#" class="text-xs text-gray-400 underline mt-3 block italic hover:text-black">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="w-full btn-arsenal text-white font-bold py-4 rounded-full uppercase tracking-[0.2em] text-sm mt-4 shadow-lg">
+                    Đăng nhập
+                </button>
+            </form>
+
+            <div class="relative flex items-center my-10">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink mx-4 text-gray-400 font-bold text-xs uppercase tracking-widest">hoặc</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-10">
+                <button class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-6 w-6"></button>
+                <button class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/452196/facebook-1.svg" class="h-6 w-6"></button>
+                <button class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/511330/apple-173.svg" class="h-6 w-6"></button>
+            </div>
+
+            <div class="text-center text-sm border-t border-gray-100 pt-6">
+                <span class="text-gray-400 italic">Chưa có tài khoản?</span>
+                <a href="register.html" class="font-bold underline ml-1 hover:text-[#9c0213]">Đăng ký ở đây</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Gọi API Login đã viết ở Backend
+                const response = await fetch('http://localhost:5000/api/users/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Đăng nhập thành công! Chào mừng ' + data.name);
+                    // Lưu thông tin user vào trình duyệt để dùng cho giỏ hàng sau này
+                    localStorage.setItem('userInfo', JSON.stringify(data));
+                    // Về trang chủ
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            } catch (error) {
+                alert('Không thể kết nối tới Server!');
+            }
+        });
+    </script>
+</body>
+</html>

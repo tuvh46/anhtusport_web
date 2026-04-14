@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán | AnhTu Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f4f4; }
+        .font-sport { font-family: 'Oswald', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-black antialiased">
+
+    <header class="bg-black text-white p-6 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="font-sport text-3xl font-bold tracking-tighter">
+                <a href="index.html">ARSENAL <span class="text-gray-500 font-normal">DIRECT</span></a>
+            </h1>
+            <a href="index.html" class="text-sm font-bold uppercase tracking-widest hover:text-red-500 transition">❮ Quay lại cửa hàng</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 px-4 max-w-6xl">
+        <h2 class="font-sport text-4xl font-bold mb-8 uppercase tracking-tighter border-b-4 border-red-700 pb-2 inline-block">Thanh Toán</h2>
+
+        <div class="flex flex-col lg:flex-row gap-10">
+            <div class="lg:w-2/3 bg-white p-8 shadow-sm border-t-4 border-black">
+                <h3 class="font-sport text-2xl font-bold mb-6 uppercase">Thông tin giao hàng</h3>
+                <form id="checkout-form" class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Họ và tên</label>
+                            <input type="text" id="fullname" required class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Số điện thoại</label>
+                            <input type="tel" id="phone" required class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Địa chỉ chi tiết (Số nhà, Đường, Phường/Xã)</label>
+                        <input type="text" id="address" required class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Tỉnh / Thành phố</label>
+                        <input type="text" id="city" required class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
+                    </div>
+
+                    <h3 class="font-sport text-2xl font-bold mt-10 mb-6 uppercase pt-6 border-t">Phương thức thanh toán</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3 p-4 border cursor-pointer hover:bg-gray-50 transition">
+                            <input type="radio" name="payment" value="COD" checked class="w-5 h-5 text-red-600 focus:ring-red-500">
+                            <span class="font-bold">Thanh toán khi nhận hàng (COD)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-4 border cursor-pointer hover:bg-gray-50 transition opacity-50">
+                            <input type="radio" name="payment" value="Card" disabled class="w-5 h-5">
+                            <span class="font-bold">Thẻ Tín dụng / Ghi nợ (Đang bảo trì)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-red-700 text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-red-800 transition shadow-lg mt-8 text-lg">
+                        Xác Nhận Đặt Hàng
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:w-1/3">
+                <div class="bg-gray-100 p-8 shadow-sm sticky top-24 border-t-4 border-red-700">
+                    <h3 class="font-sport text-2xl font-bold mb-6 uppercase">Tóm tắt đơn hàng</h3>
+                    
+                    <div id="checkout-items" class="space-y-4 mb-6 max-h-80 overflow-y-auto pr-2">
+                        </div>
+
+                    <div class="border-t border-gray-300 pt-4 space-y-3">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tạm tính</span>
+                            <span id="subtotal" class="font-bold">0₫</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Phí vận chuyển</span>
+                            <span class="font-bold">Miễn phí</span>
+                        </div>
+                        <div class="flex justify-between text-black text-xl pt-4 border-t border-black mt-2">
+                            <span class="font-sport font-bold uppercase">Tổng cộng</span>
+                            <span id="total-price" class="font-bold text-red-700">0₫</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 1. Lấy dữ liệu giỏ hàng từ Trình duyệt
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+        // Bắt buộc đăng nhập
+        if (!userInfo) {
+            alert('Vui lòng đăng nhập trước khi thanh toán!');
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('fullname').value = userInfo.name;
+        }
+
+        // Đuổi về trang chủ nếu giỏ rỗng
+        if (cart.length === 0) {
+            alert('Giỏ hàng của bạn đang trống!');
+            window.location.href = 'index.html';
+        }
+
+        // 2. Hiển thị sản phẩm và tính tiền
+        const checkoutItemsContainer = document.getElementById('checkout-items');
+        let total = 0;
+
+        checkoutItemsContainer.innerHTML = cart.map(item => {
+            total += item.price * item.qty;
+            return `
+                <div class="flex items-center space-x-4 bg-white p-3 border border-gray-200 shadow-sm">
+                    <img src="${item.image}" class="w-16 h-20 object-cover grayscale">
+                    <div class="flex-grow">
+                        <h4 class="font-bold uppercase text-xs truncate w-40">${item.name}</h4>
+                        <p class="text-gray-500 text-xs">SL: ${item.qty}</p>
+                    </div>
+                    <span class="font-bold text-sm">${(item.price * item.qty).toLocaleString('vi-VN')}₫</span>
+                </div>
+            `;
+        }).join('');
+
+        document.getElementById('subtotal').innerText = total.toLocaleString('vi-VN') + '₫';
+        document.getElementById('total-price').innerText = total.toLocaleString('vi-VN') + '₫';
+
+        // 3. XỬ LÝ GỬI ĐƠN HÀNG LÊN MONGODB (ĐÃ CẬP NHẬT)
+        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Ngăn trang tải lại
+
+            // Thu thập thông tin từ Form
+            const shippingAddress = {
+                fullname: document.getElementById('fullname').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+            };
+
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+            // Đóng gói dữ liệu gửi đi
+            const orderData = {
+                user: userInfo._id,         // ID người mua
+                orderItems: cart,           // Danh sách áo đấu
+                shippingAddress,            // Địa chỉ
+                paymentMethod,              // Phương thức (COD)
+                totalPrice: total           // Tổng tiền
+            };
+
+            try {
+                // Gọi API tạo đơn hàng ở Backend
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData) // Biến data thành chữ để gửi đi
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('🎉 Đặt hàng thành công! Mã đơn của bạn là: ' + data._id);
+                    localStorage.removeItem('cart'); // Mua xong thì xóa giỏ hàng
+                    window.location.href = 'index.html'; // Về trang chủ
+                } else {
+                    alert('Lỗi khi đặt hàng: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Lỗi kết nối:', error);
+                alert('Không thể kết nối tới Server!');
+            }
+        });
+    </script>
+</body>
+</html>
