@@ -31,7 +31,7 @@
 
 **Bước 1: Clone repository về máy**
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/tuvh46/anhtusport_web.git
 cd sport_web_store
 ```
 
