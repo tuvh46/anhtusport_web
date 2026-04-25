@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In | Arsenal Direct Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f4f4; }
-        .font-arsenal { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
+        body { font-family: 'Manrope', sans-serif; background-color: #f4f4f4; }
+        .font-arsenal { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.02em; }
         .btn-arsenal { background-color: #9c0213; transition: all 0.3s; }
         .btn-arsenal:hover { background-color: #7a020f; transform: translateY(-1px); }
+        .vintage-header {
+            background: linear-gradient(135deg, #2a1c16 0%, #4f3427 55%, #6f4d3f 100%);
+            border-bottom: 1px solid rgba(245, 222, 179, 0.22);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <header class="p-6 bg-white border-b shadow-sm">
-        <div class="container mx-auto">
-            <a href="index.html">
-                <img src="https://as2.ftcdn.net/v2/jpg/19/04/59/47/1000_F_1904594794_SFJBd5mWPvRHCnGjjgdKFKp8mKsrdodE.jpg" alt="Arsenal Logo" class="h-12 mx-auto md:mx-0">
+    <header class="vintage-header p-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-arsenal text-3xl text-[#f4dfc8] hover:text-[#ffd9a0] transition">
+                ANHTU <span class="text-[#d5bca1]">STORE</span>
             </a>
+            <a href="index.html" class="text-xs uppercase tracking-[0.2em] text-[#f4dfc8] hover:text-[#ffd9a0] transition">Về trang chủ</a>
         </div>
     </header>
 
@@ -61,9 +67,9 @@
             </div>
 
             <div class="grid grid-cols-3 gap-4 mb-10">
-                <button class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-6 w-6"></button>
-                <button class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/452196/facebook-1.svg" class="h-6 w-6"></button>
-                <button class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/511330/apple-173.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Google')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Facebook')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/452196/facebook-1.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Apple')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/511330/apple-173.svg" class="h-6 w-6"></button>
             </div>
 
             <div class="text-center text-sm border-t border-gray-100 pt-6">
@@ -90,6 +96,15 @@
                 const data = await response.json();
 
                 if (response.ok) {
+                    
+                    // Khôi phục avatar và phone từ bộ nhớ cục bộ (do backend chưa hỗ trợ lưu avatar)
+                    let localUsers = JSON.parse(localStorage.getItem('users')) || [];
+                    let localUser = localUsers.find(u => u.email === data.email);
+                    if (localUser) {
+                        if (!data.avatar && localUser.avatar) data.avatar = localUser.avatar;
+                        if (!data.phone && localUser.phone) data.phone = localUser.phone;
+                    }
+
                     alert('Đăng nhập thành công! Chào mừng ' + data.name);
                     // Lưu thông tin user vào trình duyệt để dùng cho giỏ hàng sau này
                     localStorage.setItem('userInfo', JSON.stringify(data));
@@ -102,6 +117,20 @@
                 alert('Không thể kết nối tới Server!');
             }
         });
+
+        function handleSocialLogin(provider) {
+            if (typeof window.showToast === 'function') {
+                window.showToast('Chức năng đang tiếp tục phát triển...', 'info');
+            } else {
+                alert('Chức năng đang tiếp tục phát triển...');
+            }
+        }
+    </script>
+    <script>
+        if (window.userInfo && window.userInfo.isAdmin) { // Sử dụng window.userInfo
+            window.connectAdminWebSocket(); // Gọi hàm toàn cục từ script.js
+            window.fetchAdminNotifications(); // Gọi hàm toàn cục từ script.js
+        }
     </script>
 </body>
 </html>

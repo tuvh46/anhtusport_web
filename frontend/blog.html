@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Tin tức | Arsenal Direct</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; background-color: #f7f8fa; }
+        .font-sport { font-family: 'Playfair Display', serif; letter-spacing: 0.02em; }
+        .vintage-header {
+            background: linear-gradient(135deg, rgba(13, 19, 27, 0.95) 0%, rgba(26, 34, 45, 0.92) 58%, rgba(44, 18, 24, 0.9) 100%);
+            border-bottom: 1px solid rgba(152, 53, 68, 0.45);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+        }
+        .vintage-link { color: #e8edf4; }
+        .vintage-link:hover { color: #ffffff; }
+        .article-card:hover img { transform: scale(1.05); }
+    </style>
+</head>
+<body class="text-gray-900 antialiased">
+
+    <nav class="vintage-header text-white py-5 px-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="font-sport text-3xl md:text-4xl font-bold tracking-wide">
+                <a href="index.html" class="vintage-link">ANHTU<span class="text-[#d7dde6] font-semibold">STORE</span></a>
+            </h1>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="hidden md:block text-sm uppercase tracking-widest vintage-link">Trang chủ</a>
+                <a href="about.html" class="hidden md:block text-sm uppercase tracking-widest vintage-link">Giới thiệu</a>
+                <a href="index.html#product-list-section" class="bg-[#9b111e] hover:bg-red-800 text-white px-5 py-2 font-bold uppercase text-xs tracking-widest transition rounded-sm">Mua sắm</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Header -->
+    <header class="bg-black text-white py-20 px-4 text-center border-b-4 border-[#9b111e]">
+        <h2 class="font-sport text-5xl md:text-6xl font-bold uppercase tracking-widest mb-4">Góc Pháo Thủ</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg">Cập nhật tin tức mới nhất về đội bóng, phân tích chiến thuật và các bộ sưu tập áo đấu độc quyền.</p>
+    </header>
+
+    <!-- Blog List -->
+    <main class="container mx-auto py-16 px-4 max-w-6xl">
+        
+        <!-- Featured Article -->
+        <article class="flex flex-col md:flex-row bg-white shadow-xl mb-16 overflow-hidden border border-gray-100 group article-card cursor-pointer rounded-xl">
+            <div class="md:w-3/5 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1518605368461-1ee7e53f021e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Arsenal 25/26" class="w-full h-full object-cover transition duration-700">
+            </div>
+            <div class="md:w-2/5 p-8 md:p-12 flex flex-col justify-center">
+                <span class="text-[#9b111e] font-bold uppercase text-xs tracking-widest mb-3 block">Bộ sưu tập mới</span>
+                <h3 class="font-sport text-3xl font-bold mb-4 leading-tight group-hover:text-[#9b111e] transition">Đánh giá chi tiết Bộ Áo Đấu Sân Nhà Arsenal 25/26</h3>
+                <p class="text-gray-600 mb-6 line-clamp-3">Thiết kế tối giản nhưng mang đậm DNA của câu lạc bộ. Cùng chúng tôi soi cận cảnh từng đường kim mũi chỉ của siêu phẩm mới nhất từ Adidas hợp tác cùng Arsenal.</p>
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                    <span class="text-xs text-gray-400 font-bold">12 Tháng 5, 2026</span>
+                    <span class="text-sm font-bold uppercase tracking-wider text-black group-hover:text-[#9b111e] transition flex items-center gap-1">Đọc tiếp <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Grid Articles -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Bài 1 -->
+            <article class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 group article-card cursor-pointer flex flex-col">
+                <div class="h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1551280857-2b9bbe5240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition duration-700">
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <span class="text-blue-600 font-bold uppercase text-[10px] tracking-widest mb-2 block">Tin tức Đội bóng</span>
+                    <h4 class="font-sport text-xl font-bold mb-3 leading-snug group-hover:text-[#9b111e] transition">Hành trình vô địch Ngoại Hạng Anh mùa giải đầy cảm xúc</h4>
+                    <p class="text-gray-500 text-sm mb-4 line-clamp-3 flex-grow">Nhìn lại những khoảnh khắc bùng nổ của các cầu thủ trẻ và triết lý chiến thuật đỉnh cao đã mang cúp vàng về lại Emirates.</p>
+                    <span class="text-xs text-gray-400 font-bold mt-auto border-t pt-3 block">08 Tháng 5, 2026</span>
+                </div>
+            </article>
+
+            <!-- Bài 2 -->
+            <article class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 group article-card cursor-pointer flex flex-col">
+                <div class="h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition duration-700">
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <span class="text-yellow-600 font-bold uppercase text-[10px] tracking-widest mb-2 block">Phân tích</span>
+                    <h4 class="font-sport text-xl font-bold mb-3 leading-snug group-hover:text-[#9b111e] transition">Lý giải sức hút của mẫu Áo Đấu Sân Khách mùa này</h4>
+                    <p class="text-gray-500 text-sm mb-4 line-clamp-3 flex-grow">Vì sao họa tiết tia sét cổ điển lại tạo nên cơn sốt toàn cầu? Cùng chuyên gia thiết kế bóc tách ý nghĩa đằng sau siêu phẩm này.</p>
+                    <span class="text-xs text-gray-400 font-bold mt-auto border-t pt-3 block">02 Tháng 5, 2026</span>
+                </div>
+            </article>
+
+            <!-- Bài 3 -->
+            <article class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 group article-card cursor-pointer flex flex-col">
+                <div class="h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition duration-700">
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <span class="text-green-600 font-bold uppercase text-[10px] tracking-widest mb-2 block">Sự kiện</span>
+                    <h4 class="font-sport text-xl font-bold mb-3 leading-snug group-hover:text-[#9b111e] transition">Sự kiện Offline ra mắt BST Kỉ niệm 20 năm Highbury</h4>
+                    <p class="text-gray-500 text-sm mb-4 line-clamp-3 flex-grow">Hàng ngàn Gooners đã hội tụ tại sự kiện ra mắt độc quyền. Xem ngay loạt ảnh không khí cuồng nhiệt tại Store cuối tuần qua.</p>
+                    <span class="text-xs text-gray-400 font-bold mt-auto border-t pt-3 block">25 Tháng 4, 2026</span>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black py-8 text-center text-gray-400 text-sm border-t border-gray-800">
+        <p class="font-sport tracking-widest uppercase mb-2 text-white">AnhTu Store - Nơi hội tụ Pháo thủ</p>
+        <p>© 2026 Arsenal Direct Clone. Mọi quyền được bảo lưu.</p>
+    </footer>
+
+</body>
+</html>

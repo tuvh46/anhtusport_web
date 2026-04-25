@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Về chúng tôi | AnhTu Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-sport { font-family: 'Playfair Display', serif; letter-spacing: 0.03em; }
+        .font-sans { font-family: 'Manrope', sans-serif; }
+        .vintage-header {
+            background: linear-gradient(135deg, rgba(13, 19, 27, 0.95) 0%, rgba(26, 34, 45, 0.92) 58%, rgba(44, 18, 24, 0.9) 100%);
+            border-bottom: 1px solid rgba(152, 53, 68, 0.45);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+        }
+        .vintage-link { color: #e8edf4; }
+        .vintage-link:hover { color: #ffffff; }
+        .user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border: 1px solid rgba(201, 213, 225, 0.35);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #f4f8fc;
+            letter-spacing: 0.08em;
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+        }
+        .user-chip:hover {
+            border-color: rgba(244, 248, 252, 0.65);
+            background: rgba(255, 255, 255, 0.14);
+        }
+        .logout-btn {
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(177, 66, 83, 0.55);
+            background: rgba(93, 30, 42, 0.45);
+            color: #ffd6dc;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+        }
+        .logout-btn:hover {
+            background: rgba(137, 36, 54, 0.72);
+            color: #ffffff;
+            border-color: rgba(255, 216, 222, 0.82);
+        }
+        .header-tag-btn {
+            color: #dbe4ef;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+        .header-tag-btn:hover { color: #ffffff; }
+        .header-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(201, 213, 225, 0.35);
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .header-search input {
+            width: 210px;
+            background: transparent;
+            color: #f4f8fc;
+            font-size: 14px;
+            outline: none;
+        }
+        .header-search input::placeholder { color: #aab6c5; }
+        .header-icon-btn {
+            position: relative;
+            color: #e8edf4;
+            transition: color 0.2s ease;
+        }
+        .header-icon-btn:hover { color: #ffffff; }
+        #cart-sidebar.invisible { pointer-events: none; }
+        .group-hover\:block { display: none; }
+        .group:hover .group-hover\:block { display: block; }
+    </style>
+</head>
+<body class="bg-white text-black antialiased overflow-x-hidden font-sans">
+
+    <nav class="vintage-header text-white py-5 px-4 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center gap-4">
+            <h1 class="font-sport text-4xl font-bold tracking-wide">
+                <a href="index.html" class="vintage-link">ANHTU<span class="text-[#d7dde6] font-semibold">STORE</span></a>
+            </h1>
+            <div class="hidden xl:flex items-center gap-4 flex-nowrap">
+                <a href="index.html" class="header-tag-btn hover:text-[#9b111e] transition-colors">Tất cả</a>
+                <a href="about.html" class="header-tag-btn" style="color: #ffd5dc; text-decoration: underline; text-underline-offset: 4px;">Giới thiệu</a>
+            </div>
+            <div class="space-x-4 font-sans uppercase text-sm tracking-[0.14em] hidden md:flex items-center whitespace-nowrap">
+                <form id="header-search-form" class="header-search" role="search" onsubmit="event.preventDefault(); window.location.href='index.html'">
+                    <input id="header-search-input" type="text" placeholder="Tìm sản phẩm..." />
+                    <button type="submit" aria-label="Tìm kiếm">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+                <a href="favorites.html" class="header-icon-btn transition flex items-center gap-2" title="Yêu thích">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.35-9.5-8.48A5.75 5.75 0 1112 6.17a5.75 5.75 0 119.5 6.35C19 16.65 12 21 12 21z"/>
+                    </svg>
+                    <span id="fav-count" class="bg-rose-600 text-white text-[11px] rounded-full px-2 py-0.5 min-w-[20px] text-center font-bold">0</span>
+                </a>
+                <button id="open-cart-btn" class="vintage-link transition relative flex items-center gap-2 outline-none" title="Giỏ hàng">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <span id="cart-count" class="bg-red-600 text-white text-[11px] rounded-full px-2 py-0.5 min-w-[20px] text-center font-bold">0</span>
+                </button>
+                <div id="user-nav" class="text-[#f4dfc8] text-sm font-sans uppercase tracking-[0.14em] whitespace-nowrap">
+                    <a href="login.html" class="vintage-link transition">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-[450px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-black">
+            <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover opacity-40 blur-sm" alt="Stadium">
+        </div>
+        <div class="relative z-10 text-center px-4">
+            <h1 class="font-sport text-4xl md:text-6xl text-white font-bold uppercase tracking-widest drop-shadow-2xl">VỀ CHÚNG TÔI - ARSENAL STORE</h1>
+            <div class="mt-6 w-24 h-1 bg-[#9b111e] mx-auto rounded"></div>
+        </div>
+    </section>
+
+    <!-- Main Content 2 Columns -->
+    <section class="container mx-auto py-20 px-4 max-w-6xl">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="md:w-1/2">
+                <img src="../banner/8.avif" alt="Passion" class="w-full h-auto object-cover shadow-2xl border-4 border-gray-100">
+            </div>
+            <div class="md:w-1/2 space-y-6">
+                <h2 class="font-sport text-3xl md:text-4xl font-bold uppercase text-gray-900 pb-2">Đam mê & Cam kết</h2>
+                <p class="text-gray-600 leading-relaxed text-justify text-lg">
+                    Được thành lập từ tình yêu mãnh liệt dành cho trái bóng tròn và đặc biệt là câu lạc bộ Arsenal, <strong>AnhTu Store</strong> ra đời với sứ mệnh mang đến cho người hâm mộ những sản phẩm thể thao chất lượng cao nhất.
+                </p>
+                <p class="text-gray-600 leading-relaxed text-justify text-lg">
+                    Chúng tôi cam kết cung cấp 100% hàng chính hãng, từ áo đấu, quần tập cho đến các phụ kiện thời trang mang đậm tinh thần Pháo Thủ. Mỗi sản phẩm không chỉ là một món đồ thể thao, mà còn là niềm tự hào, là sự kết nối giữa người hâm mộ và đội bóng yêu thích.
+                </p>
+                <div class="pt-4">
+                    <a href="index.html#product-list-section" class="inline-block bg-black text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#9b111e] transition-colors duration-300 shadow-xl">Mua sắm ngay</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values -->
+    <section class="bg-gray-50 py-20 border-t border-gray-200">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="text-center p-8 bg-white shadow-lg border-t-4 border-[#9b111e] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-20 h-20 mx-auto bg-red-50 text-[#9b111e] rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-xl uppercase mb-3 text-gray-800 tracking-wide">Chất lượng hàng đầu</h3>
+                    <p class="text-gray-500">Cam kết 100% sản phẩm Authentic với chất liệu và thiết kế hoàn hảo nhất đến tay bạn.</p>
+                </div>
+                <div class="text-center p-8 bg-white shadow-lg border-t-4 border-[#9b111e] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-20 h-20 mx-auto bg-red-50 text-[#9b111e] rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-xl uppercase mb-3 text-gray-800 tracking-wide">Giao hàng nhanh chóng</h3>
+                    <p class="text-gray-500">Quy trình xử lý đơn hàng siêu tốc, đóng gói cẩn thận và vận chuyển an toàn đến tận tay.</p>
+                </div>
+                <div class="text-center p-8 bg-white shadow-lg border-t-4 border-[#9b111e] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-20 h-20 mx-auto bg-red-50 text-[#9b111e] rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-xl uppercase mb-3 text-gray-800 tracking-wide">Hỗ trợ 24/7</h3>
+                    <p class="text-gray-500">Đội ngũ chăm sóc khách hàng nhiệt tình, luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="relative bg-cover bg-center bg-fixed text-sm" style="background-image: url('../banner/banner4.avif');">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-[5px]"></div>
+        
+        <div class="relative z-10 container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div>
+                <h2 class="font-sport text-4xl font-bold text-white mb-6 tracking-wide">ARSENAL</h2>
+                <p class="font-bold text-white mb-2 uppercase text-xs tracking-wider">CÔNG TY CỔ PHẦN ANHTU STORE</p>
+                <p class="mb-1 text-gray-300"><span class="text-white font-semibold">Hotline:</span> 66771508</p>
+                <p class="mb-4 text-gray-300">8:30 - 19:00 từ Thứ Hai đến Thứ Bảy</p>
+                <p class="mb-2 text-gray-300"><strong class="text-white">VP Phía Bắc:</strong> Tầng 1, Tòa nhà Lotte, 54 Liễu Giai, Ba Đình, Hà Nội</p>
+                <p class="text-gray-300"><strong class="text-white">VP Phía Nam:</strong> Tầng 17 tòa nhà Viettel, 285 Cách Mạng Tháng Tám, Quận 10, TP.HCM</p>
+            </div>
+            
+            <div>
+                <h3 class="text-white font-bold uppercase mb-6 tracking-wider">Giới thiệu</h3>
+                <ul class="space-y-3 text-gray-300">
+                    <li><a href="about.html" class="hover:text-white transition">Giới thiệu về Arsenal Direct</a></li>
+                    <li><a href="#" class="hover:text-white transition">Blog / Tin tức</a></li>
+                    <li><a href="#" class="hover:text-white transition">Hệ thống cửa hàng</a></li>
+                    <li><a href="#" class="hover:text-white transition">Liên hệ với chúng tôi</a></li>
+                    <li><a href="#" class="hover:text-white transition">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="text-white font-bold uppercase mb-6 tracking-wider">Hỗ trợ khách hàng</h3>
+                <ul class="space-y-3 text-gray-300">
+                    <li><a href="#" class="hover:text-white transition">Hỏi đáp (FAQ)</a></li>
+                    <li><a href="#" class="hover:text-white transition">Chính sách thành viên</a></li>
+                    <li><a href="#" class="hover:text-white transition">Hướng dẫn chọn size</a></li>
+                    <li><a href="#" class="hover:text-white transition">Chính sách đổi trả hàng</a></li>
+                    <li><a href="#" class="hover:text-white transition">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="text-white font-bold uppercase mb-6 tracking-wider">Kết nối</h3>
+                <div class="flex space-x-4 mb-8 text-gray-300">
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.597 1.323-1.324V1.325C24 .597 23.403 0 22.675 0z"/></svg></a>
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.15 4.39-2.92 5.62-1.74 1.25-4.05 1.58-6.07.97-2.31-.69-4.2-2.8-4.54-5.2-.42-2.95 1.4-5.91 4.17-6.86 1.05-.36 2.18-.46 3.28-.31V15c-.48-.12-1-.13-1.49-.03-.79.16-1.53.76-1.77 1.53-.3.94.13 2.05.97 2.54 1.17.68 2.87.3 3.55-.89.37-.65.51-1.44.51-2.2V.02z"/></svg></a>
+                </div>
+                
+                <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Phương thức thanh toán</h3>
+                <div class="flex space-x-3 mb-6">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png" class="h-6 bg-white p-1 rounded-sm object-contain" alt="Visa">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" class="h-6 bg-white p-1 rounded-sm object-contain" alt="Mastercard">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1200px-JCB_logo.svg.png" class="h-6 bg-white p-1 rounded-sm object-contain" alt="JCB">
+                </div>
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Da_thong_bao_bct.png/320px-Da_thong_bao_bct.png" alt="Đã thông báo Bộ Công Thương" class="h-10 opacity-90">
+            </div>
+        </div>
+        <div class="relative z-10 border-t border-white/20 mt-4 py-6 text-center">
+            <p class="font-sport text-sm tracking-[0.2em] text-gray-300">© 2026 ARSENAL DIRECT CLONE - BY ANHTU STORE AUTHENTIC</p>
+        </div>
+    </footer>
+
+    <div id="cart-sidebar" class="fixed inset-0 z-[100] invisible">
+        <div id="cart-overlay" class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"></div>
+        <div id="cart-content" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col text-black overflow-hidden">
+            <div class="p-6 border-b flex justify-between items-center bg-black text-white">
+                <h3 class="font-sport text-2xl font-bold uppercase">Giỏ hàng của bạn</h3>
+                <button id="close-cart" class="text-white text-3xl hover:text-red-500 transition outline-none">&times;</button>
+            </div>
+            <div id="sidebar-cart-items" class="flex-grow overflow-y-auto p-6 space-y-6"></div>
+            <div class="p-6 border-t bg-gray-50">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="font-bold uppercase text-gray-400">Tổng tiền:</span>
+                    <span id="sidebar-cart-total" class="font-sport text-2xl font-bold text-black">0₫</span>
+                </div>
+                <button onclick="window.location.href='checkout.html'" class="w-full bg-black text-white py-4 font-bold uppercase tracking-widest hover:bg-red-700 transition shadow-lg outline-none">Thanh toán ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

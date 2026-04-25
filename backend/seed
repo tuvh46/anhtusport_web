@@ -1,0 +1,332 @@
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const path = require('path');
+const connectDB = require('./config/db');
+const User = require('./models/User');
+const Notification = require('./models/Notification'); // Thêm Notification model
+const Order = require('./models/Order');
+const Product = require('./models/Product');
+
+// Nạp biến môi trường
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Kết nối Database
+connectDB();
+
+const importMockData = async () => {
+    try {
+        console.log('Đang tạo dữ liệu khách hàng và đơn hàng giả...');
+
+        // 0. Làm sạch dữ liệu: Tìm và xóa khách hàng giả cũ cùng toàn bộ đơn hàng của họ
+        const fakeUsers = await User.find({ email: { $regex: '^khachhang' } });
+        const existingAdmin = await User.findOne({ isAdmin: true }); // Tìm admin thật
+        const fakeUserIds = fakeUsers.map(u => u._id);
+
+        const deletedOrders = await Order.deleteMany({ 
+            $or: [
+                { user: { $in: fakeUserIds } },
+                { user: null }, 
+                { user: { $exists: false } }, 
+                { totalPrice: 0 }
+            ] 
+        });
+        const deletedUsers = await User.deleteMany({ _id: { $in: fakeUserIds } });
+        // Xóa tất cả reviews cũ của sản phẩm
+        await Product.updateMany({}, { $set: { reviews: [] } });
+        // Xóa tất cả notifications cũ
+        await Notification.deleteMany({});
+        console.log(`Đã xóa ${deletedUsers.deletedCount} khách hàng giả cũ, ${deletedOrders.deletedCount} đơn hàng cũ/rác, tất cả reviews và notifications.`);
+
+        // 1. Lấy danh sách sản phẩm (Chỉ lấy những sản phẩm CÒN HÀNG)
+        let products = await Product.find();
+        products = products.filter(p => (p.stock !== undefined ? p.stock > 0 : p.countInStock > 0));
+
+        if (products.length === 0) {
+            console.log('⚠️ Không có sản phẩm nào còn hàng. Vui lòng kiểm tra lại!');
+            process.exit();
+        }
+
+        // Dữ liệu địa chỉ mẫu chuẩn Việt Nam
+        const citiesData = {
+            'Hà Nội': {
+                'Quận Đống Đa': ['Phường Ngã Tư Sở', 'Phường Ô Chợ Dừa', 'Phường Trung Liệt'],
+                'Quận Cầu Giấy': ['Phường Dịch Vọng', 'Phường Quan Hoa', 'Phường Trung Hòa'],
+                'Quận Thanh Xuân': ['Phường Thanh Xuân Bắc', 'Phường Thanh Xuân Nam', 'Phường Thượng Đình']
+            },
+            'Hồ Chí Minh': {
+                'Quận 1': ['Phường Bến Nghé', 'Phường Bến Thành', 'Phường Phạm Ngũ Lão'],
+                'Quận 3': ['Phường 1', 'Phường 2', 'Phường 3'],
+                'Quận Bình Thạnh': ['Phường 1', 'Phường 3', 'Phường 5']
+            },
+            'Đà Nẵng': {
+                'Quận Hải Châu': ['Phường Hải Châu 1', 'Phường Hải Châu 2', 'Phường Thạch Thang'],
+                'Quận Sơn Trà': ['Phường An Hải Bắc', 'Phường An Hải Tây', 'Phường An Hải Đông']
+            }
+        };
+        const streetNames = ['Đường Nguyễn Trãi', 'Đường Lê Lợi', 'Đường Trần Hưng Đạo', 'Đường Hai Bà Trưng', 'Đường Phan Đình Phùng', 'Đường Lý Thường Kiệt', 'Đường Hoàng Diệu', 'Đường Quang Trung'];
+
+        // 2. Tạo 20 khách hàng giả
+        const usersToInsert = [];
+        const vnPrefixes = ['03', '05', '07', '08', '09']; // Các đầu số di động chuẩn ở VN
+        
+        // Từ điển tên người Việt Nam
+        const lastNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương', 'Lý'];
+        const maleMiddleNames = ['Văn', 'Hữu', 'Công', 'Quang', 'Minh', 'Xuân', 'Đình', 'Đức', 'Ngọc', 'Hải'];
+        const femaleMiddleNames = ['Thị', 'Ngọc', 'Thu', 'Phương', 'Thanh', 'Hồng', 'Mỹ', 'Thúy', 'Lan', 'Bích'];
+        const maleFirstNames = ['Dũng', 'Hùng', 'Mạnh', 'Thắng', 'Đạt', 'Tuấn', 'Kiên', 'Cường', 'Khoa', 'Thành', 'Long', 'Phúc', 'Bảo', 'Phong', 'Quân'];
+        const femaleFirstNames = ['Hoa', 'Hương', 'Linh', 'Trang', 'Nga', 'Anh', 'Nhung', 'Trà', 'My', 'Vy', 'Yến', 'Hà', 'Nhi', 'Ly', 'Dung'];
+
+        for (let i = 1; i <= 20; i++) {
+            const prefix = vnPrefixes[Math.floor(Math.random() * vnPrefixes.length)];
+            const suffix = Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
+            
+            // Sinh ngẫu nhiên giới tính và tên
+            const isMale = Math.random() > 0.5;
+            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const middleName = isMale ? maleMiddleNames[Math.floor(Math.random() * maleMiddleNames.length)] : femaleMiddleNames[Math.floor(Math.random() * femaleMiddleNames.length)];
+            const firstName = isMale ? maleFirstNames[Math.floor(Math.random() * maleFirstNames.length)] : femaleFirstNames[Math.floor(Math.random() * femaleFirstNames.length)];
+            const fullName = `${lastName} ${middleName} ${firstName}`;
+
+            // Sinh địa chỉ ngẫu nhiên cho khách hàng
+            const cityNames = Object.keys(citiesData);
+            const randomCity = cityNames[Math.floor(Math.random() * cityNames.length)];
+            const districtNames = Object.keys(citiesData[randomCity]);
+            const randomDistrict = districtNames[Math.floor(Math.random() * districtNames.length)];
+            const wards = citiesData[randomCity][randomDistrict];
+            const randomWard = wards[Math.floor(Math.random() * wards.length)];
+            const randomStreet = streetNames[Math.floor(Math.random() * streetNames.length)];
+            const houseNumber = Math.floor(Math.random() * 200) + 1;
+
+            const uniqueId = Date.now() + i; // Sinh ID độc nhất để tránh trùng lặp email
+            usersToInsert.push({
+                name: fullName,
+                email: `khachhang${uniqueId}@gmail.com`,
+                password: 'password123', // Mật khẩu giả
+                phone: `${prefix}${suffix}`,
+                address: `Số ${houseNumber} ${randomStreet}, ${randomWard}, ${randomDistrict}, ${randomCity}`,
+                isAdmin: false
+            });
+        }
+        
+        const createdUsers = await User.insertMany(usersToInsert); // Tạo 20 khách hàng giả
+        console.log(`Đã tạo ${createdUsers.length} khách hàng giả.`);
+
+        // 3. Tạo các đơn hàng ngẫu nhiên từ tháng 1 đến tháng 4
+        const ordersToInsert = [];
+        // Phân bổ trạng thái ngẫu nhiên (nhiều đơn đã giao hơn)
+        const statuses = ['delivered', 'delivered', 'delivered', 'delivered', 'delivered', 'delivered', 'shipping', 'shipping', 'pending', 'cancelled'];
+        
+        // Sử dụng năm hiện tại (hoặc có thể tuỳ chỉnh năm)
+        const currentYear = new Date().getFullYear(); 
+
+        for (const user of createdUsers) {
+            // Mỗi khách hàng mua 1 - 4 đơn
+            const numOrders = Math.floor(Math.random() * 4) + 1; 
+            
+            for (let j = 0; j < numOrders; j++) {
+                // Random tháng 1, 2, 3, 4 (chỉ số 0 đến 3 trong object Date)
+                const month = Math.floor(Math.random() * 4); 
+                const day = Math.floor(Math.random() * 28) + 1;
+                const orderDate = new Date(currentYear, month, day, Math.floor(Math.random() * 23), Math.floor(Math.random() * 59));
+                
+                const orderItems = [];
+                const numItems = Math.floor(Math.random() * 3) + 1;
+                let totalPrice = 0;
+                
+                for (let k = 0; k < numItems; k++) {
+                    const randomProduct = products[Math.floor(Math.random() * products.length)];
+                    const qty = Math.floor(Math.random() * 2) + 1;
+                    
+                    orderItems.push({
+                        id: randomProduct._id,
+                        name: randomProduct.name,
+                        image: randomProduct.image,
+                        price: randomProduct.price,
+                        qty: qty,
+                        size: ['S', 'M', 'L', 'XL'][Math.floor(Math.random() * 4)]
+                    });
+                    
+                    totalPrice += randomProduct.price * qty;
+                }
+
+                // Tách địa chỉ của khách hàng để điền vào đơn hàng
+                const addressParts = user.address.split(', ');
+                const orderCity = addressParts.pop(); // Lấy thành phố ra
+                const orderAddress = addressParts.join(', '); // Phần còn lại là địa chỉ
+
+                // Số điện thoại dự phòng (nếu User Schema không lưu phone dẫn đến bị undefined)
+                const fallbackPhone = `${vnPrefixes[Math.floor(Math.random() * vnPrefixes.length)]}${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`;
+
+                // 10% cơ hội khách hàng có thêm ghi chú
+                const notes = ['Giao vào giờ hành chính', 'Gọi trước khi giao nhé', 'Vui lòng giao cho bảo vệ', 'Giao ngoài giờ hành chính', 'Đóng gói cẩn thận giúp mình'];
+                const orderNote = Math.random() < 0.1 ? notes[Math.floor(Math.random() * notes.length)] : '';
+
+                ordersToInsert.push({
+                    user: user._id,
+                    orderItems: orderItems,
+                    shippingAddress: {
+                        fullname: user.name,
+                        phone: user.phone || fallbackPhone,
+                        address: orderAddress,
+                        city: orderCity
+                    },
+                    paymentMethod: 'COD',
+                    totalPrice: totalPrice,
+                    shippingFee: 30000,
+                    discount: 0,
+                    note: orderNote,
+                    status: statuses[Math.floor(Math.random() * statuses.length)],
+                    createdAt: orderDate,
+                    updatedAt: orderDate
+                });
+            }
+        }
+
+        // Chèn vào Database
+        await Order.insertMany(ordersToInsert);
+        console.log(`Đã tạo ${ordersToInsert.length} đơn hàng giả rải rác trong tháng 1, 2, 3 và 4.`);
+
+        // 4. Sinh dữ liệu đánh giá (Reviews) và phản hồi (Replies)
+        console.log('⏳ Đang tạo dữ liệu đánh giá và phản hồi giả...');
+
+        // Danh sách tất cả người dùng có thể đánh giá (fake users + admin)
+        const allReviewers = [...createdUsers];
+        if (existingAdmin) {
+            allReviewers.push(existingAdmin);
+        } else {
+            // Nếu chưa có admin thật, tạo một admin tạm thời từ fake user đầu tiên
+            if (createdUsers.length > 0) {
+                createdUsers[0].isAdmin = true;
+                createdUsers[0].name = 'Admin Cửa Hàng';
+                createdUsers[0].email = 'admin@sportstore.com';
+                await createdUsers[0].save();
+                allReviewers.push(createdUsers[0]);
+            }
+        }
+        
+        // Nếu vẫn không có reviewer nào, dừng lại
+        if (allReviewers.length === 0) {
+            console.log('⚠️ Không có người dùng nào để tạo đánh giá. Vui lòng kiểm tra lại!');
+            process.exit();
+        }
+
+        const reviewCommentsPositive = [
+            "Sản phẩm quá tuyệt vời, y hình, chất liệu tốt, đáng tiền!",
+            "Áo đấu đẹp xuất sắc, mình rất ưng ý. Giao hàng nhanh chóng.",
+            "Chất vải mát, thấm hút mồ hôi tốt. Mặc đi đá bóng hay đi chơi đều ok.",
+            "Không thể đòi hỏi gì hơn, sản phẩm đúng chuẩn Auth, lên form cực đẹp.",
+            "Sản phẩm chất lượng cao, đúng như mô tả. Sẽ ủng hộ shop dài dài."
+        ];
+        const reviewCommentsNeutral = [
+            "Sản phẩm tạm ổn, chưa thực sự nổi bật nhưng chấp nhận được.",
+            "Giá hơi cao một chút, nhưng chất lượng cũng tương xứng.",
+            "Giao hàng hơi lâu, nhưng sản phẩm thì cũng ổn áp.",
+            "Màu sắc bên ngoài có vẻ hơi khác so với ảnh một chút, nhưng vẫn đẹp.",
+            "Chưa có gì để phàn nàn, nhưng cũng chưa có gì đặc biệt."
+        ];
+        const reviewCommentsNegative = [
+            "Sản phẩm không như mong đợi, chất liệu hơi tệ, vải mỏng.",
+            "Hình ảnh và thực tế khác xa nhau, thất vọng.",
+            "Áo bị lỗi đường chỉ, không xứng đáng với giá tiền.",
+            "Giao hàng cực kỳ chậm, đóng gói sơ sài, sản phẩm bị nhàu nát.",
+            "Sản phẩm kém chất lượng, sẽ không mua lại lần nữa."
+        ];
+
+        const adminReplies = [
+            "Cảm ơn quý khách đã tin tưởng và ủng hộ sản phẩm của cửa hàng! Rất mong quý khách sẽ tiếp tục đồng hành cùng Arsenal Store.",
+            "Arsenal Store rất vui khi sản phẩm đã làm hài lòng quý khách. Đừng quên theo dõi các chương trình ưu đãi mới nhất nhé!",
+            "Chúng tôi chân thành cảm ơn đánh giá của quý khách và sẽ cố gắng cải thiện chất lượng dịch vụ hơn nữa.",
+            "Xin lỗi quý khách về sự bất tiện này, chúng tôi sẽ kiểm tra lại vấn đề và liên hệ hỗ trợ trong thời gian sớm nhất.",
+            "Cửa hàng đã tiếp nhận phản hồi của quý khách và đang tiến hành xử lý. Mong quý khách thông cảm."
+        ];
+
+        const mediaImageUrls = [
+            'https://images.unsplash.com/photo-1549298916-b41f75e717d3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGFyc2VuYWwlMjB8ZWtpdHxlbnwwfHwwfHw%3D',
+            'https://images.unsplash.com/photo-1621243851576-928929837a76?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1579738012629-873099710777?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1621243851576-928929837a76?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1635319857900-54911d279316?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        ];
+
+        for (const product of products) {
+            const numReviews = Math.floor(Math.random() * 6); // 0 đến 5 reviews
+            const productReviews = [];
+
+            for (let r = 0; r < numReviews; r++) {
+                const reviewer = allReviewers[Math.floor(Math.random() * allReviewers.length)];
+                const rating = Math.floor(Math.random() * 5) + 1; // 1 đến 5 sao
+                let comment = '';
+                if (rating === 5) comment = reviewCommentsPositive[Math.floor(Math.random() * reviewCommentsPositive.length)];
+                else if (rating >= 3) comment = reviewCommentsNeutral[Math.floor(Math.random() * reviewCommentsNeutral.length)];
+                else comment = reviewCommentsNegative[Math.floor(Math.random() * reviewCommentsNegative.length)];
+
+                // Random media
+                const numMedia = Math.floor(Math.random() * 3); // 0 đến 2 media
+                const media = [];
+                for (let m = 0; m < numMedia; m++) {
+                    media.push(mediaImageUrls[Math.floor(Math.random() * mediaImageUrls.length)]);
+                }
+
+                // Random likes/dislikes
+                const likes = [];
+                const dislikes = [];
+                for (const otherUser of allReviewers) {
+                    if (otherUser._id.toString() !== reviewer._id.toString()) {
+                        if (Math.random() < 0.1) likes.push(otherUser._id.toString());
+                        if (Math.random() < 0.05) dislikes.push(otherUser._id.toString());
+                    }
+                }
+
+                const reviewDate = new Date(Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000); // Trong vòng 90 ngày
+
+                const review = {
+                    id: Date.now() + r + Math.floor(Math.random() * 1000), // ID duy nhất
+                    reviewerId: reviewer._id.toString(),
+                    name: reviewer.name,
+                    isAdmin: reviewer.isAdmin,
+                    isVerifiedPurchase: Math.random() > 0.3, // 70% đã mua hàng
+                    rating: rating,
+                    comment: comment,
+                    date: reviewDate.toISOString(),
+                    likes: likes,
+                    dislikes: dislikes,
+                    media: media,
+                    isEdited: Math.random() < 0.05, // 5% đã chỉnh sửa
+                    isPinned: Math.random() < 0.02 && reviewer.isAdmin, // 2% admin ghim
+                    replies: []
+                };
+
+                // Sinh replies cho review này
+                const numReplies = Math.floor(Math.random() * 3); // 0 đến 2 replies
+                for (let rep = 0; rep < numReplies; rep++) {
+                    const replyAuthor = Math.random() < 0.7 ? existingAdmin : createdUsers[Math.floor(Math.random() * createdUsers.length)]; // 70% từ admin
+                    if (replyAuthor) {
+                        review.replies.push({
+                            id: Date.now() + r + rep + Math.floor(Math.random() * 10000),
+                            authorId: replyAuthor._id.toString(),
+                            authorName: replyAuthor.name,
+                            isAdmin: replyAuthor.isAdmin,
+                            text: adminReplies[Math.floor(Math.random() * adminReplies.length)],
+                            date: new Date(reviewDate.getTime() + Math.floor(Math.random() * 5) * 24 * 60 * 60 * 1000).toISOString(), // Sau ngày review
+                            likes: [], dislikes: []
+                        });
+                    }
+                }
+                productReviews.push(review);
+            }
+
+            // Cập nhật reviews vào sản phẩm
+            product.reviews = productReviews;
+            await product.save();
+        }
+        console.log(`Đã tạo đánh giá và phản hồi giả cho ${products.length} sản phẩm.`);
+
+        console.log('🎉 Hoàn tất việc tạo dữ liệu mẫu!');
+        process.exit();
+    } catch (error) {
+        console.error('Lỗi khi seed data:', error);
+        process.exit(1);
+    }
+};
+
+importMockData();

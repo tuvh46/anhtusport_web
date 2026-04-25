@@ -5,12 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arsenal Store | AnhTu Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .font-sport { font-family: 'Oswald', sans-serif; }
-        .font-sans { font-family: 'Inter', sans-serif; }
-        .product-card img { transition: transform 0.5s ease; }
-        .product-card:hover img { transform: scale(1.1); }
+        .font-sport { font-family: 'Playfair Display', serif; letter-spacing: 0.03em; }
+        .font-sans { font-family: 'Manrope', sans-serif; }
+        .vintage-header {
+            background: linear-gradient(135deg, rgba(13, 19, 27, 0.95) 0%, rgba(26, 34, 45, 0.92) 58%, rgba(44, 18, 24, 0.9) 100%);
+            border-bottom: 1px solid rgba(152, 53, 68, 0.45);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+        }
+        .vintage-link { color: #e8edf4; }
+        .vintage-link:hover { color: #ffffff; }
+        .user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border: 1px solid rgba(201, 213, 225, 0.35);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #f4f8fc;
+            letter-spacing: 0.08em;
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+        }
+        .user-chip:hover {
+            border-color: rgba(244, 248, 252, 0.65);
+            background: rgba(255, 255, 255, 0.14);
+        }
+        .logout-btn {
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(177, 66, 83, 0.55);
+            background: rgba(93, 30, 42, 0.45);
+            color: #ffd6dc;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+        }
+        .logout-btn:hover {
+            background: rgba(137, 36, 54, 0.72);
+            color: #ffffff;
+            border-color: rgba(255, 216, 222, 0.82);
+        }
+        .header-tag-btn {
+            color: #dbe4ef;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+        .header-tag-btn:hover { color: #ffffff; }
+        .header-tag-btn.active {
+            color: #ffd5dc;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+        .header-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(201, 213, 225, 0.35);
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .header-search input {
+            width: 210px;
+            background: transparent;
+            color: #f4f8fc;
+            font-size: 14px;
+            outline: none;
+        }
+        .header-search input::placeholder { color: #aab6c5; }
+        .header-search button {
+            color: #f4f8fc;
+            transition: color 0.2s ease;
+        }
+        .header-search button:hover { color: #ffffff; }
+        .header-icon-btn {
+            position: relative;
+            color: #e8edf4;
+            transition: color 0.2s ease;
+        }
+        .header-icon-btn:hover { color: #ffffff; }
+        .header-dropdown {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 10px);
+            width: 320px;
+            max-height: 360px;
+            overflow-y: auto;
+            background: #ffffff;
+            color: #111827;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.18);
+            z-index: 60;
+        }
         #cart-sidebar.invisible { pointer-events: none; }
         .group-hover\:block { display: none; }
         .group:hover .group-hover\:block { display: block; }
@@ -18,78 +115,204 @@
 </head>
 <body class="bg-white text-black antialiased overflow-x-hidden font-sans">
 
-    <nav class="bg-black text-white p-5 sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="font-sport text-3xl font-bold tracking-tighter">
-                <a href="index.html">ARSENAL <span class="text-gray-500 font-normal">DIRECT</span></a>
+    <nav class="vintage-header text-white py-5 px-4 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center gap-4">
+            <h1 class="font-sport text-4xl font-bold tracking-wide">
+                <a href="index.html" class="vintage-link">ANHTU<span class="text-[#d7dde6] font-semibold">STORE</span></a>
             </h1>
-            <div class="space-x-8 font-sport uppercase text-sm tracking-widest hidden md:flex items-center">
-                <a href="index.html" class="hover:text-gray-400 transition font-bold">Trang chủ</a>
-                <a href="#" class="hover:text-gray-400 transition">Sản phẩm</a>
+            <div class="hidden xl:flex items-center gap-4 flex-nowrap">
+                <button class="header-tag-btn active" data-tag="all">Tất cả</button>
+                <button class="header-tag-btn" data-tag="collection">Bộ sưu tập</button>
+                <button class="header-tag-btn" data-tag="new">Hàng mới về</button>
+                <button class="header-tag-btn" data-tag="shirt">Áo</button>
+                <button class="header-tag-btn" data-tag="pants">Quần</button>
+                <button class="header-tag-btn" data-tag="shoes">Giày</button>
+                <button class="header-tag-btn" data-tag="accessory">Phụ kiện</button>
+                <a href="blog.html" class="header-tag-btn hover:text-[#9b111e] transition-colors">Blog / Tin tức</a>
+            </div>
+            <div class="space-x-4 font-sans uppercase text-sm tracking-[0.14em] hidden md:flex items-center whitespace-nowrap">
+                <form id="header-search-form" class="header-search" role="search">
+                    <input id="header-search-input" type="text" placeholder="Tìm sản phẩm..." />
+                    <button type="submit" aria-label="Tìm kiếm">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+                <a href="favorites.html" class="header-icon-btn transition flex items-center gap-2" title="Yêu thích">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.35-9.5-8.48A5.75 5.75 0 1112 6.17a5.75 5.75 0 119.5 6.35C19 16.65 12 21 12 21z"/>
+                    </svg>
+                    <span id="fav-count" class="bg-rose-600 text-white text-[11px] rounded-full px-2 py-0.5 min-w-[20px] text-center font-bold">0</span>
+                </a>
+
+                <div class="relative">
+                    <button id="customer-notification-btn" class="header-icon-btn" title="Thông báo">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4a2 2 0 01-.6-1.42V11a6 6 0 10-12 0v3.18c0 .53-.21 1.04-.59 1.42L4 17h5m6 0a3 3 0 11-6 0m6 0H9"/>
+                        </svg>
+                        <span id="customer-notification-count" class="hidden absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] rounded-full px-1.5 min-w-[16px] text-center font-bold">0</span>
+                    </button>
+                    <div id="customer-notification-dropdown" class="header-dropdown hidden max-h-[350px] overflow-y-auto overflow-x-hidden">
+                        <div class="p-3 border-b bg-gray-50 flex justify-between items-center">
+                            <span class="font-bold text-xs uppercase tracking-widest text-gray-700">Thông báo của bạn</span>
+                            <div class="flex items-center gap-3">
+                                <button onclick="window.deleteSelectedNotifications(event, false)" class="text-gray-500 hover:text-gray-800 text-xs font-bold z-10 relative cursor-pointer transition">Xóa đã chọn</button>
+                                <button onclick="window.clearReadNotifications(event)" class="text-red-500 hover:text-red-700 text-sm font-bold z-10 relative cursor-pointer">Xóa đã đọc</button>
+                            </div>
+                        </div>
+                        <div id="customer-notification-list"></div>
+                    </div>
+                </div>
                 
-                <button id="open-cart-btn" class="hover:text-gray-400 transition text-red-500 font-bold relative flex items-center outline-none">
-                    Giỏ hàng
-                    <span id="cart-count" class="ml-2 bg-red-600 text-white text-[10px] rounded-full px-2 py-0.5 min-w-[18px] text-center">0</span>
+                <button id="open-cart-btn" class="vintage-link transition relative flex items-center gap-2 outline-none" title="Giỏ hàng">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <span id="cart-count" class="bg-red-600 text-white text-[11px] rounded-full px-2 py-0.5 min-w-[20px] text-center font-bold">0</span>
                 </button>
 
-                <div id="user-nav" class="text-gray-400 text-[10px]">
-                    <a href="login.html" class="hover:text-white">Sign In</a>
+                <div id="user-nav" class="text-[#f4dfc8] text-sm font-sans uppercase tracking-[0.14em] whitespace-nowrap">
+                    <a href="login.html" class="vintage-link transition flex items-center gap-1.5" title="Tài khoản">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span>Sign In</span>
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="relative bg-black overflow-hidden shadow-2xl">
+    <section class="relative bg-black overflow-hidden shadow-2xl" id="carousel-container">
         <div id="carousel-slides" class="relative flex transition-transform duration-700 ease-out" style="transform: translateX(0%);">
-            
-            <div class="min-w-full relative aspect-[16/7] md:aspect-[21/9]">
-                <img src="https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/adidas_AW24_L_v4.jpg?itok=8L1L_K_5" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-red-900 bg-opacity-60 flex flex-col items-center justify-center text-center p-10 md:p-16">
-                    <div class="text-white max-w-2xl">
-                        <h2 class="font-sport text-5xl md:text-7xl font-bold uppercase italic leading-none mb-3">AnhTu Store</h2>
-                        <p class="text-xs md:text-sm text-gray-200 uppercase tracking-[0.2em] mb-6">Đẳng cấp tối giản • Sức mạnh Pháo thủ</p>
-                        <a href="#product-list-section" class="bg-white text-red-700 px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-gray-200 transition shadow-lg">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="min-w-full relative aspect-[16/7] md:aspect-[21/9]">
-                <img src="https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/AW24_AWAY_L_v2.jpg?itok=yR-I8Q9z" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-red-900 bg-opacity-70 flex flex-col items-center justify-center text-center p-10 md:p-16">
-                    <div class="text-white max-w-3xl">
-                        <h2 class="font-sport text-6xl md:text-8xl font-bold uppercase leading-none mb-4 tracking-tighter">Away Kit</h2>
-                        <p class="text-xs md:text-sm text-gray-200 uppercase tracking-[0.3em] mb-8 font-bold">Chinh phục mọi sân đấu</p>
-                        <a href="#product-list-section" class="bg-white text-red-700 px-10 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-gray-200 transition shadow-lg">Khám phá</a>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Slides sẽ được load từ localStorage -->
         </div>
         
         <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 transition z-10 outline-none">❮</button>
         <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 transition z-10 outline-none">❯</button>
         
         <div id="carousel-indicators" class="absolute bottom-5 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
-            <button class="w-3 h-3 rounded-full bg-white transition-opacity outline-none" data-slide="0"></button>
-            <button class="w-3 h-3 rounded-full bg-white bg-opacity-50 transition-opacity outline-none" data-slide="1"></button>
+            <!-- Indicators sẽ được tạo động -->
         </div>
     </section>
 
     <main id="product-list-section" class="container mx-auto py-16 px-4">
         <div class="flex justify-between items-end mb-12 border-b-2 border-black pb-4">
             <h3 class="font-sport text-4xl font-bold uppercase">Sản phẩm mới</h3>
-            <span class="text-sm font-bold uppercase text-gray-400">Shop all</span>
+            <span id="search-feedback" class="text-sm font-bold uppercase text-gray-400">Shop all</span>
         </div>
         <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <p class="col-span-full text-center py-20 font-sport text-xl animate-pulse">Đang tải sản phẩm...</p>
         </div>
+        <div id="load-more-container" class="text-center mt-12 hidden">
+            <button onclick="loadMoreProducts()" class="bg-transparent border-2 border-black text-black px-10 py-3 font-bold uppercase tracking-widest hover:bg-black hover:text-white transition outline-none">Xem thêm</button>
+        </div>
     </main>
 
-    <footer class="bg-black text-white py-10 mt-20">
-        <div class="container mx-auto text-center">
-            <p class="font-sport text-sm tracking-[0.2em] text-gray-500">© 2026 ARSENAL DIRECT CLONE - BY ANHTU STORE</p>
+    <!-- Mini Slider Banner -->
+    <section class="relative w-full h-72 flex items-center justify-center mt-12">
+        <div class="absolute inset-0">
+            <img src="../banner/banner4.avif" alt="Stadium Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/60"></div>
+        </div>
+        
+        <div class="relative z-10 w-11/12 max-w-3xl backdrop-blur-md bg-white/20 border border-white/30 rounded-xl shadow-2xl h-48 overflow-hidden">
+            <!-- Slide 1 -->
+            <div class="mini-slide absolute inset-0 flex flex-col items-center justify-center p-6 opacity-100 transition-opacity duration-700 pointer-events-auto">
+                <h3 class="font-sport text-2xl md:text-3xl font-bold text-white tracking-widest mb-2 uppercase">Đăng ký nhận khuyến mãi</h3>
+                <p class="text-sm text-gray-200 mb-6 text-center">Đừng bỏ lỡ hàng ngàn sản phẩm và chương trình siêu hấp dẫn</p>
+                <form class="flex w-full max-w-md gap-3" onsubmit="event.preventDefault()">
+                    <input type="email" id="banner-email-input" placeholder="Nhập email của bạn..." class="flex-1 bg-white/10 border border-white/30 text-white placeholder-gray-200 px-4 py-2 outline-none focus:border-white transition rounded-none">
+                    <button type="button" onclick="forwardToRegister()" class="border border-white text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-white hover:text-black transition outline-none">Đăng ký</button>
+                </form>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="mini-slide absolute inset-0 flex flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700 pointer-events-none">
+                <h3 class="font-sport text-2xl md:text-3xl font-bold text-white tracking-widest mb-2 uppercase">Đặc quyền Pháo thủ</h3>
+                <p class="text-sm text-gray-200 mb-6 text-center">Miễn phí vận chuyển cho đơn hàng từ 4 sản phẩm hoặc tổng giá trị trên 10.000.000đ</p>
+                <a href="#product-list-section" class="bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-[#9b111e] hover:text-white transition shadow-lg outline-none">Mua sắm ngay</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="relative bg-cover bg-center bg-fixed text-sm" style="background-image: url('../banner/banner4.avif');">
+        <!-- Lớp phủ mờ (Overlay + Blur) -->
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-[5px]"></div>
+        
+        <div class="relative z-10 container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            <!-- Cột 1: Thông tin công ty -->
+            <div>
+                <h2 class="font-sport text-4xl font-bold text-white mb-6 tracking-wide">ARSENAL</h2>
+                <p class="font-bold text-white mb-2 uppercase text-xs tracking-wider">CÔNG TY CỔ PHẦN ANHTU STORE</p>
+                <p class="mb-1 text-gray-300"><span class="text-white font-semibold">Hotline:</span> 66771508</p>
+                <p class="mb-4 text-gray-300">8:30 - 19:00 từ Thứ Hai đến Thứ Bảy</p>
+                <p class="mb-2 text-gray-300"><strong class="text-white">VP Phía Bắc:</strong> Tầng 1, Tòa nhà Lotte, 54 Liễu Giai, Ba Đình, Hà Nội</p>
+                <p class="text-gray-300"><strong class="text-white">VP Phía Nam:</strong> Tầng 17 tòa nhà Viettel, 285 Cách Mạng Tháng Tám, Quận 10, TP.HCM</p>
+            </div>
+            
+            <!-- Cột 2: Giới thiệu -->
+            <div>
+                <h3 class="text-white font-bold uppercase mb-6 tracking-wider">Giới thiệu</h3>
+                <ul class="space-y-3 text-gray-300">
+                    <li><a href="about.html" class="hover:text-white transition">Giới thiệu về Arsenal Direct</a></li>
+                    <li><a href="#" class="hover:text-white transition">Blog / Tin tức</a></li>
+                    <li><a href="#" class="hover:text-white transition">Hệ thống cửa hàng</a></li>
+                    <li><a href="#" class="hover:text-white transition">Liên hệ với chúng tôi</a></li>
+                    <li><a href="#" class="hover:text-white transition">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            
+            <!-- Cột 3: Hỗ trợ khách hàng -->
+            <div>
+                <h3 class="text-white font-bold uppercase mb-6 tracking-wider">Hỗ trợ khách hàng</h3>
+                <ul class="space-y-3 text-gray-300">
+                    <li><a href="#" class="hover:text-white transition">Hỏi đáp (FAQ)</a></li>
+                    <li><a href="#" class="hover:text-white transition">Chính sách thành viên</a></li>
+                    <li><a href="#" class="hover:text-white transition">Hướng dẫn chọn size</a></li>
+                    <li><a href="#" class="hover:text-white transition">Chính sách đổi trả hàng</a></li>
+                    <li><a href="#" class="hover:text-white transition">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+            
+            <!-- Cột 4: Kết nối & Thanh toán -->
+            <div>
+                <h3 class="text-white font-bold uppercase mb-6 tracking-wider">Kết nối</h3>
+                <div class="flex space-x-4 mb-8 text-gray-300">
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.597 1.323-1.324V1.325C24 .597 23.403 0 22.675 0z"/></svg></a>
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                    <a href="#" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.15 4.39-2.92 5.62-1.74 1.25-4.05 1.58-6.07.97-2.31-.69-4.2-2.8-4.54-5.2-.42-2.95 1.4-5.91 4.17-6.86 1.05-.36 2.18-.46 3.28-.31V15c-.48-.12-1-.13-1.49-.03-.79.16-1.53.76-1.77 1.53-.3.94.13 2.05.97 2.54 1.17.68 2.87.3 3.55-.89.37-.65.51-1.44.51-2.2V.02z"/></svg></a>
+                </div>
+                
+                <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Phương thức thanh toán</h3>
+                <div class="flex space-x-3 mb-6">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png" class="h-6 bg-white p-1 rounded-sm object-contain" alt="Visa">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" class="h-6 bg-white p-1 rounded-sm object-contain" alt="Mastercard">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1200px-JCB_logo.svg.png" class="h-6 bg-white p-1 rounded-sm object-contain" alt="JCB">
+                </div>
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Da_thong_bao_bct.png/320px-Da_thong_bao_bct.png" alt="Đã thông báo Bộ Công Thương" class="h-10 opacity-90">
+            </div>
+        </div>
+        <div class="relative z-10 border-t border-white/20 mt-4 py-6 text-center">
+            <p class="font-sport text-sm tracking-[0.2em] text-gray-300">© 2026 ARSENAL DIRECT CLONE - BY ANHTU STORE AUTHENTIC</p>
         </div>
     </footer>
+
+    <!-- Floating Sticky Buttons -->
+    <div class="fixed bottom-6 left-6 flex flex-col gap-4 z-50">
+        <!-- Zalo -->
+        <a href="#" class="w-12 h-12 bg-[#0068ff] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform relative group">
+            <span class="text-white font-bold text-xs">Zalo</span>
+            <span class="absolute left-full ml-4 bg-white text-gray-800 text-xs font-bold px-3 py-1.5 rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Chat Zalo</span>
+        </a>
+        <!-- Messenger -->
+        <a href="#" class="w-12 h-12 bg-[#00b2ff] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform relative group">
+            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.87 1.455 5.438 3.73 7.152v3.588c0 .282.316.446.542.288l3.37-2.368c.75.21 1.54.32 2.358.32 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1.09 11.96l-2.45-2.61-4.81 2.61 5.3-5.63 2.45 2.61 4.81-2.61-5.3 5.63z"/></svg>
+            <span class="absolute left-full ml-4 bg-white text-gray-800 text-xs font-bold px-3 py-1.5 rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Chat Messenger</span>
+        </a>
+    </div>
 
     <div id="cart-sidebar" class="fixed inset-0 z-[100] invisible">
         <div id="cart-overlay" class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"></div>
@@ -112,75 +335,155 @@
         </div>
     </div>
 
+    <!-- Compare Bar -->
+    <div id="compare-bar" class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.15)] z-[90] transform translate-y-full transition-transform duration-300 border-t-4 border-[#9b111e]">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span class="font-bold uppercase tracking-wider text-sm hidden md:block">So sánh sản phẩm:</span>
+                <div id="compare-items" class="flex gap-3"></div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="clearCompare()" class="text-gray-500 hover:text-red-600 text-sm font-bold uppercase underline outline-none">Xóa hết</button>
+                <button onclick="openCompareModal()" class="bg-black text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-[#9b111e] transition shadow-lg outline-none disabled:opacity-50" id="compare-btn-trigger">So sánh ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div id="compare-modal" class="fixed inset-0 z-[120] hidden items-center justify-center">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCompareModal()"></div>
+        <div class="relative z-10 bg-white w-11/12 max-w-5xl rounded-xl shadow-2xl p-6 md:p-8 max-h-[90vh] overflow-y-auto scale-95 opacity-0 transition-all duration-300" id="compare-modal-content">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h3 class="font-sport text-3xl font-bold uppercase">So sánh sản phẩm</h3>
+                <button onclick="closeCompareModal()" class="text-gray-400 hover:text-red-600 text-3xl outline-none transition">&times;</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse" id="compare-table">
+                    <!-- Rendered by JS -->
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Chat Floating -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="chat-toggle-btn" class="w-14 h-14 bg-[#9b111e] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform relative group border-2 border-white outline-none">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            <span class="absolute right-full mr-4 bg-white text-gray-800 text-xs font-bold px-3 py-1.5 rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Chat với Store</span>
+        </button>
+
+        <div id="chat-box" class="absolute bottom-16 right-0 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 hidden flex-col overflow-hidden transition-all duration-300 origin-bottom-right transform scale-95 opacity-0 h-[400px]">
+            <div class="bg-[#9b111e] text-white p-4 flex justify-between items-center shadow-md z-10">
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/1200px-Arsenal_FC.svg.png" class="w-8 h-8 bg-white rounded-full p-1 object-contain">
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-[#9b111e] rounded-full"></span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm leading-tight">AnhTu Store</h4>
+                        <p class="text-[10px] text-red-200">Chúng tôi đang trực tuyến</p>
+                    </div>
+                </div>
+                <button id="chat-close-btn" class="text-white hover:text-gray-300 outline-none"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-3 text-sm"></div>
+            <form id="chat-form" class="p-3 border-t bg-white flex gap-2">
+                <input type="text" id="chat-input" class="flex-1 bg-gray-100 border-transparent rounded-full px-4 py-2 text-sm focus:bg-white focus:ring-2 focus:ring-red-200 focus:border-red-400 outline-none transition" placeholder="Nhập tin nhắn..." required>
+                <button type="submit" class="w-9 h-9 bg-[#9b111e] text-white rounded-full flex items-center justify-center hover:bg-red-800 transition outline-none shrink-0">
+                    <svg class="w-4 h-4 transform -rotate-45 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Welcome Voucher Popup -->
+    <div id="welcome-popup" class="fixed inset-0 z-[120] hidden items-center justify-center">
+        <div id="welcome-popup-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-500"></div>
+        <div id="welcome-popup-content" class="relative z-10 bg-white w-11/12 max-w-3xl rounded-xl shadow-2xl flex flex-col md:flex-row overflow-hidden scale-95 opacity-0 transition-all duration-500">
+            <div class="md:w-1/2 h-48 md:h-auto bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center text-center md:text-left">
+                <button onclick="closeWelcomePopup()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h3 class="font-sport text-3xl font-bold uppercase mb-4 text-[#9b111e]">THAM GIA CÙNG PHÁO THỦ!</h3>
+                <p class="text-gray-600 mb-8 leading-relaxed">Đăng ký thành viên ngay để nhận Voucher giảm giá <span id="welcome-popup-discount" class="font-bold text-[#9b111e] text-xl"></span> cho đơn hàng đầu tiên.</p>
+                <a href="register.html" class="bg-black text-white font-bold uppercase tracking-widest py-4 text-center hover:bg-[#9b111e] transition shadow-lg w-full block mb-4">Đăng ký ngay</a>
+                <button onclick="closeWelcomePopup()" class="text-xs text-gray-400 uppercase tracking-wider hover:text-gray-800 underline underline-offset-4 text-center w-full outline-none">Bỏ qua</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        
-        // Logic ẩn chấm đỏ thông báo
-        function markNotificationsRead() {
-            localStorage.setItem('notificationsRead', 'true');
-            const redDot = document.getElementById('notification-dot');
-            const badgeCount = document.getElementById('notification-badge');
-            if(redDot) redDot.style.display = 'none';
-            if(badgeCount) badgeCount.style.display = 'none';
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const popupShown = sessionStorage.getItem('welcomePopupShown');
+            
+            const miniSlides = document.querySelectorAll('.mini-slide');
+            if (miniSlides.length > 0) {
+                let currentMiniSlide = 0;
+                setInterval(() => {
+                    miniSlides[currentMiniSlide].classList.replace('opacity-100', 'opacity-0');
+                    miniSlides[currentMiniSlide].classList.replace('pointer-events-auto', 'pointer-events-none');
+                    currentMiniSlide = (currentMiniSlide + 1) % miniSlides.length;
+                    miniSlides[currentMiniSlide].classList.replace('opacity-0', 'opacity-100');
+                    miniSlides[currentMiniSlide].classList.replace('pointer-events-none', 'pointer-events-auto');
+                }, 4000);
+            }
+
+            if (!userInfo && !popupShown) {
+                setTimeout(async () => {
+                    
+                    let welcomeVoucher = { discount: 10, code: 'ARSENALNEW' };
+                    try {
+                        const res = await fetch('http://localhost:5000/api/settings/welcome-voucher');
+                        if (res.ok) welcomeVoucher = await res.json();
+                    } catch (e) {
+                        welcomeVoucher = JSON.parse(localStorage.getItem('welcomeVoucherSetting')) || welcomeVoucher;
+                    }
+                    const discountEl = document.getElementById('welcome-popup-discount');
+                    if (discountEl) discountEl.innerText = welcomeVoucher.discount + '%';
+                    
+                    const popup = document.getElementById('welcome-popup');
+                    const overlay = document.getElementById('welcome-popup-overlay');
+                    const content = document.getElementById('welcome-popup-content');
+                    
+                    popup.classList.remove('hidden');
+                    popup.classList.add('flex');
+                    
+                    // Hiệu ứng Fade in & Scale
+                    setTimeout(() => {
+                        overlay.classList.remove('opacity-0');
+                        content.classList.remove('opacity-0', 'scale-95');
+                    }, 50);
+                    
+                    sessionStorage.setItem('welcomePopupShown', 'true');
+                }, 3000); // Đợi 3 giây
+            }
+        });
+
+        function closeWelcomePopup() {
+            const popup = document.getElementById('welcome-popup');
+            const overlay = document.getElementById('welcome-popup-overlay');
+            const content = document.getElementById('welcome-popup-content');
+            
+            overlay.classList.add('opacity-0');
+            content.classList.add('opacity-0', 'scale-95');
+            
+            setTimeout(() => {
+                popup.classList.add('hidden');
+                popup.classList.remove('flex');
+            }, 500);
         }
 
-        if (userInfo) {
-            const hasRead = localStorage.getItem('notificationsRead') === 'true';
-
-            document.getElementById('user-nav').innerHTML = `
-                <div class="flex items-center h-full">
-                    ${userInfo.isAdmin ? `
-                        <div class="relative group mr-5 border-l border-gray-700 pl-5 flex items-center h-10">
-                            <button onclick="markNotificationsRead()" class="relative flex items-center hover:text-white transition outline-none text-gray-300 cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                </svg>
-                                ${!hasRead ? `
-                                <span id="notification-dot" class="absolute -top-1.5 -right-1.5 flex h-3 w-3">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-600 border-2 border-black"></span>
-                                </span>` : ''}
-                            </button>
-                            
-                            <div class="absolute right-0 top-full pt-4 w-80 hidden group-hover:block z-50 cursor-default">
-                                <div class="bg-white text-black shadow-2xl rounded-xl overflow-hidden border border-gray-200 font-sans">
-                                    <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
-                                        <span class="font-bold text-sm text-gray-800">THÔNG BÁO MỚI</span>
-                                        ${!hasRead ? `<span id="notification-badge" class="bg-red-600 text-white px-2.5 py-0.5 rounded-full text-xs font-bold shadow-sm">2</span>` : ''}
-                                    </div>
-                                    <div class="max-h-80 overflow-y-auto">
-                                        
-                                        <a href="admin.html" onclick="markNotificationsRead()" class="block p-4 border-b border-gray-100 hover:bg-red-50 transition duration-200 cursor-pointer">
-                                            <p class="text-sm font-bold text-red-600 mb-1 flex items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                                                Đơn hàng mới!
-                                            </p>
-                                            <p class="text-[13px] text-gray-600 leading-relaxed mt-1.5">Khách hàng <span class="font-bold text-gray-900">Nguyễn Văn A</span> vừa đặt một đơn hàng trị giá <span class="font-bold text-red-600">4.300.000₫</span>.</p>
-                                            <p class="text-[11px] text-gray-400 mt-2 font-medium">Vừa xong</p>
-                                        </a>
-
-                                        <a href="product.html?id=1#reviews-list-container" onclick="markNotificationsRead()" class="block p-4 border-b border-gray-100 hover:bg-yellow-50 transition duration-200 cursor-pointer">
-                                            <p class="text-sm font-bold text-yellow-500 mb-1 flex items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                                                Đánh giá 5 sao!
-                                            </p>
-                                            <p class="text-[13px] text-gray-600 leading-relaxed mt-1.5">Khách hàng <span class="font-bold text-gray-900">Anh Tú</span> vừa để lại một đánh giá tuyệt vời.</p>
-                                            <p class="text-[11px] text-gray-400 mt-2 font-medium">10 phút trước</p>
-                                        </a>
-
-                                    </div>
-                                    <a href="admin.html" class="block w-full text-center p-3 text-sm font-bold text-red-700 hover:bg-gray-100 transition uppercase bg-white">Xem toàn bộ</a>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="admin.html" class="mr-4 font-sport text-yellow-500 font-bold hover:text-yellow-400 transition uppercase text-sm tracking-wide">Admin Panel</a>
-                    ` : ''}
-
-                    <a href="profile.html" class="text-white border-l ${!userInfo.isAdmin ? 'border-gray-700' : 'border-gray-700 pl-4'} pl-4 font-sport uppercase font-bold text-sm tracking-widest hover:text-red-500 transition">HELLO, ${userInfo.name}</a>
-                    <button onclick="localStorage.removeItem('userInfo'); location.reload();" class="ml-4 hover:text-red-500 uppercase font-bold text-red-700 text-xs font-sport tracking-widest">[Thoát]</button>
-                </div>
-            `;
+        function forwardToRegister() {
+            const emailInput = document.getElementById('banner-email-input');
+            const emailValue = emailInput ? emailInput.value.trim() : '';
+            if (!emailValue) {
+                alert("Vui lòng nhập email của bạn");
+            } else {
+                window.location.href = 'register.html?email=' + encodeURIComponent(emailValue);
+            }
         }
     </script>
 </body>

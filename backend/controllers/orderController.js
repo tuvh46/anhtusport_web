@@ -31,7 +31,6 @@ const getMyOrders = async (req, res) => {
     }
 };
 
-module.exports = { addOrderItems, getMyOrders };
 // Lấy toàn bộ đơn hàng (Chỉ dành cho Admin)
 const getAllOrders = async (req, res) => {
     try {
@@ -42,20 +41,33 @@ const getAllOrders = async (req, res) => {
     }
 };
 
-// Cập nhật trạng thái đã giao hàng
-const updateOrderToDelivered = async (req, res) => {
+// Cập nhật trạng thái đơn hàng (Admin)
+const updateOrderStatus = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id);
-        if (order) {
-            order.isDelivered = true;
-            const updatedOrder = await order.save();
-            res.json(updatedOrder);
-        } else {
-            res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+        const { status } = req.body;
+        const validStatuses = ['pending', 'shipping', 'delivered', 'cancelled'];
+        
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
         }
+
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+        }
+
+        order.status = status;
+        if (status === 'delivered') {
+            order.isDelivered = true;
+        } else {
+            order.isDelivered = false; // Đồng bộ trạng thái isDelivered
+        } 
+
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
     } catch (error) {
-        res.status(500).json({ message: 'Lỗi khi cập nhật đơn hàng' });
+        res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái đơn hàng' });
     }
 };
 
-module.exports = { addOrderItems, getMyOrders, getAllOrders, updateOrderToDelivered };
+module.exports = { addOrderItems, getMyOrders, getAllOrders, updateOrderStatus };

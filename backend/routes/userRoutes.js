@@ -1,11 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, authUser } = require('../controllers/userController');
+const { registerUser, authUser, getAllUsers, deleteUser, updateUserProfile, updateUserPassword } = require('../controllers/userController');
 
-// Đường dẫn Đăng ký (POST /api/users)
+// POST /api/users - Đăng ký
 router.post('/', registerUser);
-
-// Đường dẫn Đăng nhập (POST /api/users/login) -
+// POST /api/users/login - Đăng nhập
 router.post('/login', authUser);
+// GET /api/users - Lấy danh sách tất cả users (Dùng cho Admin)
+router.get('/', getAllUsers);
+
+// PUT /api/users/:id - Cập nhật thông tin profile
+router.put('/:id', updateUserProfile);
+// PUT /api/users/:id/password - Cập nhật mật khẩu
+router.put('/:id/password', updateUserPassword);
+
+router.delete('/:id', deleteUser); // Xóa user
 
 module.exports = router;

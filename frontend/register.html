@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account | Arsenal Direct Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f4f4; }
-        .font-arsenal { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
+        body { font-family: 'Manrope', sans-serif; background-color: #f4f4f4; }
+        .font-arsenal { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.02em; }
         .btn-arsenal { background-color: #9c0213; transition: all 0.3s; }
         .btn-arsenal:hover { background-color: #7a020f; transform: translateY(-1px); }
+        .vintage-header {
+            background: linear-gradient(135deg, #2a1c16 0%, #4f3427 55%, #6f4d3f 100%);
+            border-bottom: 1px solid rgba(245, 222, 179, 0.22);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <header class="p-6 bg-white border-b shadow-sm">
-        <div class="container mx-auto text-center md:text-left">
-            <a href="index.html">
-                <img src="https://as2.ftcdn.net/v2/jpg/19/04/59/47/1000_F_1904594794_SFJBd5mWPvRHCnGjjgdKFKp8mKsrdodE.jpg" alt="Arsenal Logo" class="h-12 mx-auto md:mx-0">
+    <header class="vintage-header p-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-arsenal text-3xl text-[#f4dfc8] hover:text-[#ffd9a0] transition">
+                ANHTU <span class="text-[#d5bca1]">STORE</span>
             </a>
+            <a href="index.html" class="text-xs uppercase tracking-[0.2em] text-[#f4dfc8] hover:text-[#ffd9a0] transition">Về trang chủ</a>
         </div>
     </header>
 
@@ -42,7 +48,7 @@
 
                 <div>
                     <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Địa chỉ email</label>
-                    <input type="email" id="email" required placeholder="example@gmail.com"
+                    <input type="email" id="register-email" required placeholder="example@gmail.com"
                         class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
                 </div>
 
@@ -64,6 +70,18 @@
                 </button>
             </form>
 
+            <div class="relative flex items-center my-8">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink mx-4 text-gray-400 font-bold text-xs uppercase tracking-widest">hoặc đăng ký bằng</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <button type="button" onclick="handleSocialLogin('Google')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Facebook')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/452196/facebook-1.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Apple')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/511330/apple-173.svg" class="h-6 w-6"></button>
+            </div>
+
             <div class="text-center text-sm border-t border-gray-100 pt-6 mt-8">
                 <span class="text-gray-400 italic">Đã có tài khoản?</span>
                 <a href="login.html" class="font-bold underline ml-1 hover:text-[#9c0213]">Đăng nhập</a>
@@ -71,11 +89,22 @@
         </div>
     </main>
 
+    <!-- Success Voucher Popup -->
+    <div id="success-voucher-popup" class="fixed inset-0 z-[120] hidden items-center justify-center">
+        <div id="success-voucher-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div id="success-voucher-content" class="relative z-10 bg-white w-11/12 max-w-md rounded-xl shadow-2xl p-8 text-center scale-95 opacity-0 transition-all duration-300">
+            <h3 class="font-arsenal text-3xl font-bold uppercase mb-4 text-[#9c0213]">ĐĂNG KÝ THÀNH CÔNG!</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Chào mừng bạn đến với cộng đồng. Đây là món quà dành cho bạn: Giảm <strong id="success-discount-val" class="text-[#9c0213] text-xl">...</strong> cho đơn hàng đầu tiên.</p>
+            <div class="bg-gray-100 p-3 font-bold text-xl border-dashed border-2 border-red-600 text-center tracking-widest mb-6" id="voucher-code-display">ARSENALNEW</div>
+            <button onclick="copyAndShop()" class="w-full btn-arsenal text-white font-bold py-4 rounded-full uppercase tracking-[0.2em] text-sm shadow-lg outline-none">SAO CHÉP MÃ & MUA SẮM</button>
+        </div>
+    </div>
+
     <script>
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('register-email').value;
             const password = document.getElementById('password').value;
 
             try {
@@ -89,9 +118,27 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert('Đăng ký thành công! Chào mừng ' + data.name);
-                    // Sau khi đăng ký xong, chuyển sang trang Login
-                    window.location.href = 'login.html';
+                    // Lưu thông tin user để tự động đăng nhập sau khi đăng ký
+                    localStorage.setItem('userInfo', JSON.stringify(data));
+
+                    let welcomeVoucher = { discount: 10, code: 'ARSENALNEW' };
+                    try {
+                        const res = await fetch('http://localhost:5000/api/settings/welcome-voucher');
+                        if (res.ok) welcomeVoucher = await res.json();
+                    } catch (e) {
+                        welcomeVoucher = JSON.parse(localStorage.getItem('welcomeVoucherSetting')) || welcomeVoucher;
+                    }
+                    
+                    document.getElementById('success-discount-val').innerText = welcomeVoucher.discount + '%';
+                    document.getElementById('voucher-code-display').innerText = welcomeVoucher.code;
+                    
+                    const popup = document.getElementById('success-voucher-popup');
+                    const content = document.getElementById('success-voucher-content');
+                    popup.classList.remove('hidden');
+                    popup.classList.add('flex');
+                    setTimeout(() => {
+                        content.classList.remove('opacity-0', 'scale-95');
+                    }, 50);
                 } else {
                     alert('Lỗi: ' + data.message);
                 }
@@ -99,6 +146,38 @@
                 alert('Không thể kết nối tới Server!');
             }
         });
+
+        window.copyAndShop = function() {
+            const code = document.getElementById('voucher-code-display').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Đã sao chép mã: ' + code);
+                window.location.href = 'index.html';
+            }).catch(err => {
+                window.location.href = 'index.html';
+            });
+        }
+
+        function handleSocialLogin(provider) {
+            if (typeof window.showToast === 'function') {
+                window.showToast('Chức năng đang tiếp tục phát triển...', 'info');
+            } else {
+                alert('Chức năng đang tiếp tục phát triển...');
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            if (emailParam) {
+                document.getElementById('register-email').value = emailParam;
+            }
+        });
+
+        if (window.userInfo && window.userInfo.isAdmin) { // Sử dụng window.userInfo
+            window.connectAdminWebSocket(); // Gọi hàm toàn cục từ script.js
+            window.fetchAdminNotifications(); // Gọi hàm toàn cục từ script.js
+        }
     </script>
 </body>
 </html>
