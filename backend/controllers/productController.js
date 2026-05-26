@@ -75,7 +75,7 @@ const updateProductReviews = async (req, res) => {
             let notifMessage = `Khách hàng ${latestReview.name || 'ẩn danh'} vừa đánh giá ${latestReview.rating} sao cho sản phẩm: ${product.name}`;
             
             if (latestReview.rating <= 2) {
-                notifTitle = '🚨 CẢNH BÁO ĐÁNH GIÁ THẤP';
+                notifTitle = ' CẢNH BÁO ĐÁNH GIÁ THẤP';
                 notifMessage = `Khẩn cấp: ${latestReview.name || 'ẩn danh'} vừa đánh giá ${latestReview.rating} sao cho sản phẩm ${product.name}! Cần xử lý ngay.`;
             }
             try {
@@ -185,4 +185,19 @@ const updateProduct = async (req, res) => {
     }
 };
 
-module.exports = { getProducts, getProductById, updateProductReviews, replyReview, createProduct, updateProduct };
+const deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (product) {
+            await product.deleteOne();
+            res.json({ message: 'Sản phẩm đã được xóa thành công' });
+        } else {
+            res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi Server khi xóa sản phẩm', error: error.message });
+    }
+};
+
+module.exports = { getProducts, getProductById, updateProductReviews, replyReview, createProduct, updateProduct, deleteProduct };
+

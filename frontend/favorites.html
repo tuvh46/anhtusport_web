@@ -30,7 +30,7 @@
             <span id="favorite-count-text" class="text-sm text-gray-500 uppercase tracking-wider">0 sản phẩm</span>
         </div>
 
-        <div id="favorites-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="favorites-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             <p class="col-span-full text-center text-gray-500 py-16">Đang tải sản phẩm...</p>
         </div>
     </main>
@@ -53,8 +53,8 @@
                 updateCountText(0);
                 favoritesList.innerHTML = `
                     <div class="col-span-full text-center py-16">
-                        <p class="text-lg text-gray-500 mb-3">Bạn chưa thêm sản phẩm nào vào mục yêu thích.</p>
-                        <a href="index.html#product-list-section" class="inline-block bg-black text-white px-6 py-3 uppercase text-xs tracking-widest hover:bg-red-700 transition">Khám phá sản phẩm</a>
+                        <p class="text-base text-gray-500 mb-3">Bạn chưa thêm sản phẩm nào vào mục yêu thích.</p>
+                        <a href="index.html#product-list-section" class="inline-block bg-black text-white px-5 py-2.5 uppercase text-[11px] tracking-widest hover:bg-red-700 transition">Khám phá sản phẩm</a>
                     </div>
                 `;
                 return;
@@ -71,38 +71,40 @@
             }
 
             favoritesList.innerHTML = favoriteProducts.map((product) => `
-                <div class="bg-white border border-gray-100 shadow-sm hover:shadow-md transition p-2">
-                    <a href="product.html?id=${product._id}" class="block bg-gray-100 aspect-[3/4] mb-3 overflow-hidden">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
-                    </a>
-                    <div class="px-2 pb-3">
-                        <a href="product.html?id=${product._id}" class="block font-semibold text-base mb-1 hover:text-red-700 line-clamp-2">${product.name}</a>
-                        <p class="text-xs uppercase text-gray-400 mb-1">${product.category || 'Sản phẩm'}</p>
-                        ${(() => {
-                            const reviews = product.reviews || [];
-                            const actualRatings = reviews.filter(r => (Number(r.rating) || 0) > 0);
-                            const totalReviews = actualRatings.length;
-                            const avgRating = totalReviews > 0 ? (actualRatings.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / totalReviews).toFixed(1) : 0;
-                            const ratingPercent = (avgRating / 5) * 100;
-                            if (totalReviews > 0) {
-                                return `
-                                    <div class="flex flex-col gap-1 mb-3 mt-1">
-                                        <div class="flex justify-between items-center text-[10px]">
-                                            <span class="font-bold text-gray-700 flex items-center">${avgRating} <span class="text-yellow-400 text-[10px] ml-0.5 mb-0.5">★</span></span>
-                                            <span class="text-gray-400 font-medium">(${totalReviews} đánh giá)</span>
+                <div class="bg-white border border-gray-100 shadow-sm hover:shadow-md transition p-1.5 rounded-sm flex flex-col justify-between h-full">
+                    <div>
+                        <a href="product.html?id=${product._id}" class="block bg-gray-100 aspect-[3/4] mb-2 overflow-hidden rounded-sm">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        </a>
+                        <div class="px-1 pb-2">
+                            <a href="product.html?id=${product._id}" class="block font-semibold text-xs md:text-sm mb-1 hover:text-red-700 line-clamp-2 h-8 md:h-10 leading-tight">${product.name}</a>
+                            <p class="text-[10px] uppercase text-gray-400 mb-1">${product.category || 'Sản phẩm'}</p>
+                            ${(() => {
+                                const reviews = product.reviews || [];
+                                const actualRatings = reviews.filter(r => (Number(r.rating) || 0) > 0);
+                                const totalReviews = actualRatings.length;
+                                const avgRating = totalReviews > 0 ? (actualRatings.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / totalReviews).toFixed(1) : 0;
+                                const ratingPercent = (avgRating / 5) * 100;
+                                if (totalReviews > 0) {
+                                    return `
+                                        <div class="flex flex-col gap-1 mb-2 mt-1">
+                                            <div class="flex justify-between items-center text-[9px]">
+                                                <span class="font-bold text-gray-700 flex items-center">${avgRating} <span class="text-yellow-400 text-[9px] ml-0.5 mb-0.5">★</span></span>
+                                                <span class="text-gray-400 font-medium">(${totalReviews})</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-1 shadow-inner">
+                                                <div class="bg-gradient-to-r from-yellow-300 to-yellow-500 h-1 rounded-full" style="width: ${ratingPercent}%"></div>
+                                            </div>
                                         </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1 shadow-inner">
-                                            <div class="bg-gradient-to-r from-yellow-300 to-yellow-500 h-1 rounded-full" style="width: ${ratingPercent}%"></div>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-                            return `<p class="text-[10px] text-gray-400 italic mb-3 mt-1">Chưa có đánh giá</p>`;
-                        })()}
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-lg">${product.price.toLocaleString('vi-VN')}₫</span>
-                            <button onclick="removeFavorite('${product._id}')" class="text-xs uppercase tracking-wider text-rose-700 hover:text-rose-900 font-semibold">Bỏ thích</button>
+                                    `;
+                                }
+                                return `<p class="text-[9px] text-gray-400 italic mb-2 mt-1">Chưa có đánh giá</p>`;
+                            })()}
                         </div>
+                    </div>
+                    <div class="px-1 pb-1 flex items-center justify-between mt-auto pt-1 border-t border-gray-50">
+                        <span class="font-bold text-xs md:text-sm text-gray-900">${product.price.toLocaleString('vi-VN')}₫</span>
+                        <button onclick="removeFavorite('${product._id}')" class="text-[10px] uppercase tracking-wider text-rose-700 hover:text-rose-900 font-bold outline-none">Bỏ thích</button>
                     </div>
                 </div>
             `).join('');

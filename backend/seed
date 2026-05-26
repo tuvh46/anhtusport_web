@@ -210,27 +210,117 @@ const importMockData = async () => {
             process.exit();
         }
 
-        const reviewCommentsPositive = [
-            "Sản phẩm quá tuyệt vời, y hình, chất liệu tốt, đáng tiền!",
-            "Áo đấu đẹp xuất sắc, mình rất ưng ý. Giao hàng nhanh chóng.",
-            "Chất vải mát, thấm hút mồ hôi tốt. Mặc đi đá bóng hay đi chơi đều ok.",
-            "Không thể đòi hỏi gì hơn, sản phẩm đúng chuẩn Auth, lên form cực đẹp.",
-            "Sản phẩm chất lượng cao, đúng như mô tả. Sẽ ủng hộ shop dài dài."
-        ];
-        const reviewCommentsNeutral = [
-            "Sản phẩm tạm ổn, chưa thực sự nổi bật nhưng chấp nhận được.",
-            "Giá hơi cao một chút, nhưng chất lượng cũng tương xứng.",
-            "Giao hàng hơi lâu, nhưng sản phẩm thì cũng ổn áp.",
-            "Màu sắc bên ngoài có vẻ hơi khác so với ảnh một chút, nhưng vẫn đẹp.",
-            "Chưa có gì để phàn nàn, nhưng cũng chưa có gì đặc biệt."
-        ];
-        const reviewCommentsNegative = [
-            "Sản phẩm không như mong đợi, chất liệu hơi tệ, vải mỏng.",
-            "Hình ảnh và thực tế khác xa nhau, thất vọng.",
-            "Áo bị lỗi đường chỉ, không xứng đáng với giá tiền.",
-            "Giao hàng cực kỳ chậm, đóng gói sơ sài, sản phẩm bị nhàu nát.",
-            "Sản phẩm kém chất lượng, sẽ không mua lại lần nữa."
-        ];
+        const getRandomComment = (productName, rating) => {
+            const nameLower = productName.toLowerCase();
+            
+            // 1. Nhóm sản phẩm TẤT (Socks)
+            if (nameLower.includes('tất') || nameLower.includes('sock')) {
+                const positive = [
+                    "Tất đi êm chân, chất vải dày dặn dệt rất đều, co giãn 4 chiều cực kỳ ôm sát.",
+                    "Tất thi đấu quá đỉnh, đi rất êm và chống trơn trượt trong giày rất tốt.",
+                    "Sản phẩm chất lượng cao, đi đá bóng 90 phút mà chân vẫn thông thoáng, không bị bí mùi.",
+                    "Tất dày dặn, thấm hút mồ hôi tốt, logo dệt sắc sảo, đường thêu tinh tế.",
+                    "Hàng chính hãng đi khác biệt hẳn, cực kỳ bền chân và không bị bai nhão sau nhiều lần giặt."
+                ];
+                const neutral = [
+                    "Tất co giãn tốt nhưng hơi dài, kéo lên gần đến đầu gối chân mình.",
+                    "Tất dày dặn nhưng đi vào mùa hè nóng nực thì hơi bí chân một chút.",
+                    "Giao hàng nhanh, tất đi tạm ổn nhưng đường dệt logo thỉnh thoảng có chỉ thừa nhẹ.",
+                    "Giá tất hơi đắt đỏ nhưng bù lại chất lượng dệt kim đi êm chân, bảo vệ cổ chân tốt."
+                ];
+                const negative = [
+                    "Tất co giãn rất kém, cổ tất chặt đi vào chân bị thắt và lằn đỏ đau đớn.",
+                    "Tất mỏng quá, mình đi đá bóng mới được 2 trận đã bị sờn rách ở gót chân.",
+                    "Sản phẩm bị lỗi dệt ở đầu ngón chân, đi bị cộm cọ xát rất khó chịu khi sút bóng.",
+                    "Giao sai màu tất, chất tất mỏng dính và nhanh bị nhão dãn rộng sau lần giặt đầu tiên."
+                ];
+                
+                if (rating === 5) return positive[Math.floor(Math.random() * positive.length)];
+                if (rating >= 3) return neutral[Math.floor(Math.random() * neutral.length)];
+                return negative[Math.floor(Math.random() * negative.length)];
+            }
+            
+            // 2. Nhóm sản phẩm DÉP (Slides)
+            if (nameLower.includes('dép') || nameLower.includes('slide') || nameLower.includes('sandal')) {
+                const positive = [
+                    "Dép đi siêu êm chân, quai dép ôm vừa vặn, dép rất nhẹ và thoát nước tốt.",
+                    "Đế dép EVA đàn hồi và giảm chấn cực tốt, đi trong nhà hay sau trận đấu mỏi chân đều rất sướng.",
+                    "Dép đẹp xuất sắc, quai dép dập vân nổi logo sắc nét và chắc chắn vô cùng.",
+                    "Dép đi mưa đi nước thoải mái không lo bị hôi hay trơn trượt, chất cao su đúc nguyên khối siêu bền.",
+                    "Rất đáng tiền, form dép thể thao khỏe khoắn cực ôm bàn chân."
+                ];
+                const neutral = [
+                    "Dép đi êm chân nhưng quai hơi bó chặt, bạn nào bàn chân bè nên mua tăng lên 1 size nhé.",
+                    "Dép nhẹ và chống trượt tốt, nhưng màu sắc thực tế hơi xỉn màu hơn ảnh chụp chút.",
+                    "Dép dùng tạm ổn, quai dép hơi cứng lúc mới đi vài hôm đầu nhưng sau đi nhiều sẽ mềm ra.",
+                    "Giao hàng nhanh, dép đi vừa vặn thoải mái nhưng hộp đựng bên ngoài bị móp méo nặng."
+                ];
+                const negative = [
+                    "Quai dép rất cứng và sắc, đi cọ vào mu bàn chân làm trầy xước và đau rát cổ chân.",
+                    "Dép đi nước bị bong keo ở quai sau chưa đầy một tuần sử dụng, chất lượng keo rất tệ.",
+                    "Đế dép cực kỳ cứng, trơn trượt mạnh khi đi trên sàn gạch hoa ướt nước, rất nguy hiểm.",
+                    "Dép có mùi nhựa tái chế rất nồng và hắc khi mới khui hộp, đi lâu bị đau gót chân."
+                ];
+                
+                if (rating === 5) return positive[Math.floor(Math.random() * positive.length)];
+                if (rating >= 3) return neutral[Math.floor(Math.random() * neutral.length)];
+                return negative[Math.floor(Math.random() * negative.length)];
+            }
+            
+            // 3. Nhóm sản phẩm QUẦN (Shorts/Pants)
+            if (nameLower.includes('quần') || nameLower.includes('short') || nameLower.includes('pant')) {
+                const positive = [
+                    "Quần mặc cực kỳ mát, vải nhẹ co giãn thoải mái khi di chuyển chạy nhảy trên sân.",
+                    "Chất liệu co giãn thể thao rất tốt, form quần ngắn năng động thích hợp đá bóng hoặc chạy bộ.",
+                    "Quần dày dặn vừa phải, túi quần sâu tiện lợi đựng đồ cá nhân, đường may thêu logo sắc sảo.",
+                    "Màu sắc chuẩn phối đồ thể thao cực đẹp, cạp chun co giãn ôm bụng vừa vặn thoải mái.",
+                    "Đáng tiền mua, chất vải dù Aeroready thoát mồ hôi siêu nhanh và thoáng khí."
+                ];
+                const neutral = [
+                    "Quần mặc tạm ổn, ống quần hơi rộng chút so với đùi của mình nhưng vận động thoải mái.",
+                    "Quần mỏng nhẹ mát mẻ, nhưng tầm giá này thì chất vải có hơi mỏng so với kỳ vọng.",
+                    "Quần mặc vừa vặn, giao hàng nhanh chóng nhưng cạp quần có vài đường chỉ may bị thừa.",
+                    "Vải quần thun co giãn trung bình, mặc đá bóng hay đi tập gym hàng ngày đều được."
+                ];
+                const negative = [
+                    "Quần bị ngắn và mỏng hơn nhiều so với mô tả, mặc lên bị lộ và chất vải thô ráp.",
+                    "Quần bị bục chỉ ở đường đáy đùi chỉ sau buổi tập đầu tiên, kỹ thuật gia công rất kém.",
+                    "Đường may lỗi tùm lum, cạp chun quần quá chật bó sát bụng rất đau khi cúi người.",
+                    "Giao hàng siêu chậm trễ, quần nhận được bị đứt mất một đầu dây rút ở cạp quần."
+                ];
+                
+                if (rating === 5) return positive[Math.floor(Math.random() * positive.length)];
+                if (rating >= 3) return neutral[Math.floor(Math.random() * neutral.length)];
+                return negative[Math.floor(Math.random() * negative.length)];
+            }
+            
+            // 4. Mặc định: Nhóm ÁO đấu và ĐỒ dùng chung (Jerseys/Shirts)
+            const positive = [
+                "Sản phẩm quá tuyệt vời, y hệt như hình mô tả, chất liệu vải xịn mịn cực kỳ đáng tiền!",
+                "Áo đấu đẹp xuất sắc, thêu logo sắc sảo lên form cực kỳ ôm dáng và thể thao. Giao hàng nhanh.",
+                "Chất vải thun mè mát lạnh, thoát mồ hôi rất tốt. Mặc đi đá bóng hay đi chơi dạo phố đều cực đẹp.",
+                "Không thể đòi hỏi gì hơn, sản phẩm chuẩn form Authentic, vải co giãn mặc thoải mái vô cùng.",
+                "Sản phẩm chất lượng cao, đúng như mô tả của shop. Sẽ tiếp tục mua thêm nhiều bộ khác nữa."
+            ];
+            const neutral = [
+                "Áo mặc tạm ổn, chất vải chưa thực sự xuất sắc nhưng tầm giá này là chấp nhận được.",
+                "Giá hơi cao một chút nhưng bù lại thiết kế cổ áo và bo tay thêu dệt rất chi tiết, sang trọng.",
+                "Giao hàng hơi lâu do hàng hot, nhưng áo nhận về mặc thử lên dáng rất tôn vai.",
+                "Màu sắc bên ngoài của áo có hơi đậm hơn so với ảnh chụp studio một chút, nhưng mặc vẫn đẹp.",
+                "Form áo hơi ôm người (slim-fit), bạn nào thích mặc thoải mái thì nên tăng thêm 1 size."
+            ];
+            const negative = [
+                "Sản phẩm không như mong đợi, chất liệu thun mỏng dính, mặc lên bị nóng và bí mồ hôi.",
+                "Hình ảnh quảng cáo và thực tế nhận được khác xa nhau, chất vải rất thô ráp dột chỉ.",
+                "Áo bị lỗi đường chỉ dập nhăn nheo ở vai, logo thêu bị lệch trông rất mất thẩm mỹ.",
+                "Giao hàng cực kỳ chậm trễ, đóng gói bọc nylon sơ sài làm áo nhận được bị nhăn nheo bẩn thỉu.",
+                "Áo mặc bị ngứa cổ, giặt một lần đã bắt đầu bị xơ lông vải và phai nhẹ màu."
+            ];
+            
+            if (rating === 5) return positive[Math.floor(Math.random() * positive.length)];
+            if (rating >= 3) return neutral[Math.floor(Math.random() * neutral.length)];
+            return negative[Math.floor(Math.random() * negative.length)];
+        };
 
         const adminReplies = [
             "Cảm ơn quý khách đã tin tưởng và ủng hộ sản phẩm của cửa hàng! Rất mong quý khách sẽ tiếp tục đồng hành cùng Arsenal Store.",
@@ -240,40 +330,85 @@ const importMockData = async () => {
             "Cửa hàng đã tiếp nhận phản hồi của quý khách và đang tiến hành xử lý. Mong quý khách thông cảm."
         ];
 
-        const mediaImageUrls = [
-            'https://images.unsplash.com/photo-1549298916-b41f75e717d3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGFyc2VuYWwlMjB8ZWtpdHxlbnwwfHwwfHw%3D',
-            'https://images.unsplash.com/photo-1621243851576-928929837a76?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1579738012629-873099710777?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1621243851576-928929837a76?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1635319857900-54911d279316?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-        ];
+        const getMediaUrls = (productName) => {
+            const nameLower = productName.toLowerCase();
+            
+            // 1. Nhóm sản phẩm TẤT (Socks)
+            if (nameLower.includes('tất') || nameLower.includes('sock')) {
+                return [
+                    'https://picsum.photos/id/103/400/400',  // Giày thể thao kết hợp tất dệt kim cổ cao
+                    'https://picsum.photos/id/291/400/400',  // Đôi chân mang giày chạy và tất ôm sát
+                    'https://picsum.photos/id/355/400/400'   // Hoạt động chạy bộ ngoài trời
+                ];
+            }
+            
+            // 2. Nhóm sản phẩm DÉP (Slides)
+            if (nameLower.includes('dép') || nameLower.includes('slide') || nameLower.includes('sandal')) {
+                return [
+                    'https://picsum.photos/id/347/400/400',  // Dép lê đi mưa / dép bơi thể thao
+                    'https://picsum.photos/id/431/400/400'   // Dép lê quai ngang đi ngoài trời
+                ];
+            }
+            
+            // 3. Nhóm sản phẩm QUẦN (Shorts/Pants)
+            if (nameLower.includes('quần') || nameLower.includes('short') || nameLower.includes('pant')) {
+                return [
+                    'https://picsum.photos/id/1077/400/400', // Mẫu mặc đồ thể thao nam / quần đùi
+                    'https://picsum.photos/id/355/400/400',  // Chạy bộ mặc quần thể thao nhẹ thoáng
+                    'https://picsum.photos/id/103/400/400'   // Giày thể thao phong cách kết hợp shorts
+                ];
+            }
+            
+            // 4. Mặc định: Nhóm ÁO đấu (Jerseys/Shirts)
+            return [
+                'https://picsum.photos/id/770/400/400',  // Sân bóng đá / sân vận động phủ cỏ xanh
+                'https://picsum.photos/id/1077/400/400', // Đồ tập bóng đá chuyên nghiệp khỏe khoắn
+                'https://picsum.photos/id/355/400/400'   // Vận động thể thao trên sân
+            ];
+        };
 
         for (const product of products) {
-            const numReviews = Math.floor(Math.random() * 6); // 0 đến 5 reviews
+            const numReviews = Math.floor(Math.random() * 16) + 35; // Tạo từ 35 đến 50 đánh giá cho mỗi sản phẩm
             const productReviews = [];
 
             for (let r = 0; r < numReviews; r++) {
                 const reviewer = allReviewers[Math.floor(Math.random() * allReviewers.length)];
-                const rating = Math.floor(Math.random() * 5) + 1; // 1 đến 5 sao
-                let comment = '';
-                if (rating === 5) comment = reviewCommentsPositive[Math.floor(Math.random() * reviewCommentsPositive.length)];
-                else if (rating >= 3) comment = reviewCommentsNeutral[Math.floor(Math.random() * reviewCommentsNeutral.length)];
-                else comment = reviewCommentsNegative[Math.floor(Math.random() * reviewCommentsNegative.length)];
-
-                // Random media
-                const numMedia = Math.floor(Math.random() * 3); // 0 đến 2 media
-                const media = [];
-                for (let m = 0; m < numMedia; m++) {
-                    media.push(mediaImageUrls[Math.floor(Math.random() * mediaImageUrls.length)]);
+                
+                // Tỷ lệ đánh giá cao nhiều hơn (85% là 4-5 sao, 10% là 3 sao, 5% là 1-2 sao)
+                const rand = Math.random();
+                let rating;
+                if (rand < 0.65) {
+                    rating = 5; // 65% đánh giá 5 sao
+                } else if (rand < 0.85) {
+                    rating = 4; // 20% đánh giá 4 sao
+                } else if (rand < 0.95) {
+                    rating = 3; // 10% đánh giá 3 sao
+                } else if (rand < 0.98) {
+                    rating = 2; // 3% đánh giá 2 sao
+                } else {
+                    rating = 1; // 2% đánh giá 1 sao
                 }
+                
+                const comment = getRandomComment(product.name, rating);
 
-                // Random likes/dislikes
+                // Không đính kèm ảnh mẫu tự sinh nữa theo yêu cầu của khách hàng
+                const media = [];
+
+                // Random likes/dislikes (Giới hạn chỉ dislike bình luận tiêu cực/trung lập)
                 const likes = [];
                 const dislikes = [];
                 for (const otherUser of allReviewers) {
                     if (otherUser._id.toString() !== reviewer._id.toString()) {
-                        if (Math.random() < 0.1) likes.push(otherUser._id.toString());
-                        if (Math.random() < 0.05) dislikes.push(otherUser._id.toString());
+                        // Likes xuất hiện nhiều hơn ở bình luận tích cực
+                        const likeProb = rating >= 4 ? 0.15 : (rating >= 3 ? 0.08 : 0.02);
+                        if (Math.random() < likeProb) likes.push(otherUser._id.toString());
+
+                        // CHỈ cho phép Dislike đối với đánh giá tiêu cực (<= 2 sao) hoặc trung lập (3 sao)
+                        if (rating <= 2) {
+                            if (Math.random() < 0.12) dislikes.push(otherUser._id.toString());
+                        } else if (rating === 3) {
+                            if (Math.random() < 0.03) dislikes.push(otherUser._id.toString());
+                        }
                     }
                 }
 

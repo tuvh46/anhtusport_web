@@ -223,6 +223,13 @@ let currentDisplayCount = 8;
 let activeTag = 'all';
 let searchKeyword = '';
 
+// Khởi tạo lấy tham số URL tag nếu có
+const initUrlParams = new URLSearchParams(window.location.search);
+const tagFromUrl = initUrlParams.get('tag');
+if (tagFromUrl) {
+    activeTag = tagFromUrl;
+}
+
 // Khởi tạo danh sách Yêu thích từ trình duyệt
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
@@ -261,7 +268,6 @@ function toggleFavorite(id) {
     applyProductFilters(); // Vẽ lại sản phẩm theo bộ lọc hiện tại
 }
 
-// Hàm hiển thị sản phẩm
 // Hàm hiển thị sản phẩm
 function renderProducts(products) {
     if (!productList) return;
@@ -384,14 +390,17 @@ function isNewArrival(product, index) {
 }
 
 function matchesTag(product, index) {
-    const haystack = normalizeText(`${product.name} ${product.category}`);
+    const haystack = normalizeText(`${product.name} ${product.category} ${product.description || ''}`);
 
     if (activeTag === 'all') return true;
-    if (activeTag === 'collection') return index < 12;
+    if (activeTag === 'collection-all') return /25\/26|2025-2026|26\/27|2026-2027|retro|classic|original|kit/.test(haystack);
+    if (activeTag === 'collection-25-26') return /25\/26|2025-2026/.test(haystack);
+    if (activeTag === 'collection-26-27') return /26\/27|2026-2027/.test(haystack);
+    if (activeTag === 'collection-retro') return /retro|classic|original/.test(haystack);
     if (activeTag === 'new') return isNewArrival(product, index);
     if (activeTag === 'shirt') return /ao|shirt|jersey|kit/.test(haystack);
     if (activeTag === 'pants') return /quan|short|pant|trouser/.test(haystack);
-    if (activeTag === 'shoes') return /giay|shoe|sneaker|boot/.test(haystack);
+    if (activeTag === 'shoes') return /giay|shoe|sneaker|boot|dep|sandal|slide/.test(haystack);
     if (activeTag === 'accessory') return /phu kien|accessor|sock|cap|hat|ball|bag/.test(haystack);
 
     return true;
@@ -407,11 +416,14 @@ function updateSearchFeedback(total) {
     }
 
     const tagLabels = {
-        collection: 'Bộ sưu tập',
+        'collection-all': 'Tất cả Bộ sưu tập',
+        'collection-25-26': 'Bộ sưu tập 2025/26',
+        'collection-26-27': 'Bộ sưu tập 2026/27',
+        'collection-retro': 'Dòng Retro / Originals',
         new: 'Hàng mới',
         shirt: 'Áo',
         pants: 'Quần',
-        shoes: 'Giày',
+        shoes: 'Giày & Dép',
         accessory: 'Phụ kiện',
         all: 'Tất cả'
     };
@@ -449,10 +461,29 @@ function setupHeaderFilters() {
     const searchInput = document.getElementById('header-search-input');
 
     tagButtons.forEach((button) => {
+        // Tự động kích hoạt tab active tương ứng khi load trang (nếu có activeTag từ URL)
+        if (button.dataset.tag === activeTag) {
+            tagButtons.forEach((item) => item.classList.remove('active'));
+            button.classList.add('active');
+
+            // Nổi bật nút Bộ sưu tập cha nếu đang active một bộ sưu tập con
+            if (activeTag.startsWith('collection-')) {
+                const parentBtn = document.getElementById('collection-parent-btn');
+                if (parentBtn) parentBtn.classList.add('active');
+            }
+        }
+
         button.addEventListener('click', () => {
             activeTag = button.dataset.tag || 'all';
             tagButtons.forEach((item) => item.classList.remove('active'));
             button.classList.add('active');
+
+            // Nổi bật nút Bộ sưu tập cha nếu đang active một bộ sưu tập con
+            if (activeTag.startsWith('collection-')) {
+                const parentBtn = document.getElementById('collection-parent-btn');
+                if (parentBtn) parentBtn.classList.add('active');
+            }
+
             applyProductFilters();
             document.getElementById('product-list-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
@@ -621,15 +652,121 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!toggleBtn || !chatBox) return;
 
+    // Nếu là admin, ẩn luôn nút chat nổi vì admin chat trong trang Dashboard
+    if (window.userInfo && window.userInfo.isAdmin) {
+        toggleBtn.style.display = 'none';
+        chatBox.style.display = 'none';
+        return;
+    }
+
     let isFirstOpen = true;
 
-    toggleBtn.addEventListener('click', () => {
+    // Thiết lập duy nhất kết nối WebSocket cho khách hàng
+    window.connectUserWebSocket = function() {
+        if (window.userWs && window.userWs.readyState === WebSocket.OPEN) return;
+
+        window.userWs = new WebSocket('ws://localhost:5000');
+
+        window.userWs.onopen = () => {
+            console.log('Khách hàng đã kết nối WebSocket chat.');
+            const userId = window.userInfo ? window.userInfo._id : (localStorage.getItem('chat_session_id') || ('guest_' + Math.random().toString(36).substr(2, 9)));
+            localStorage.setItem('chat_session_id', userId);
+            const userName = window.userInfo ? window.userInfo.name : 'Khách vãng lai';
+            
+            window.userWs.send(JSON.stringify({
+                type: 'auth_user',
+                userId: userId,
+                userName: userName
+            }));
+        };
+
+        window.userWs.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+
+                // Lịch sử chat (nếu có)
+                if (data.type === 'user_chat_history') {
+                    if (messagesContainer && data.messages.length > 0) {
+                        messagesContainer.innerHTML = '';
+                        isFirstOpen = false; // Đã có lịch sử thì không hiện câu chào mặc định
+                        data.messages.forEach(msg => {
+                            if (msg.sender === 'admin') {
+                                messagesContainer.innerHTML += `
+                                    <div class="self-start bg-white border border-gray-200 text-gray-800 p-2.5 rounded-lg rounded-tl-none shadow-sm max-w-[85%] animate-fade-in">
+                                        ${msg.text}
+                                    </div>
+                                `;
+                            } else {
+                                messagesContainer.innerHTML += `
+                                    <div class="self-end bg-[#9b111e] text-white p-2.5 rounded-lg rounded-tr-none shadow-sm max-w-[85%] animate-fade-in">
+                                        ${msg.text}
+                                    </div>
+                                `;
+                            }
+                        });
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                }
+
+                else if (data.type === 'chat_message' && data.sender === 'admin') {
+                    // Hiển thị tin nhắn của admin trả về lên khung chat của khách hàng
+                    if (messagesContainer) {
+                        messagesContainer.innerHTML += `
+                            <div class="self-start bg-white border border-gray-200 text-gray-800 p-2.5 rounded-lg rounded-tl-none shadow-sm max-w-[85%] animate-fade-in">
+                                ${data.text}
+                            </div>
+                        `;
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        
+                        // Thông báo ngoài khung chat nếu chatbox đang đóng
+                        if (chatBox.classList.contains('hidden')) {
+                            showToast("Cửa hàng: " + data.text, "info");
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Lỗi nhận tin chat:", e);
+            }
+        };
+
+        window.userWs.onclose = () => {
+            console.log('Mất kết nối chat với cửa hàng. Đang kết nối lại sau 5 giây...');
+            setTimeout(window.connectUserWebSocket, 5000);
+        };
+    };
+
+    // Tự động kết nối WebSocket chat cho khách hàng khi nạp trang
+    window.connectUserWebSocket();
+
+    // Biến lưu avatar admin để không phải gọi API nhiều lần
+    let cachedAdminAvatar = null;
+
+    toggleBtn.addEventListener('click', async () => {
         chatBox.classList.remove('hidden');
         setTimeout(() => {
             chatBox.classList.remove('scale-95', 'opacity-0');
         }, 10);
         
-        if (isFirstOpen && messagesContainer) {
+        // Tải avatar của admin
+        const avatarImg = document.getElementById('chat-header-avatar');
+        if (avatarImg && !cachedAdminAvatar) {
+            try {
+                const res = await fetch('http://localhost:5000/api/users/admin-avatar');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.avatar) {
+                        cachedAdminAvatar = data.avatar;
+                        avatarImg.src = cachedAdminAvatar;
+                    }
+                }
+            } catch (err) {
+                console.error('Không tải được avatar admin', err);
+            }
+        } else if (avatarImg && cachedAdminAvatar) {
+            avatarImg.src = cachedAdminAvatar;
+        }
+        
+        if (isFirstOpen && messagesContainer && messagesContainer.innerHTML.trim() === '') {
             messagesContainer.innerHTML = `<div class="self-start bg-white border border-gray-200 text-gray-800 p-2.5 rounded-lg rounded-tl-none shadow-sm max-w-[85%] animate-fade-in">Xin chào! Bạn cần tư vấn về sản phẩm hay đơn hàng nào ạ? 🔴⚪</div>`;
             isFirstOpen = false;
         }
@@ -646,25 +783,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = chatInput.value.trim();
         if (!text) return;
 
+        // Đưa tin nhắn của user vừa gửi lên khung chat ngay lập tức
         messagesContainer.innerHTML += `<div class="self-end bg-[#9b111e] text-white p-2.5 rounded-lg rounded-tr-none shadow-sm max-w-[85%] animate-fade-in">${text}</div>`;
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
         chatInput.value = '';
 
-        // Gửi thông báo WebSocket tới Admin
-        const sendChat = (wsObj) => {
-            const userName = window.userInfo ? window.userInfo.name : 'Khách vãng lai';
-            wsObj.send(JSON.stringify({ type: 'chat_message', sender: 'user', text: text, userName: userName }));
+        const userId = window.userInfo ? window.userInfo._id : (localStorage.getItem('chat_session_id') || 'guest');
+        const userName = window.userInfo ? window.userInfo.name : 'Khách vãng lai';
+
+        const payload = {
+            type: 'chat_message',
+            sender: 'user',
+            userId: userId,
+            userName: userName,
+            text: text
         };
 
-        if (window.adminWs && window.adminWs.readyState === WebSocket.OPEN) {
-            sendChat(window.adminWs);
+        // Gửi lên server
+        if (window.userWs && window.userWs.readyState === WebSocket.OPEN) {
+            window.userWs.send(JSON.stringify(payload));
         } else {
-            if (!window.userWs) window.userWs = new WebSocket('ws://localhost:5000');
-            if (window.userWs.readyState === WebSocket.OPEN) {
-                sendChat(window.userWs);
-            } else {
-                window.userWs.onopen = () => sendChat(window.userWs);
-            }
+            // Tái kết nối và gửi
+            window.userWs = new WebSocket('ws://localhost:5000');
+            window.userWs.onopen = () => {
+                const uid = window.userInfo ? window.userInfo._id : (localStorage.getItem('chat_session_id') || 'guest');
+                const uName = window.userInfo ? window.userInfo.name : 'Khách vãng lai';
+                window.userWs.send(JSON.stringify({ type: 'auth_user', userId: uid, userName: uName }));
+                setTimeout(() => window.userWs.send(JSON.stringify(payload)), 100);
+            };
+            window.connectUserWebSocket();
         }
     });
 });
@@ -980,7 +1127,7 @@ window.connectAdminWebSocket = function() { // Make global
     
     adminWs.onmessage = (event) => {
         const notification = JSON.parse(event.data);
-        console.log('📬 Có thông báo mới từ server:', notification);
+        console.log(' Có thông báo mới từ server:', notification);
         // Khi có thông báo mới -> Fetch lại từ DB để lấy dữ liệu chuẩn nhất và cập nhật UI (đảm bảo hiển thị ngay lập tức)
         fetchAdminNotifications();
         // Optionally show a toast notification on admin pages
@@ -995,7 +1142,7 @@ window.connectAdminWebSocket = function() { // Make global
     };
     
     adminWs.onclose = () => {
-        console.log('❌ Admin WebSocket mất kết nối. Tái kết nối trong 3 giây...');
+        console.log(' Admin WebSocket mất kết nối. Tái kết nối trong 3 giây...');
         setTimeout(window.connectAdminWebSocket, 3000); // Tái kết nối nếu đứt
     }
 

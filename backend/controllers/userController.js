@@ -13,15 +13,16 @@ const generateToken = (id) => {
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
+        const normalizedEmail = email ? email.toLowerCase().trim() : '';
         
         // Kiểm tra xem email đã tồn tại chưa
-        const userExists = await User.findOne({ email });
+        const userExists = await User.findOne({ email: normalizedEmail });
         if (userExists) {
             return res.status(400).json({ message: 'Email này đã được sử dụng!' });
         }
 
         // Tạo user mới
-        const user = await User.create({ name, email, password });
+        const user = await User.create({ name, email: normalizedEmail, password });
 
         if (user) {
             res.status(201).json({
@@ -29,6 +30,9 @@ const registerUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 isAdmin: user.isAdmin,
+                phone: user.phone || '',
+                address: user.address || '',
+                avatar: user.avatar || '',
                 token: generateToken(user._id)
             });
         } else {
@@ -39,10 +43,11 @@ const registerUser = async (req, res) => {
     }
 };
 
-// 2. Hàm Xử lý Đăng nhập (Giải quyết lỗi 404 của bạn)
+// 2. Hàm Xử lý Đăng nhập
 const authUser = async (req, res) => {
     try {
         const { email, password } = req.body;
+        const normalizedEmail = email ? email.toLowerCase().trim() : '';
         const jwtSecret = process.env.JWT_SECRET;
 
         if (!jwtSecret) {
@@ -50,7 +55,7 @@ const authUser = async (req, res) => {
         }
 
         // Tìm user theo email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: normalizedEmail });
 
         // Kiểm tra mật khẩu (Bcrypt sẽ so sánh mật khẩu bạn nhập với mật khẩu mã hóa trong DB)
         if (user && (await bcrypt.compare(password, user.password))) {
@@ -59,6 +64,9 @@ const authUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 isAdmin: user.isAdmin,
+                phone: user.phone || '',
+                address: user.address || '',
+                avatar: user.avatar || '',
                 token: generateToken(user._id) // Trả về token
             });
         } else {
@@ -148,5 +156,19 @@ const updateUserPassword = async (req, res) => {
         res.status(500).json({ message: 'Lỗi Server khi đổi mật khẩu' });
     }
 };
+// 7. Lấy avatar của Admin cho khung chat
+const getAdminAvatar = async (req, res) => {
+    try {
+        const admin = await User.findOne({ isAdmin: true });
+        if (admin && admin.avatar) {
+            res.json({ avatar: admin.avatar });
+        } else {
+            // Trả về logo mặc định nếu không có avatar
+            res.json({ avatar: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/1200px-Arsenal_FC.svg.png' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi Server' });
+    }
+};
 
-module.exports = { registerUser, authUser, getAllUsers, deleteUser, updateUserProfile, updateUserPassword };
+module.exports = { registerUser, authUser, getAllUsers, deleteUser, updateUserProfile, updateUserPassword, getAdminAvatar };

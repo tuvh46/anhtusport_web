@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 
 // 1. Tạo đơn hàng mới
 const addOrderItems = async (req, res) => {
@@ -7,15 +8,37 @@ const addOrderItems = async (req, res) => {
 
         if (orderItems && orderItems.length === 0) {
             return res.status(400).json({ message: 'Không có sản phẩm nào trong đơn hàng' });
-        } else {
-            const order = new Order({
-                user, orderItems, shippingAddress, paymentMethod, totalPrice
-            });
-
-            const createdOrder = await order.save();
-            res.status(201).json(createdOrder);
         }
+
+        // 1. Kiểm tra tồn kho cho tất cả sản phẩm trong đơn hàng
+        for (const item of orderItems) {
+            const product = await Product.findById(item.id);
+            if (!product) {
+                return res.status(404).json({ message: `Không tìm thấy sản phẩm: ${item.name}` });
+            }
+            if (product.stock < item.qty) {
+                return res.status(400).json({
+                    message: `Sản phẩm "${item.name}" không đủ số lượng tồn kho. Hiện tại trong kho chỉ còn ${product.stock} sản phẩm.`
+                });
+            }
+        }
+
+        // 2. Thực hiện trừ số lượng tồn kho
+        for (const item of orderItems) {
+            const product = await Product.findById(item.id);
+            product.stock -= item.qty;
+            await product.save();
+        }
+
+        // 3. Lưu đơn hàng mới vào Database
+        const order = new Order({
+            user, orderItems, shippingAddress, paymentMethod, totalPrice
+        });
+
+        const createdOrder = await order.save();
+        res.status(201).json(createdOrder);
     } catch (error) {
+        console.error("Lỗi tạo đơn hàng:", error);
         res.status(500).json({ message: 'Lỗi Server khi tạo đơn hàng' });
     }
 };

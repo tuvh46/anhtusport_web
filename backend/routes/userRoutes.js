@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, authUser, getAllUsers, deleteUser, updateUserProfile, updateUserPassword } = require('../controllers/userController');
+const { registerUser, authUser, getAllUsers, deleteUser, updateUserProfile, updateUserPassword, getAdminAvatar } = require('../controllers/userController');
+
+// GET /api/users/admin-avatar - Lấy avatar của admin
+router.get('/admin-avatar', getAdminAvatar);
 
 // POST /api/users - Đăng ký
 router.post('/', registerUser);
