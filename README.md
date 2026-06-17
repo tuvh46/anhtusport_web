@@ -158,7 +158,6 @@ Dự án thể hiện các nguyên tắc **Kiến trúc Hướng Dịch Vụ**:
 ```bash
 npm install
 npm run dev
-# → http://localhost:3000
 ```
 
 ### Databricks Pipeline
@@ -172,13 +171,3 @@ Chạy theo thứ tự trên Databricks:
 ```
 
 ---
-
-## 👥 Thành viên nhóm
-
-| Họ tên | MSSV |
-|---|---|
-| [Tên thành viên] | [MSSV] |
-
----
-
-*Môn: Kiến trúc Hướng dịch vụ (SOA) & Điện toán Đám mây — 2025*
