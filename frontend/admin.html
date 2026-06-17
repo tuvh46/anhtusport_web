@@ -1309,6 +1309,7 @@
             <button class="nav-btn" onclick="switchTab('products')" data-tab="products">
                 <i class="fas fa-tshirt"></i> Sản phẩm
             </button>
+
             <button class="nav-btn" onclick="switchTab('customers')" data-tab="customers">
                 <i class="fas fa-users"></i> Khách hàng
             </button>
@@ -1492,9 +1493,14 @@
                 <div class="page-actions">
                     <div class="page-header">Quản lý sản phẩm <small id="products-count"
                             style="font-size:14px;color:var(--text-muted);font-weight:500;"></small></div>
-                    <button class="btn btn-primary" onclick="openProductModal()">
-                        <i class="fas fa-plus"></i> Thêm sản phẩm
-                    </button>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn btn-success" id="sync-uk-btn" onclick="crawlArsenalProducts(this)" style="background:#dc1c2c;border:1px solid rgba(255,255,255,0.1);color:white;">
+                            <i class="fas fa-sync-alt"></i> Đồng bộ Arsenal Direct
+                        </button>
+                        <button class="btn btn-primary" onclick="openProductModal()">
+                            <i class="fas fa-plus"></i> Thêm sản phẩm
+                        </button>
+                    </div>
                 </div>
                 <div class="card">
                     <table class="data-table">
@@ -1513,6 +1519,8 @@
                     <div class="pagination" id="products-pagination"></div>
                 </div>
             </div>
+
+
 
             <!-- ============= 4. CUSTOMERS ============= -->
             <div id="customers-panel" class="tab-panel">
@@ -1786,6 +1794,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- Reviews Modal -->
     <div class="modal-overlay" id="reviews-modal" onclick="if(event.target===this)closeReviewsModal()">
@@ -2233,6 +2243,36 @@
             for (let i = 1; i <= totalPages; i++) h += `<button class="page-btn ${i === page ? 'active' : ''}" onclick="loadProducts(${i})">${i}</button>`;
             h += `<button class="page-btn" onclick="loadProducts(${page + 1})" ${page === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
             pag.innerHTML = h;
+        }
+
+        async function crawlArsenalProducts(btn) {
+            if (btn.disabled) return;
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang đồng bộ...';
+            showToast('Đang tiến hành đồng bộ từ Arsenal Direct (UK)...', 'info');
+            
+            try {
+                const res = await fetch(`${API}/products/crawl`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                
+                if (res.ok && data.success) {
+                    showToast(data.message, 'success');
+                    cache.products = null; // Clear cache
+                    await loadProducts(1); // Reload list
+                } else {
+                    showToast(data.message || 'Lỗi khi đồng bộ sản phẩm', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Lỗi kết nối tới máy chủ', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
         }
 
         function openProductModal(product = null) {
@@ -2917,6 +2957,8 @@
 
         // Chạy kết nối WebSocket Admin
         connectAdminSocket();
+
+
 
         // Init
         loadNotifications();

@@ -1,23 +1,44 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In | Arsenal Direct Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="script.js" defer></script>
     <style>
-        body { font-family: 'Manrope', sans-serif; background-color: #f4f4f4; }
-        .font-arsenal { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.02em; }
-        .btn-arsenal { background-color: #9c0213; transition: all 0.3s; }
-        .btn-arsenal:hover { background-color: #7a020f; transform: translateY(-1px); }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .font-arsenal {
+            font-family: 'Playfair Display', serif;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-arsenal {
+            background-color: #9c0213;
+            transition: all 0.3s;
+        }
+
+        .btn-arsenal:hover {
+            background-color: #7a020f;
+            transform: translateY(-1px);
+        }
+
         .vintage-header {
             background: linear-gradient(135deg, #2a1c16 0%, #4f3427 55%, #6f4d3f 100%);
             border-bottom: 1px solid rgba(245, 222, 179, 0.22);
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
 
     <header class="vintage-header p-6 shadow-lg">
@@ -25,13 +46,15 @@
             <a href="index.html" class="font-arsenal text-3xl text-[#f4dfc8] hover:text-[#ffd9a0] transition">
                 ANHTU <span class="text-[#d5bca1]">STORE</span>
             </a>
-            <a href="index.html" class="text-xs uppercase tracking-[0.2em] text-[#f4dfc8] hover:text-[#ffd9a0] transition">Về trang chủ</a>
+            <a href="index.html"
+                class="text-xs uppercase tracking-[0.2em] text-[#f4dfc8] hover:text-[#ffd9a0] transition">Về trang
+                chủ</a>
         </div>
     </header>
 
     <main class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-[500px] p-8 md:p-12 shadow-md border-t-4 border-[#9c0213]">
-            
+
             <div class="text-center mb-10">
                 <h2 class="font-arsenal text-4xl mb-4 text-black">Đăng nhập</h2>
                 <p class="text-gray-500 text-sm">
@@ -41,21 +64,24 @@
 
             <form id="login-form" class="space-y-6">
                 <div>
-                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Tên đăng nhập</label>
-                    <input type="email" id="email" required 
+                    <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Tên đăng
+                        nhập</label>
+                    <input type="email" id="email" required
                         class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Mật khẩu</label>
                     <div class="relative">
-                        <input type="password" id="password" required 
+                        <input type="password" id="password" required
                             class="w-full bg-[#f0f0f0] border-none p-4 rounded-sm focus:ring-2 focus:ring-gray-300 outline-none text-black">
                     </div>
-                    <a href="#" class="text-xs text-gray-400 underline mt-3 block italic hover:text-black">Quên mật khẩu?</a>
+                    <a href="#" class="text-xs text-gray-400 underline mt-3 block italic hover:text-black">Quên mật
+                        khẩu?</a>
                 </div>
 
-                <button type="submit" class="w-full btn-arsenal text-white font-bold py-4 rounded-full uppercase tracking-[0.2em] text-sm mt-4 shadow-lg">
+                <button type="submit"
+                    class="w-full btn-arsenal text-white font-bold py-4 rounded-full uppercase tracking-[0.2em] text-sm mt-4 shadow-lg">
                     Đăng nhập
                 </button>
             </form>
@@ -67,9 +93,15 @@
             </div>
 
             <div class="grid grid-cols-3 gap-4 mb-10">
-                <button type="button" onclick="handleSocialLogin('Google')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-6 w-6"></button>
-                <button type="button" onclick="handleSocialLogin('Facebook')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/452196/facebook-1.svg" class="h-6 w-6"></button>
-                <button type="button" onclick="handleSocialLogin('Apple')" class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img src="https://www.svgrepo.com/show/511330/apple-173.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Google')"
+                    class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img
+                        src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Facebook')"
+                    class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img
+                        src="https://www.svgrepo.com/show/452196/facebook-1.svg" class="h-6 w-6"></button>
+                <button type="button" onclick="handleSocialLogin('Apple')"
+                    class="bg-[#f5f5f5] p-3 rounded-full flex justify-center hover:bg-gray-200 transition"><img
+                        src="https://www.svgrepo.com/show/511330/apple-173.svg" class="h-6 w-6"></button>
             </div>
 
             <div class="text-center text-sm border-t border-gray-100 pt-6">
@@ -96,7 +128,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    
+
                     // Khôi phục avatar và phone từ bộ nhớ cục bộ (do backend chưa hỗ trợ lưu avatar)
                     let localUsers = JSON.parse(localStorage.getItem('users')) || [];
                     let localUser = localUsers.find(u => u.email === data.email);
@@ -133,4 +165,5 @@
         }
     </script>
 </body>
+
 </html>

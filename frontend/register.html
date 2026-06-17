@@ -118,8 +118,8 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Lưu thông tin user để tự động đăng nhập sau khi đăng ký
-                    localStorage.setItem('userInfo', JSON.stringify(data));
+                    // KHÔNG tự đăng nhập sau khi đăng ký
+                    // User phải tự đăng nhập để bảo mật
 
                     let welcomeVoucher = { discount: 10, code: 'ARSENALNEW' };
                     try {
@@ -140,21 +140,26 @@
                         content.classList.remove('opacity-0', 'scale-95');
                     }, 50);
                 } else {
-                    alert('Lỗi: ' + data.message);
+                    if (typeof window.showToast === 'function') {
+                        window.showToast('Lỗi: ' + data.message, 'error');
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                    }
                 }
             } catch (error) {
-                alert('Không thể kết nối tới Server!');
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Không thể kết nối tới Server!', 'error');
+                } else {
+                    alert('Không thể kết nối tới Server!');
+                }
             }
         });
 
         window.copyAndShop = function() {
             const code = document.getElementById('voucher-code-display').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Đã sao chép mã: ' + code);
-                window.location.href = 'index.html';
-            }).catch(err => {
-                window.location.href = 'index.html';
-            });
+            // Sao chép mã rồi chuyển về login.html để user đăng nhập
+            navigator.clipboard.writeText(code).catch(() => {});
+            window.location.href = 'login.html';
         }
 
         function handleSocialLogin(provider) {

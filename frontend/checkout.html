@@ -1,35 +1,57 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh Toán | AnhTu Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        body { font-family: 'Manrope', sans-serif; background-color: #f4f4f4; }
-        .font-sport { font-family: 'Playfair Display', serif; letter-spacing: 0.03em; }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .font-sport {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.03em;
+        }
+
         .vintage-header {
             background: linear-gradient(135deg, #2a1c16 0%, #4f3427 55%, #6f4d3f 100%);
             border-bottom: 1px solid rgba(245, 222, 179, 0.22);
         }
-        .vintage-link { color: #f4dfc8; }
-        .vintage-link:hover { color: #ffd9a0; }
+
+        .vintage-link {
+            color: #f4dfc8;
+        }
+
+        .vintage-link:hover {
+            color: #ffd9a0;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 text-black antialiased">
 
     <header class="vintage-header text-white p-6 shadow-xl">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="font-sport text-3xl font-bold tracking-wide">
-                <a href="index.html" class="vintage-link">ANHTU <span class="text-[#d5bca1] font-semibold">STORE</span></a>
+                <a href="index.html" class="vintage-link">ANHTU <span
+                        class="text-[#d5bca1] font-semibold">STORE</span></a>
             </h1>
-            <a href="index.html" class="text-xs font-semibold uppercase tracking-[0.2em] vintage-link transition">❮ Quay lại cửa hàng</a>
+            <a href="index.html" class="text-xs font-semibold uppercase tracking-[0.2em] vintage-link transition">❮ Quay
+                lại cửa hàng</a>
         </div>
     </header>
 
     <main class="container mx-auto py-12 px-4 max-w-6xl">
-        <h2 class="font-sport text-4xl font-bold mb-8 uppercase tracking-tighter border-b-4 border-red-700 pb-2 inline-block">Thanh Toán</h2>
+        <h2
+            class="font-sport text-4xl font-bold mb-8 uppercase tracking-tighter border-b-4 border-red-700 pb-2 inline-block">
+            Thanh Toán</h2>
 
         <div class="flex flex-col lg:flex-row gap-10">
             <div class="lg:w-2/3 bg-white p-8 shadow-sm border-t-4 border-black">
@@ -37,36 +59,51 @@
                 <form id="checkout-form" class="space-y-5">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Họ và tên</label>
-                            <input type="text" id="fullname" required class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
+                            <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Họ và
+                                tên</label>
+                            <input type="text" id="fullname" required
+                                class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Số điện thoại</label>
-                            <input type="tel" id="phone" required maxlength="10" pattern="0[0-9]{9}" class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none" title="Vui lòng nhập đúng 10 chữ số và bắt đầu bằng số 0">
+                            <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Số điện
+                                thoại</label>
+                            <input type="tel" id="phone" required maxlength="10" pattern="0[0-9]{9}"
+                                class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none"
+                                title="Vui lòng nhập đúng 10 chữ số và bắt đầu bằng số 0">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Địa chỉ chi tiết (Số nhà, Đường, Phường/Xã)</label>
-                        <input type="text" id="address" required class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
+                        <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Địa chỉ chi
+                            tiết (Số nhà, Đường, Phường/Xã)</label>
+                        <input type="text" id="address" required
+                            class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Tỉnh / Thành phố</label>
-                        <input type="text" id="city" required placeholder="VD: Hà Nội, Hồ Chí Minh, Đà Nẵng..." class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none" oninput="renderCheckoutSummary()">
+                        <label class="block text-xs font-bold mb-2 uppercase tracking-wider text-gray-700">Tỉnh / Thành
+                            phố</label>
+                        <input type="text" id="city" required placeholder="VD: Hà Nội, Hồ Chí Minh, Đà Nẵng..."
+                            class="w-full bg-[#f0f0f0] border-none p-3 focus:ring-2 focus:ring-red-700 outline-none"
+                            oninput="renderCheckoutSummary()">
                     </div>
 
-                    <h3 class="font-sport text-2xl font-bold mt-10 mb-6 uppercase pt-6 border-t">Phương thức thanh toán</h3>
+                    <h3 class="font-sport text-2xl font-bold mt-10 mb-6 uppercase pt-6 border-t">Phương thức thanh toán
+                    </h3>
                     <div class="space-y-3">
-                        <label class="flex items-center space-x-3 p-4 border cursor-pointer hover:bg-gray-50 transition">
-                            <input type="radio" name="payment" value="COD" checked class="w-5 h-5 text-red-600 focus:ring-red-500">
+                        <label
+                            class="flex items-center space-x-3 p-4 border cursor-pointer hover:bg-gray-50 transition">
+                            <input type="radio" name="payment" value="COD" checked
+                                class="w-5 h-5 text-red-600 focus:ring-red-500">
                             <span class="font-bold">Thanh toán khi nhận hàng (COD)</span>
                         </label>
-                        <label class="flex items-center space-x-3 p-4 border cursor-pointer hover:bg-gray-50 transition opacity-50">
+                        <label
+                            class="flex items-center space-x-3 p-4 border cursor-pointer hover:bg-gray-50 transition opacity-50">
                             <input type="radio" name="payment" value="Card" disabled class="w-5 h-5">
                             <span class="font-bold">Thẻ Tín dụng / Ghi nợ (Đang bảo trì)</span>
                         </label>
                     </div>
 
-                    <button type="submit" class="w-full bg-red-700 text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-red-800 transition shadow-lg mt-8 text-lg">
+                    <button type="submit"
+                        class="w-full bg-red-700 text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-red-800 transition shadow-lg mt-8 text-lg">
                         Xác Nhận Đặt Hàng
                     </button>
                 </form>
@@ -75,13 +112,16 @@
             <div class="lg:w-1/3">
                 <div class="bg-gray-100 p-8 shadow-sm sticky top-24 border-t-4 border-red-700">
                     <h3 class="font-sport text-2xl font-bold mb-6 uppercase">Tóm tắt đơn hàng</h3>
-                    
+
                     <div id="checkout-items" class="space-y-4 mb-6 max-h-80 overflow-y-auto pr-2">
-                        </div>
+                    </div>
 
                     <div class="flex gap-2 mb-2 border-t pt-6">
-                        <input type="text" id="voucher-input" placeholder="Nhập mã giảm giá..." class="flex-grow border border-gray-300 p-3 outline-none focus:border-red-700 uppercase text-sm">
-                        <button type="button" onclick="applyVoucher()" class="bg-gray-900 text-white hover:bg-[#9b111e] px-4 py-2 text-sm font-bold transition outline-none">ÁP DỤNG</button>
+                        <input type="text" id="voucher-input" placeholder="Nhập mã giảm giá..."
+                            class="flex-grow border border-gray-300 p-3 outline-none focus:border-red-700 uppercase text-sm">
+                        <button type="button" onclick="applyVoucher()"
+                            class="bg-gray-900 text-white hover:bg-[#9b111e] px-4 py-2 text-sm font-bold transition outline-none">ÁP
+                            DỤNG</button>
                     </div>
                     <p id="voucher-message" class="text-xs mb-4 hidden font-medium"></p>
 
@@ -94,16 +134,29 @@
                         <div class="flex justify-between items-center text-gray-600 relative group">
                             <div class="flex items-center gap-1.5 cursor-help">
                                 <span>Phí vận chuyển</span>
-                                <svg class="w-4 h-4 text-gray-400 hover:text-red-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <svg class="w-4 h-4 text-gray-400 hover:text-red-600 transition" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
                                 <!-- Tooltip -->
-                                <div id="shipping-tooltip" class="absolute left-0 bottom-full mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pointer-events-none">
+                                <div id="shipping-tooltip"
+                                    class="absolute left-0 bottom-full mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pointer-events-none">
                                     <!-- Dữ liệu được điền bằng JS -->
                                 </div>
                             </div>
                             <span id="checkout-shipping-price" class="font-bold">0₫</span>
                         </div>
-                        <div id="discount-row" class="flex justify-between items-center text-green-600 font-medium hidden">
-                            <span class="flex items-center gap-2">Giảm giá <button type="button" onclick="removeVoucher()" class="text-red-500 hover:text-red-700 outline-none transition" title="Gỡ mã giảm giá"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg></button></span>
+                        <div id="discount-row"
+                            class="flex justify-between items-center text-green-600 font-medium hidden">
+                            <span class="flex items-center gap-2">Giảm giá <button type="button"
+                                    onclick="removeVoucher()"
+                                    class="text-red-500 hover:text-red-700 outline-none transition"
+                                    title="Gỡ mã giảm giá"><svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg></button></span>
                             <span id="discount-amount">-0₫</span>
                         </div>
                         <div id="freeship-info" class="text-xs text-gray-500 italic hidden"></div>
@@ -127,16 +180,16 @@
 
         function updateFinalTotal() {
             const itemsPrice = (window.tempCheckoutCart || []).reduce((acc, item) => acc + (item.price * item.qty), 0);
-            
+
             window.vipDiscountAmount = 0;
             const vipRow = document.getElementById('vip-gift-row');
             if (vipRow) vipRow.classList.add('hidden');
-            
+
             const totalSpent = parseFloat(localStorage.getItem('totalSpent_' + window.userInfo._id)) || parseFloat(localStorage.getItem('totalSpent')) || 0;
-            
+
             const isDiamond = totalSpent >= 50000000;
             const isGold = totalSpent >= 30000000;
-            
+
             let giftThreshold = 0;
             let rankName = '';
             if (isDiamond) { giftThreshold = 2000000; rankName = 'Kim Cương'; }
@@ -164,7 +217,7 @@
             document.getElementById('checkout-total-price').innerText = total.toLocaleString('vi-VN') + '₫';
         }
 
-        window.applyVoucher = async function() {
+        window.applyVoucher = async function () {
             const code = document.getElementById('voucher-input').value.trim().toUpperCase();
             const msgEl = document.getElementById('voucher-message');
             const discountRow = document.getElementById('discount-row');
@@ -176,9 +229,12 @@
                 return;
             }
 
-            const usedVouchers = JSON.parse(localStorage.getItem('usedVouchers')) || [];
+            // ✅ FIX: Track usedVouchers theo từng user, không phải global
+            const userId = window.userInfo ? window.userInfo._id : 'guest';
+            const usedKey = 'usedVouchers_' + userId;
+            const usedVouchers = JSON.parse(localStorage.getItem(usedKey)) || [];
             if (usedVouchers.includes(code)) {
-                msgEl.textContent = 'Mã giảm giá này bạn đã sử dụng rồi!';
+                msgEl.textContent = 'Tài khoản của bạn đã sử dụng mã này rồi!';
                 msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
                 window.discountAmount = 0;
                 window.appliedVoucherCode = '';
@@ -188,69 +244,103 @@
                 return;
             }
 
+            msgEl.textContent = 'Đang kiểm tra mã...';
+            msgEl.className = 'text-xs mb-4 block font-medium text-gray-500';
+
             const itemsPrice = window.tempCheckoutCart.reduce((acc, item) => acc + (item.price * item.qty), 0);
             let discount = 0;
             let isApplied = false;
+            let appliedVoucherObj = null;
 
-            let welcomeVoucher = JSON.parse(localStorage.getItem('welcomeVoucherSetting'));
-            if (!welcomeVoucher) welcomeVoucher = { discount: 10, code: 'ARSENALNEW' };
+            try {
+                // Bước 1: Thử validate voucher thông thường từ DB
+                const res = await fetch('http://localhost:5000/api/vouchers/validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+                const data = await res.json();
 
-            const vouchers = JSON.parse(localStorage.getItem('vouchers')) || [];
+                if (res.ok) {
+                    // Voucher hợp lệ từ DB
+                    appliedVoucherObj = data;
+                    isApplied = true;
 
-            if (welcomeVoucher && welcomeVoucher.code === code) {
-                discount = (itemsPrice * parseFloat(welcomeVoucher.discount)) / 100;
-                isApplied = true;
-            } else {
-                const voucher = vouchers.find(v => v.code === code);
-                if (voucher) {
-                    const today = new Date();
-                    today.setHours(0,0,0,0);
-                    let isExpired = false;
-                    if (voucher.expires) {
-                        const expParts = voucher.expires.split('-');
-                        if (expParts.length === 3) {
-                            const expDate = new Date(expParts[0], expParts[1] - 1, expParts[2]);
-                            expDate.setHours(0,0,0,0);
-                            if (expDate.getTime() < today.getTime()) isExpired = true;
-                        } else {
-                            const expDate = new Date(voucher.expires);
-                            if (expDate < today) isExpired = true;
-                        }
-                    }
-                    if (isExpired) {
-                        msgEl.textContent = 'Mã giảm giá này đã hết hạn sử dụng!';
-                        msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
-                        return;
-                    }
-                    if (voucher.uses !== undefined && parseInt(voucher.uses) <= 0) {
-                        msgEl.textContent = 'Mã giảm giá này đã hết lượt sử dụng!';
-                        msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
-                        return;
-                    }
-
-                    // Lọc sản phẩm theo danh mục nếu voucher có quy định
+                    // Tính giảm giá theo category nếu voucher có giới hạn danh mục
                     let eligibleItemsPrice = itemsPrice;
-                    if (voucher.category) {
-                        const targetCat = voucher.category.toLowerCase();
+                    if (data.category && data.category.trim() !== '') {
+                        const targetCat = data.category.toLowerCase();
                         eligibleItemsPrice = window.tempCheckoutCart.reduce((acc, item) => {
                             const dbProd = window.allProductsDB.find(p => p._id === item.id);
                             const itemCat = dbProd ? dbProd.category.toLowerCase() : '';
                             return itemCat.includes(targetCat) ? acc + (item.price * item.qty) : acc;
                         }, 0);
+                        if (eligibleItemsPrice === 0) {
+                            msgEl.textContent = `Mã này chỉ áp dụng cho danh mục "${data.category}". Giỏ hàng không có sản phẩm phù hợp!`;
+                            msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
+                            return;
+                        }
                     }
 
-                    if (voucher.type === 'percent') {
-                        discount = (eligibleItemsPrice * parseFloat(voucher.discount)) / 100;
+                    if (data.type === 'percent') {
+                        discount = (eligibleItemsPrice * parseFloat(data.discount)) / 100;
                     } else {
-                        discount = Math.min(parseFloat(voucher.discount), eligibleItemsPrice);
+                        discount = Math.min(parseFloat(data.discount), eligibleItemsPrice);
                     }
+
+                } else if (res.status === 404) {
+                    // Bước 2: Không tìm thấy trong DB vouchers → kiểm tra welcome-voucher settings
+                    let welcomeVoucher = { discount: 10, code: 'ARSENALNEW' };
+                    try {
+                        const settRes = await fetch('http://localhost:5000/api/settings/welcome-voucher');
+                        if (settRes.ok) welcomeVoucher = await settRes.json();
+                    } catch (e) {
+                        welcomeVoucher = JSON.parse(localStorage.getItem('welcomeVoucherSetting')) || welcomeVoucher;
+                    }
+
+                    if (welcomeVoucher && welcomeVoucher.code === code) {
+                        discount = (itemsPrice * parseFloat(welcomeVoucher.discount)) / 100;
+                        isApplied = true;
+                        // Welcome voucher không có _id trong DB vouchers
+                        appliedVoucherObj = null;
+                    } else {
+                        // Không phải welcome voucher, hiển thị lỗi từ backend
+                        msgEl.textContent = data.message || 'Mã giảm giá không tồn tại!';
+                        msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
+                        window.discountAmount = 0;
+                        window.appliedVoucherCode = '';
+                        window.currentAppliedVoucher = '';
+                        discountRow.classList.add('hidden');
+                        updateFinalTotal();
+                        return;
+                    }
+                } else {
+                    // Lỗi khác (hết hạn, hết lượt, ...)
+                    msgEl.textContent = data.message || 'Mã giảm giá không hợp lệ!';
+                    msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
+                    window.discountAmount = 0;
+                    window.appliedVoucherCode = '';
+                    window.currentAppliedVoucher = '';
+                    discountRow.classList.add('hidden');
+                    updateFinalTotal();
+                    return;
+                }
+
+            } catch (err) {
+                // Mất kết nối hoàn toàn → fallback welcome voucher từ localStorage
+                let welcomeVoucher = JSON.parse(localStorage.getItem('welcomeVoucherSetting')) || { discount: 10, code: 'ARSENALNEW' };
+                if (welcomeVoucher && welcomeVoucher.code === code) {
+                    discount = (itemsPrice * parseFloat(welcomeVoucher.discount)) / 100;
                     isApplied = true;
+                } else {
+                    msgEl.textContent = 'Không thể kết nối server để kiểm tra mã!';
+                    msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
+                    return;
                 }
             }
 
-            if (!isApplied || discount === 0) {
-                msgEl.textContent = 'Mã giảm giá không tồn tại hoặc không hợp lệ!';
-                if (isApplied && discount === 0) msgEl.textContent = 'Mã giảm giá không áp dụng cho các sản phẩm trong giỏ!';
+            if (!isApplied || discount <= 0) {
+                msgEl.textContent = 'Mã giảm giá không áp dụng được cho đơn hàng này!';
                 msgEl.className = 'text-xs mb-4 block font-medium text-red-600';
                 window.discountAmount = 0;
                 window.appliedVoucherCode = '';
@@ -259,22 +349,21 @@
                 return;
             }
 
-            discount = Math.min(discount, itemsPrice); // Đảm bảo số tiền giảm không vượt quá tiền hàng
+            discount = Math.min(discount, itemsPrice);
 
             window.discountAmount = discount;
             window.appliedVoucherCode = code;
             window.currentAppliedVoucher = code;
+            window.currentAppliedVoucherObj = appliedVoucherObj; // Lưu để dùng khi đặt hàng
 
-            msgEl.textContent = 'Áp dụng mã thành công!';
+            msgEl.textContent = `Áp dụng mã "${code}" thành công!`;
             msgEl.className = 'text-xs mb-4 block font-medium text-green-600';
-            
             discountRow.classList.remove('hidden');
             discountAmountEl.textContent = '-' + discount.toLocaleString('vi-VN') + '₫';
-            
             updateFinalTotal();
         };
 
-        window.removeVoucher = function() {
+        window.removeVoucher = function () {
             window.discountAmount = 0;
             window.appliedVoucherCode = '';
             window.currentAppliedVoucher = '';
@@ -289,7 +378,7 @@
             // 1. Lấy dữ liệu giỏ hàng từ Trình duyệt
             const cartKey = typeof window.getCartKey === 'function' ? window.getCartKey() : 'cart';
             const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
-            
+
             // Nếu giỏ rỗng thì redirect về trang chủ
             if (cartItems.length === 0) {
                 window.showToast('Giỏ hàng của bạn đang trống!', 'warning');
@@ -306,7 +395,7 @@
             const feeHN = parseInt(storeSettings.feeHN) || 20000;
             const feeHCM = parseInt(storeSettings.feeHCM) || 20000;
             const freeShippingThreshold = parseInt(storeSettings.freeShippingThreshold) || 500000;
-            
+
             // Điền thông tin bảng Tooltip phí ship cho khách hàng xem trước
             const tooltipEl = document.getElementById('shipping-tooltip');
             if (tooltipEl) {
@@ -371,11 +460,11 @@
             // 6. Gắn các giá trị vào HTML
             document.getElementById('checkout-items-price').innerText = itemsPrice.toLocaleString('vi-VN') + '₫';
             document.getElementById('checkout-shipping-price').innerText = shippingCost === 0 ? 'Miễn phí' : shippingCost.toLocaleString('vi-VN') + '₫';
-            
+
             const freeshipInfo = document.getElementById('freeship-info');
             freeshipInfo.textContent = freeshipMessage;
             freeshipInfo.classList.remove('hidden');
-            
+
             window.tempCheckoutCart = cartItems;
             window.tempShippingCost = shippingCost;
 
@@ -389,7 +478,7 @@
             setTimeout(() => window.location.replace('login.html'), 1500);
         } else {
             document.getElementById('fullname').value = userInfo.name;
-            
+
             // Load thông tin địa chỉ và số điện thoại từ profile
             const profileData = JSON.parse(localStorage.getItem('userProfile_' + userInfo._id)) || {};
             document.getElementById('phone').value = profileData.phone || '';
@@ -402,12 +491,12 @@
             try {
                 const res = await fetch('http://localhost:5000/api/products');
                 window.allProductsDB = await res.json();
-            } catch(e) {}
+            } catch (e) { }
             renderCheckoutSummary();
         });
 
         // 3. XỬ LÝ GỬI ĐƠN HÀNG LÊN MONGODB (ĐÃ CẬP NHẬT)
-        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+        document.getElementById('checkout-form').addEventListener('submit', async function (e) {
             e.preventDefault(); // Ngăn trang tải lại
 
             // Thu thập thông tin từ Form
@@ -427,7 +516,7 @@
 
             const phoneInputValue = shippingAddress.phone;
             let users = JSON.parse(localStorage.getItem('users')) || [];
-            
+
             // Kiểm tra số điện thoại duy nhất
             const isPhoneExists = users.some(user => user.phone === phoneInputValue && user.email !== userInfo.email);
             if (isPhoneExists) {
@@ -467,7 +556,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // ✅ Gửi notification tới admin qua WebSocket
+                    //  Gửi notification tới admin qua WebSocket
                     const totalAmount = window.tempCheckoutCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
                     fetch('http://localhost:5000/api/notifications/emit', {
                         method: 'POST',
@@ -476,22 +565,25 @@
                             type: 'order',
                             title: `Đơn hàng mới từ ${userInfo.name}`,
                             message: `${userInfo.name} vừa đặt hàng trị giá ${totalAmount.toLocaleString('vi-VN')}₫. Mã đơn: ${data._id}`,
-                            time: new Date().toISOString(), 
+                            time: new Date().toISOString(),
                             author: window.userInfo.name // Thêm trường author
                         })
                     }).catch(err => console.error('Lỗi gửi notification:', err));
-                    
-                    if (window.currentAppliedVoucher) {
-                        const usedVouchers = JSON.parse(localStorage.getItem('usedVouchers')) || [];
-                        usedVouchers.push(window.currentAppliedVoucher);
-                        localStorage.setItem('usedVouchers', JSON.stringify(usedVouchers));
 
-                        // Trừ lượt dùng của voucher
-                        let storedVouchers = JSON.parse(localStorage.getItem('vouchers')) || [];
-                        const vIndex = storedVouchers.findIndex(v => v.code === window.currentAppliedVoucher);
-                        if (vIndex !== -1 && storedVouchers[vIndex].uses > 0) {
-                            storedVouchers[vIndex].uses = parseInt(storedVouchers[vIndex].uses) - 1;
-                            localStorage.setItem('vouchers', JSON.stringify(storedVouchers));
+                    if (window.currentAppliedVoucher) {
+                        // FIX: Track per-user, không phải global
+                        const uid = window.userInfo ? window.userInfo._id : 'guest';
+                        const usedKey = 'usedVouchers_' + uid;
+                        const usedVouchers = JSON.parse(localStorage.getItem(usedKey)) || [];
+                        usedVouchers.push(window.currentAppliedVoucher);
+                        localStorage.setItem(usedKey, JSON.stringify(usedVouchers));
+
+                        // FIX: Tăng usedCount trên backend thay vì sửa localStorage
+                        if (window.currentAppliedVoucherObj && window.currentAppliedVoucherObj._id) {
+                            fetch(`http://localhost:5000/api/vouchers/${window.currentAppliedVoucherObj._id}/use`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' }
+                            }).catch(e => console.error('Lỗi cập nhật lượt dùng voucher:', e));
                         }
                     }
 
@@ -517,4 +609,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -81,4 +81,18 @@ const validateVoucher = async (req, res) => {
     }
 };
 
-module.exports = { getVouchers, createVoucher, updateVoucher, deleteVoucher, validateVoucher };
+const useVoucher = async (req, res) => {
+    try {
+        const voucher = await Voucher.findById(req.params.id);
+        if (!voucher) {
+            return res.status(404).json({ message: 'Không tìm thấy voucher' });
+        }
+        voucher.usedCount = (voucher.usedCount || 0) + 1;
+        await voucher.save();
+        res.json({ message: 'Cập nhật lượt dùng thành công', usedCount: voucher.usedCount });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi Server khi cập nhật lượt dùng voucher' });
+    }
+};
+
+module.exports = { getVouchers, createVoucher, updateVoucher, deleteVoucher, validateVoucher, useVoucher };

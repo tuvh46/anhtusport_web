@@ -3,278 +3,543 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tài khoản | Arsenal Direct</title>
+    <title>Tài khoản | AnhTu Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        html { zoom: 0.82; }
-        .font-sport { font-family: 'Playfair Display', serif; letter-spacing: 0.03em; }
-        .font-sans { font-family: 'Manrope', sans-serif; }
-        .menu-active { background: #f0f0f0; border-left: 4px solid #dc2626; }
-        .vintage-header {
-            background: linear-gradient(135deg, #2a1c16 0%, #4f3427 55%, #6f4d3f 100%);
-            border-bottom: 1px solid rgba(245, 222, 179, 0.22);
-        }
-        .vintage-link { color: #f4dfc8; }
-        .vintage-link:hover { color: #ffd9a0; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-    </style>
-    <script src="script.js" defer></script>
-    <!-- Cropper.js for Avatar Cropping -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-</head>
-<body class="bg-gray-50 font-sans">
+    <script src="script.js" defer></script>
+    <style>
+        * { box-sizing: border-box; }
+        html { zoom: 0.9; }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #0f1117;
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+        .font-sport { font-family: 'Playfair Display', serif; letter-spacing: 0.03em; }
 
-    <header class="vintage-header text-white p-6 shadow-xl">
+        /* ── HEADER ── */
+        .site-header {
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1a10 60%, #3d2515 100%);
+            border-bottom: 1px solid rgba(245,222,179,0.12);
+        }
+
+        /* ── SIDEBAR ── */
+        .profile-sidebar {
+            background: linear-gradient(180deg, #161b27 0%, #111520 100%);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
+        }
+        .sidebar-avatar-ring {
+            background: conic-gradient(from 0deg, #dc2626, #f97316, #fbbf24, #dc2626);
+            padding: 3px;
+            border-radius: 50%;
+            animation: spinRing 6s linear infinite;
+        }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+        .sidebar-avatar-inner {
+            background: #161b27;
+            border-radius: 50%;
+            padding: 3px;
+        }
+
+        /* ── NAV ITEMS ── */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid transparent;
+            width: 100%;
+            text-align: left;
+        }
+        .nav-item:hover {
+            background: rgba(220,38,38,0.08);
+            color: #f87171;
+            border-color: rgba(220,38,38,0.2);
+        }
+        .nav-item.active {
+            background: rgba(220,38,38,0.15);
+            color: #ef4444;
+            border-color: rgba(220,38,38,0.35);
+        }
+        .nav-item.active .nav-icon { color: #ef4444; }
+        .nav-item-danger { color: #f87171 !important; }
+        .nav-item-danger:hover { background: rgba(239,68,68,0.12) !important; border-color: rgba(239,68,68,0.3) !important; }
+
+        /* ── CONTENT CARD ── */
+        .content-card {
+            background: linear-gradient(160deg, #161b27 0%, #12161f 100%);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
+            padding: 36px;
+        }
+
+        /* ── INPUT FIELDS ── */
+        .field-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 13px 16px;
+            color: #e2e8f0;
+            font-size: 14px;
+            font-family: 'Manrope', sans-serif;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .field-input:focus { border-color: rgba(220,38,38,0.6); background: rgba(220,38,38,0.05); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+        .field-input::placeholder { color: #4a5568; }
+        .field-input[readonly] { background: rgba(255,255,255,0.02); color: #64748b; cursor: default; }
+        .field-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 8px; }
+
+        /* ── BUTTON PRIMARY ── */
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 20px rgba(220,38,38,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(220,38,38,0.4); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* ── VIP PROGRESS ── */
+        .vip-card {
+            background: linear-gradient(135deg, rgba(30,10,10,0.8) 0%, rgba(20,10,30,0.8) 100%);
+            border: 1px solid rgba(220,38,38,0.2);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .vip-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -30%;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .vip-bar-bg { background: rgba(255,255,255,0.08); border-radius: 100px; height: 8px; overflow: hidden; }
+        .vip-bar-fill { height: 100%; border-radius: 100px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+
+        /* ── ORDER TABLE ── */
+        .order-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        .order-row { background: rgba(255,255,255,0.03); transition: background 0.2s; }
+        .order-row:hover { background: rgba(220,38,38,0.05); }
+        .order-row td { padding: 14px 18px; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .order-row td:first-child { border-left: 1px solid rgba(255,255,255,0.05); border-radius: 10px 0 0 10px; }
+        .order-row td:last-child { border-right: 1px solid rgba(255,255,255,0.05); border-radius: 0 10px 10px 0; }
+
+        /* ── STATUS BADGES ── */
+        .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+        .badge-pending { background: rgba(234,179,8,0.15); color: #fbbf24; border: 1px solid rgba(234,179,8,0.25); }
+        .badge-shipping { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+        .badge-delivered { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+        .badge-cancelled { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+
+        /* ── AVATAR PANEL ── */
+        .avatar-panel {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .avatar-thumb { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .avatar-thumb:hover { border-color: #dc2626; transform: scale(1.1); }
+
+        /* ── PREF TOGGLE ── */
+        .pref-toggle { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; cursor: pointer; transition: all 0.2s; }
+        .pref-toggle:hover { background: rgba(220,38,38,0.06); border-color: rgba(220,38,38,0.2); }
+        .toggle-switch { width: 46px; height: 26px; background: rgba(255,255,255,0.1); border-radius: 100px; position: relative; transition: background 0.3s; }
+        .toggle-switch.on { background: #dc2626; }
+        .toggle-knob { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+        .toggle-switch.on .toggle-knob { transform: translateX(20px); }
+
+        /* ── SECTION ANIMATIONS ── */
+        .section-content { animation: sectionFadeIn 0.3s ease-out; }
+        @keyframes sectionFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── DIAMOND ANIMATION ── */
+        @keyframes diamondSparkle { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .diamond-bar, .diamond-badge {
+            background: linear-gradient(90deg, #00f2fe, #4facfe, #ffffff, #00f2fe);
+            background-size: 300% 300%;
+            animation: diamondSparkle 2.5s linear infinite;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 100px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(220,38,38,0.4); }
+
+        /* ── COLOR SWATCH ── */
+        .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .color-swatch:hover { transform: scale(1.2); border-color: white; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="site-header text-white py-5 px-8 shadow-xl">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="font-sport text-3xl font-bold tracking-wide">
-                <a href="index.html" class="vintage-link">ANHTU <span class="text-[#d5bca1] font-semibold">STORE</span></a>
-            </h1>
-            <a href="index.html" class="text-xs font-semibold uppercase tracking-[0.2em] vintage-link transition">← Về trang chủ</a>
+            <a href="index.html" class="font-sport text-3xl font-bold tracking-wide text-[#f4dfc8] hover:text-[#ffd9a0] transition">
+                ANHTU <span class="text-[#c89a6a]">STORE</span>
+            </a>
+            <a href="index.html" class="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b0956e] hover:text-[#ffd9a0] transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Trang chủ
+            </a>
         </div>
     </header>
 
-    <main class="container mx-auto py-8 px-4 flex gap-6">
-        
-        <!-- SIDEBAR MENU -->
-        <aside class="w-80 bg-white shadow-sm rounded-lg p-0 h-fit sticky top-24">
-            <nav class="space-y-0">
-                <button onclick="switchSection('account')" class="menu-btn w-full text-left px-6 py-4 flex items-center gap-4 border-b hover:bg-gray-50 transition menu-active" data-section="account">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    <span class="text-lg font-medium text-gray-800">Tài khoản</span>
-                </button>
-                <button onclick="switchSection('password')" class="menu-btn w-full text-left px-6 py-4 flex items-center gap-4 border-b hover:bg-gray-50 transition" data-section="password">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span class="text-lg font-medium text-gray-700">Đổi mật khẩu</span>
-                </button>
-                <button onclick="switchSection('orders')" class="menu-btn w-full text-left px-6 py-4 flex items-center gap-4 border-b hover:bg-gray-50 transition" data-section="orders">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 015.646 5.646 9.001 9.001 0 0120.354 15.354z"/></svg>
-                    <span class="text-lg font-medium text-gray-700">Lịch sử đơn hàng</span>
-                </button>
-                <button onclick="switchSection('preferences')" class="menu-btn w-full text-left px-6 py-4 flex items-center gap-4 border-b hover:bg-gray-50 transition" data-section="preferences">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span class="text-lg font-medium text-gray-700">Ưu tiên cá nhân</span>
-                </button>
-                <button onclick="deleteAccount()" class="w-full text-left px-6 py-4 flex items-center gap-4 hover:bg-red-50 transition text-red-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    <span class="text-lg font-medium">Xóa tài khoản</span>
-                </button>
-            </nav>
+    <main class="container mx-auto py-10 px-4 flex gap-7 max-w-7xl">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SIDEBAR                                    -->
+        <!-- ═══════════════════════════════════════════ -->
+        <aside class="w-72 shrink-0 sticky top-6 h-fit">
+            <div class="profile-sidebar p-6">
+
+                <!-- Avatar + Name -->
+                <div class="flex flex-col items-center text-center mb-8 pt-2">
+                    <div class="relative mb-4 cursor-pointer" onclick="toggleAvatarPanel()" title="Thay đổi ảnh đại diện">
+                        <div class="sidebar-avatar-ring">
+                            <div class="sidebar-avatar-inner">
+                                <img id="profile-avatar-preview" src="https://ui-avatars.com/api/?name=U&background=7a3040&color=fff"
+                                    class="w-24 h-24 rounded-full object-cover block" alt="Avatar">
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 rounded-full flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div id="profile-vip-badge" class="hidden absolute -bottom-1 -right-1 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border-2 border-[#0f1117] shadow-lg tracking-wider z-10"></div>
+                    </div>
+                    <p id="profile-display-name" class="font-bold text-white text-lg leading-tight mb-1">Người dùng</p>
+                    <p id="profile-display-email" class="text-xs text-slate-500 truncate max-w-[180px]"></p>
+                    <div id="profile-rank-pill" class="mt-2 hidden text-[11px] font-bold px-3 py-1 rounded-full border"></div>
+                </div>
+
+                <!-- Nav -->
+                <nav class="space-y-1">
+                    <button onclick="switchSection('account')" class="nav-item active menu-btn" data-section="account">
+                        <svg class="nav-icon w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        Thông tin tài khoản
+                    </button>
+                    <button onclick="switchSection('password')" class="nav-item menu-btn" data-section="password">
+                        <svg class="nav-icon w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Đổi mật khẩu
+                    </button>
+                    <button onclick="switchSection('orders')" class="nav-item menu-btn" data-section="orders">
+                        <svg class="nav-icon w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        Lịch sử đơn hàng
+                    </button>
+                    <button onclick="switchSection('preferences')" class="nav-item menu-btn" data-section="preferences">
+                        <svg class="nav-icon w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Ưu tiên cá nhân
+                    </button>
+
+                    <div class="border-t border-white/5 pt-2 mt-2">
+                        <button onclick="deleteAccount()" class="nav-item nav-item-danger">
+                            <svg class="nav-icon w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            Xóa tài khoản
+                        </button>
+                    </div>
+                </nav>
+            </div>
         </aside>
 
-        <!-- MAIN CONTENT -->
-        <div class="flex-1 bg-white shadow-sm rounded-lg p-8">
-            
-            <!-- 1. ACCOUNT SECTION -->
-            <section id="account-section" class="section-content">
-                <h2 class="font-sport text-3xl font-bold mb-6">Thông tin tài khoản</h2>
-                
-                <div class="flex items-start gap-6 mb-6">
-                    <div class="relative shrink-0">
-                        <div class="relative w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-white shadow-lg cursor-pointer group" onclick="toggleAvatarPanel()" title="Nhấp để thay đổi Avatar">
-                            <img id="profile-avatar-preview" src="https://via.placeholder.com/150" class="w-full h-full object-cover" alt="Avatar">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </div>
-                        </div>
-                        <div id="profile-vip-badge" class="hidden absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full border-2 border-white shadow-md transform rotate-[-10deg] tracking-wider z-10">VIP</div>
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- MAIN CONTENT                               -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div class="flex-1 min-w-0">
+
+            <!-- ── 1. TÀI KHOẢN ── -->
+            <section id="account-section" class="section-content content-card">
+
+                <div class="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     </div>
-                    <div class="flex-1 mt-2">
-                        <div class="flex items-center gap-4 mb-2">
-                            <p class="font-bold text-gray-800 text-xl" id="profile-display-name">Tên</p>
-                        </div>
-                        
-                        <!-- Panel chọn Avatar (Mặc định ẩn) -->
-                        <div id="avatar-selection-panel" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mt-2 animate-fade-in shadow-inner">
-                            <div class="flex items-center justify-between mb-3">
-                                <h4 class="font-bold text-sm text-gray-700 uppercase tracking-wider">Cập nhật ảnh đại diện</h4>
-                                <div class="flex gap-2">
-                                    <label for="profile-avatar-input" class="cursor-pointer text-[10px] bg-black text-white px-3 py-1.5 rounded hover:bg-red-700 transition font-bold uppercase shadow-sm">Tải ảnh lên</label>
-                                    <input type="file" id="profile-avatar-input" accept="image/*" class="hidden" onchange="previewAvatar(event)">
-                                    <button type="button" onclick="removeAvatar()" class="text-[10px] bg-red-50 text-red-600 border border-red-200 px-3 py-1.5 rounded hover:bg-red-100 transition font-bold uppercase shadow-sm">Về mặc định</button>
-                                </div>
-                            </div>
-
-                            <p class="text-xs text-gray-500 mb-2 font-bold uppercase tracking-wider">Đổi màu nền (Chữ cái):</p>
-                            <div class="flex gap-2 mb-4">
-                                <button type="button" onclick="setDefaultAvatarColor('7a3040')" class="w-6 h-6 rounded-full bg-[#7a3040] hover:scale-110 transition shadow-sm border border-white" title="Màu đỏ đô"></button>
-                                <button type="button" onclick="setDefaultAvatarColor('1d4ed8')" class="w-6 h-6 rounded-full bg-[#1d4ed8] hover:scale-110 transition shadow-sm border border-white" title="Màu xanh dương"></button>
-                                <button type="button" onclick="setDefaultAvatarColor('15803d')" class="w-6 h-6 rounded-full bg-[#15803d] hover:scale-110 transition shadow-sm border border-white" title="Màu xanh lá"></button>
-                                <button type="button" onclick="setDefaultAvatarColor('b45309')" class="w-6 h-6 rounded-full bg-[#b45309] hover:scale-110 transition shadow-sm border border-white" title="Màu cam/nâu"></button>
-                                <button type="button" onclick="setDefaultAvatarColor('6d28d9')" class="w-6 h-6 rounded-full bg-[#6d28d9] hover:scale-110 transition shadow-sm border border-white" title="Màu tím"></button>
-                                <button type="button" onclick="setDefaultAvatarColor('0f172a')" class="w-6 h-6 rounded-full bg-[#0f172a] hover:scale-110 transition shadow-sm border border-white" title="Màu đen/xám"></button>
-                            </div>
-
-                            <p class="text-xs text-gray-500 mb-2 font-bold uppercase tracking-wider">Chọn ảnh động vật Cute:</p>
-                            <div class="flex flex-wrap gap-2 max-w-[400px]">
-                                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Mèo">
-                                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Chó Corgi">
-                                <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Gấu Trúc">
-                                <img src="https://images.unsplash.com/photo-1518796745738-41048802f99a?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Thỏ">
-                                <img src="https://images.unsplash.com/photo-1516934024742-b461fba47600?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Cáo">
-                                <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Khỉ">
-                                <img src="https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Cú mèo">
-                                <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Sư tử">
-                                <img src="https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Chim cánh cụt">
-                                <img src="https://images.unsplash.com/photo-1501705388883-4ed8a543392c?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Hổ">
-                                <img src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Chuột Lang">
-                                <img src="https://images.unsplash.com/photo-1456926631375-92c8ce872def?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Báo">
-                                <img src="https://images.unsplash.com/photo-1484406566174-9da000fda645?q=80&w=689&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Hươu">
-                                <img src="https://images.unsplash.com/photo-1517825738774-7de9363ef735?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white" onclick="selectPredefinedAvatar(this.src)" title="Hải cẩu">
-                                <img src="https://api.dicebear.com/9.x/fun-emoji/svg?seed=Mimi" class="w-10 h-10 rounded-full cursor-pointer hover:scale-110 hover:ring-2 hover:ring-red-600 transition object-cover shadow-sm bg-white p-1 border" onclick="selectPredefinedAvatar(this.src)" title="Emoji">
-                            </div>
-                        </div>
+                    <div>
+                        <h2 class="font-sport text-2xl font-bold text-white">Thông tin tài khoản</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Cập nhật thông tin cá nhân và ảnh đại diện</p>
                     </div>
                 </div>
-                
-                <!-- VIP Progress Bar -->
-                <div id="vip-progress-container" class="bg-gray-50 rounded-xl p-5 mb-6 border border-gray-200 shadow-sm hidden">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-gray-800 uppercase tracking-wider text-sm">Hạng thành viên: <span id="member-rank" class="text-gray-500">Đang tải...</span></span>
-                        <span class="text-xs font-bold text-gray-500 bg-white px-2 py-1 rounded shadow-sm border border-gray-200" id="vip-spent-text">0₫ / 30.000.000₫</span>
+
+                <!-- Avatar panel (toggle) -->
+                <div id="avatar-selection-panel" class="hidden avatar-panel mb-8">
+                    <div class="flex items-center justify-between mb-5">
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider">Cập nhật ảnh đại diện</h4>
+                        <div class="flex gap-2">
+                            <label for="profile-avatar-input" class="cursor-pointer text-[11px] bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-bold uppercase shadow">Tải lên</label>
+                            <input type="file" id="profile-avatar-input" accept="image/*" class="hidden" onchange="previewAvatar(event)">
+                            <button type="button" onclick="removeAvatar()" class="text-[11px] bg-white/5 text-slate-300 border border-white/10 px-4 py-2 rounded-lg hover:bg-white/10 transition font-bold uppercase">Mặc định</button>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3 overflow-hidden shadow-inner">
-                        <div id="vip-progress-bar" class="bg-gradient-to-r from-red-600 to-[#9b111e] h-2 rounded-full transition-all duration-1000 w-0"></div>
+
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-3">Đổi màu nền:</p>
+                    <div class="flex gap-2 mb-5">
+                        <button type="button" onclick="setDefaultAvatarColor('7a3040')" class="color-swatch bg-[#7a3040]" title="Đỏ đô"></button>
+                        <button type="button" onclick="setDefaultAvatarColor('1d4ed8')" class="color-swatch bg-[#1d4ed8]" title="Xanh dương"></button>
+                        <button type="button" onclick="setDefaultAvatarColor('15803d')" class="color-swatch bg-[#15803d]" title="Xanh lá"></button>
+                        <button type="button" onclick="setDefaultAvatarColor('b45309')" class="color-swatch bg-[#b45309]" title="Cam/nâu"></button>
+                        <button type="button" onclick="setDefaultAvatarColor('6d28d9')" class="color-swatch bg-[#6d28d9]" title="Tím"></button>
+                        <button type="button" onclick="setDefaultAvatarColor('0f172a')" class="color-swatch bg-[#0f172a] border border-white/20" title="Đen"></button>
                     </div>
-                    <p id="vip-hint-text" class="text-xs text-gray-500 italic font-medium mb-3">Mua thêm để lên hạng VIP và nhận quà tặng đặc biệt.</p>
-                    
-                    <!-- Đặc quyền VIP -->
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <p id="vip-privilege-title" class="text-xs font-bold text-gray-800 uppercase mb-3 tracking-wider">Đặc quyền khi đạt hạng VIP:</p>
-                        <ul class="text-xs text-gray-600 space-y-2.5" id="vip-perks-list">
-                            <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span><strong>🥈 VIP Bạc (Từ 10tr):</strong> Miễn phí giao hàng toàn quốc.</span></li>
-                            <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span><strong>🥇 VIP Vàng (Từ 30tr):</strong> Nhận 1 sản phẩm miễn phí (dưới 1 triệu).</span></li>
-                            <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span><strong>💎 VIP Kim Cương (Từ 50tr):</strong> Nhận 1 sản phẩm miễn phí (dưới 2 triệu).</span></li>
-                            <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>Ưu tiên xử lý đơn hàng và Huy hiệu đặc quyền.</span></li>
+
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-3">Chọn avatar dễ thương:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Mèo">
+                        <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Chó Corgi">
+                        <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Gấu Trúc">
+                        <img src="https://images.unsplash.com/photo-1518796745738-41048802f99a?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Thỏ">
+                        <img src="https://images.unsplash.com/photo-1516934024742-b461fba47600?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Cáo">
+                        <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Khỉ">
+                        <img src="https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Cú mèo">
+                        <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Sư tử">
+                        <img src="https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Chim cánh cụt">
+                        <img src="https://images.unsplash.com/photo-1501705388883-4ed8a543392c?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Hổ">
+                        <img src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Chuột Lang">
+                        <img src="https://images.unsplash.com/photo-1456926631375-92c8ce872def?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Báo">
+                        <img src="https://images.unsplash.com/photo-1517825738774-7de9363ef735?auto=format&fit=crop&w=150&q=80" class="avatar-thumb" onclick="selectPredefinedAvatar(this.src)" title="Hải cẩu">
+                        <img src="https://api.dicebear.com/9.x/fun-emoji/svg?seed=Mimi" class="avatar-thumb p-0.5 bg-white" onclick="selectPredefinedAvatar(this.src)" title="Emoji">
+                    </div>
+                </div>
+
+                <!-- VIP Card -->
+                <div id="vip-progress-container" class="vip-card mb-8 hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Hạng thành viên</p>
+                            <p id="member-rank" class="text-lg font-extrabold text-white">Đang tải...</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[11px] text-slate-500 mb-1">Tổng chi tiêu</p>
+                            <p id="vip-spent-text" class="text-sm font-bold text-white">0₫</p>
+                        </div>
+                    </div>
+                    <div class="vip-bar-bg mb-3">
+                        <div id="vip-progress-bar" class="vip-bar-fill bg-gradient-to-r from-red-600 to-red-400" style="width:0%"></div>
+                    </div>
+                    <p id="vip-hint-text" class="text-xs text-slate-400 mb-5">Mua thêm để lên hạng VIP</p>
+
+                    <div class="border-t border-white/5 pt-4">
+                        <p id="vip-privilege-title" class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Đặc quyền VIP:</p>
+                        <ul class="space-y-2.5" id="vip-perks-list">
+                            <li class="flex items-start gap-3 text-xs text-slate-400">
+                                <svg class="w-4 h-4 text-slate-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span><strong class="text-slate-300">🥈 VIP Bạc (từ 10tr):</strong> Miễn phí giao hàng toàn quốc.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-xs text-slate-400">
+                                <svg class="w-4 h-4 text-slate-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span><strong class="text-slate-300">🥇 VIP Vàng (từ 30tr):</strong> Nhận 1 sản phẩm miễn phí (dưới 1 triệu).</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-xs text-slate-400">
+                                <svg class="w-4 h-4 text-slate-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span><strong class="text-slate-300">💎 VIP Kim Cương (từ 50tr):</strong> Nhận 1 sản phẩm miễn phí (dưới 2 triệu).</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-xs text-slate-400">
+                                <svg class="w-4 h-4 text-slate-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>Ưu tiên xử lý đơn hàng và huy hiệu đặc quyền.</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="space-y-6">
+                <!-- Form -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Họ và tên</label>
-                        <input type="text" id="profile-name" readonly class="w-full bg-gray-100 border rounded px-4 py-3 text-gray-800 font-medium">
+                        <label class="field-label">Họ và tên</label>
+                        <input type="text" id="profile-name" readonly class="field-input">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Email</label>
-                        <input type="email" id="profile-email" readonly class="w-full bg-gray-100 border rounded px-4 py-3 text-gray-800 font-medium">
+                        <label class="field-label">Địa chỉ Email</label>
+                        <input type="email" id="profile-email" readonly class="field-input">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Số điện thoại <span class="text-red-600">*</span></label>
-                        <input type="tel" id="profile-phone" placeholder="Nhập 10 số điện thoại" maxlength="10" class="w-full border rounded px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none">
+                        <label class="field-label">Số điện thoại <span class="text-red-500">*</span></label>
+                        <input type="tel" id="profile-phone" placeholder="Nhập 10 số điện thoại" maxlength="10" class="field-input">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Địa chỉ</label>
-                        <textarea id="profile-address" placeholder="Nhập địa chỉ chi tiết" rows="3" class="w-full border rounded px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none resize-none"></textarea>
+                        <label class="field-label">Địa chỉ giao hàng</label>
+                        <input type="text" id="profile-address" placeholder="Số nhà, đường, phường, quận..." class="field-input">
                     </div>
-                    <button id="save-profile-btn" onclick="saveProfile()" class="w-full flex items-center justify-center bg-red-700 text-white py-3 rounded-full font-bold uppercase tracking-widest hover:bg-red-800 transition">
-                        Lưu
+                </div>
+
+                <button id="save-profile-btn" onclick="saveProfile()" class="btn-primary w-full mt-2">
+                    Lưu thông tin
+                </button>
+            </section>
+
+            <!-- ── 2. MẬT KHẨU ── -->
+            <section id="password-section" class="section-content content-card hidden">
+                <div class="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="font-sport text-2xl font-bold text-white">Đổi mật khẩu</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Cập nhật mật khẩu để bảo vệ tài khoản</p>
+                    </div>
+                </div>
+
+                <div class="max-w-md space-y-5">
+                    <div>
+                        <label class="field-label">Mật khẩu cũ</label>
+                        <input type="password" id="old-password" placeholder="••••••••" class="field-input">
+                    </div>
+                    <div>
+                        <label class="field-label">Mật khẩu mới</label>
+                        <input type="password" id="new-password" placeholder="••••••••" class="field-input">
+                    </div>
+                    <div>
+                        <label class="field-label">Xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirm-password" placeholder="••••••••" class="field-input">
+                    </div>
+                    <button id="change-password-btn" onclick="changePassword()" class="btn-primary w-full mt-2">
+                        Cập nhật mật khẩu
                     </button>
                 </div>
             </section>
 
-            <!-- 2. PASSWORD SECTION -->
-            <section id="password-section" class="section-content hidden">
-                <h2 class="font-sport text-3xl font-bold mb-6">Đổi mật khẩu</h2>
-                
-                <div class="space-y-6 max-w-md">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Mật khẩu cũ</label>
-                        <input type="password" id="old-password" placeholder="Nhập mật khẩu cũ" class="w-full border rounded px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none">
+            <!-- ── 3. ĐƠN HÀNG ── -->
+            <section id="orders-section" class="section-content content-card hidden">
+                <div class="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Mật khẩu mới</label>
-                        <input type="password" id="new-password" placeholder="Nhập mật khẩu mới" class="w-full border rounded px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none">
+                        <h2 class="font-sport text-2xl font-bold text-white">Lịch sử đơn hàng</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Theo dõi tất cả đơn hàng của bạn</p>
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Xác nhận mật khẩu mới</label>
-                        <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu mới" class="w-full border rounded px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none">
-                    </div>
-                    <button id="change-password-btn" onclick="changePassword()" class="w-full flex items-center justify-center bg-red-700 text-white py-3 rounded-full font-bold uppercase tracking-widest hover:bg-red-800 transition">
-                        Cập nhật
-                    </button>
                 </div>
-            </section>
 
-            <!-- 3. ORDERS SECTION -->
-            <section id="orders-section" class="section-content hidden">
-                <h2 class="font-sport text-3xl font-bold mb-6">Lịch sử đơn hàng</h2>
-                
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="order-table">
                         <thead>
-                            <tr class="bg-gray-100 border-b-2">
-                                <th class="px-4 py-3 font-bold text-gray-700">Mã đơn</th>
-                                <th class="px-4 py-3 font-bold text-gray-700">Ngày đặt</th>
-                                <th class="px-4 py-3 font-bold text-gray-700">Tổng tiền</th>
-                                <th class="px-4 py-3 font-bold text-gray-700">Trạng thái</th>
+                            <tr>
+                                <th class="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">Mã đơn</th>
+                                <th class="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">Ngày đặt</th>
+                                <th class="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">Tổng tiền</th>
+                                <th class="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody id="orders-table">
-                            <tr><td colspan="4" class="p-4 text-center text-gray-500">Đang tải...</td></tr>
+                            <tr class="order-row">
+                                <td colspan="4" class="text-center text-slate-500 py-10">
+                                    <svg class="w-8 h-8 mx-auto mb-2 text-slate-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    Đang tải...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- 4. PREFERENCES SECTION -->
-            <section id="preferences-section" class="section-content hidden">
-                <h2 class="font-sport text-3xl font-bold mb-6">Ưu tiên cá nhân</h2>
-                
-                <div class="space-y-4 max-w-md">
-                    <label class="flex items-center gap-3 p-4 border rounded cursor-pointer hover:bg-gray-50 transition">
+            <!-- ── 4. ƯU TIÊN ── -->
+            <section id="preferences-section" class="section-content content-card hidden">
+                <div class="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="font-sport text-2xl font-bold text-white">Ưu tiên cá nhân</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Tuỳ chỉnh thông báo và trải nghiệm mua sắm</p>
+                    </div>
+                </div>
+
+                <div class="max-w-lg space-y-4">
+                    <!-- Toggle 1 -->
+                    <div class="pref-toggle" onclick="togglePref('pref-newsletter','toggle-1')">
+                        <div>
+                            <p class="text-sm font-bold text-white">Thông báo khuyến mãi</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Nhận email về ưu đãi và sản phẩm mới</p>
+                        </div>
+                        <div class="toggle-switch" id="toggle-1"><div class="toggle-knob"></div></div>
                         <input type="checkbox" id="pref-newsletter" class="hidden">
-                        <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-300 rounded bg-white">
-                            <svg class="w-4 h-4 text-green-600 hidden" id="check-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        </span>
-                        <span class="text-gray-700 font-medium">Nhận thông báo khuyến mãi qua email</span>
-                    </label>
-                    <label class="flex items-center gap-3 p-4 border rounded cursor-pointer hover:bg-gray-50 transition">
+                    </div>
+                    <!-- Toggle 2 -->
+                    <div class="pref-toggle" onclick="togglePref('pref-sms','toggle-2')">
+                        <div>
+                            <p class="text-sm font-bold text-white">Thông báo SMS</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Nhận tin nhắn SMS về tình trạng đơn hàng</p>
+                        </div>
+                        <div class="toggle-switch" id="toggle-2"><div class="toggle-knob"></div></div>
                         <input type="checkbox" id="pref-sms" class="hidden">
-                        <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-300 rounded bg-white">
-                            <svg class="w-4 h-4 text-green-600 hidden" id="check-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        </span>
-                        <span class="text-gray-700 font-medium">Nhận tin nhắn SMS về đơn hàng</span>
-                    </label>
-                    <button onclick="savePreferences()" class="mt-6 w-full bg-red-700 text-white py-3 rounded-full font-bold uppercase tracking-widest hover:bg-red-800 transition">
-                        Lưu
-                    </button>
+                    </div>
+
+                    <button onclick="savePreferences()" class="btn-primary w-full mt-4">Lưu ưu tiên</button>
                 </div>
             </section>
 
         </div>
     </main>
 
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- CROP MODAL                                         -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="crop-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div id="crop-modal-content" class="bg-[#161b27] border border-white/10 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform scale-95 transition-all duration-300">
+            <div class="p-6 border-b border-white/5">
+                <h3 class="font-sport text-xl font-bold text-white uppercase tracking-wider">Cắt ảnh đại diện</h3>
+                <p class="text-xs text-slate-500 mt-1">Điều chỉnh khung hình vuông để có avatar đẹp nhất.</p>
+            </div>
+            <div class="p-6 flex justify-center bg-black/20">
+                <div class="max-h-[300px] max-w-[300px] overflow-hidden rounded-xl border border-white/10">
+                    <img id="image-to-crop" class="max-w-full" src="" alt="Ảnh để cắt">
+                </div>
+            </div>
+            <div class="p-6 border-t border-white/5 flex justify-end gap-3">
+                <button type="button" onclick="cancelCrop()" class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 transition outline-none border border-white/10">Hủy bỏ</button>
+                <button type="button" onclick="applyCrop()" class="px-6 py-2.5 text-xs font-bold uppercase tracking-wider bg-red-700 text-white rounded-xl hover:bg-red-600 transition outline-none shadow-lg">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SCRIPTS (giữ nguyên toàn bộ logic)                 -->
+    <!-- ═══════════════════════════════════════════════════ -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Auth Guard: Kiểm tra đăng nhập SAU KHI script.js đã chắc chắn chạy
             const userInfo = window.userInfo;
             if (!userInfo || Object.keys(userInfo).length === 0) {
                 window.showToast("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.", "error");
                 setTimeout(() => window.location.replace('login.html'), 1500);
-                return; // Dừng thực thi script nếu chưa đăng nhập
+                return;
             }
 
-            // Điền thông tin user
-            document.getElementById('profile-name').value = window.userInfo.name;
-            document.getElementById('profile-email').value = window.userInfo.email;
-            document.getElementById('profile-display-name').textContent = window.userInfo.name;
-            
-            const profileData = JSON.parse(localStorage.getItem('userProfile_' + window.userInfo._id)) || {};
-            document.getElementById('profile-phone').value = window.userInfo.phone || profileData.phone || '';
-            document.getElementById('profile-address').value = window.userInfo.address || profileData.address || '';
+            document.getElementById('profile-name').value = userInfo.name;
+            document.getElementById('profile-email').value = userInfo.email;
+            document.getElementById('profile-display-name').textContent = userInfo.name;
+            document.getElementById('profile-display-email').textContent = userInfo.email;
 
-            if (window.userInfo.avatar && window.userInfo.avatar !== 'REMOVE') {
-                document.getElementById('profile-avatar-preview').src = window.userInfo.avatar;
+            const profileData = JSON.parse(localStorage.getItem('userProfile_' + userInfo._id)) || {};
+            document.getElementById('profile-phone').value = userInfo.phone || profileData.phone || '';
+            document.getElementById('profile-address').value = userInfo.address || profileData.address || '';
+
+            if (userInfo.avatar && userInfo.avatar !== 'REMOVE') {
+                document.getElementById('profile-avatar-preview').src = userInfo.avatar;
             } else {
-                const initial = (window.userInfo.name || 'U').charAt(0).toUpperCase();
+                const initial = (userInfo.name || 'U').charAt(0).toUpperCase();
                 document.getElementById('profile-avatar-preview').src = `https://ui-avatars.com/api/?name=${initial}&background=7a3040&color=fff`;
             }
 
@@ -283,111 +548,103 @@
 
         window.currentAvatarBase64 = null;
 
+        // ── Toggle ưu tiên (thay thế checkbox cũ) ──
+        function togglePref(checkId, toggleId) {
+            const cb = document.getElementById(checkId);
+            const sw = document.getElementById(toggleId);
+            cb.checked = !cb.checked;
+            sw.classList.toggle('on', cb.checked);
+        }
+
         async function calculateVIPStatus() {
             let totalSpent = 0;
             try {
                 const response = await fetch(`http://localhost:5000/api/orders/myorders/${window.userInfo._id}`);
                 if (!response.ok) throw new Error('Failed to fetch');
                 const orders = await response.json();
-                
                 const deliveredOrders = orders.filter(o => o.status === 'delivered');
                 totalSpent = deliveredOrders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
-                
                 localStorage.setItem('totalSpent_' + window.userInfo._id, totalSpent);
             } catch (error) {
-                console.error("Lỗi khi tính toán VIP:", error);
                 totalSpent = parseFloat(localStorage.getItem('totalSpent_' + window.userInfo._id)) || 0;
             }
 
             const tiers = [
-                { id: 'normal', name: 'Thành viên Thường', min: 0, badge: 'hidden' },
-                { id: 'silver', name: '🥈 VIP Bạc', min: 10000000, badge: 'from-gray-300 to-gray-400 text-gray-800 border-gray-400', color: 'text-gray-500' },
-                { id: 'gold', name: '🥇 VIP Vàng', min: 30000000, badge: 'from-yellow-400 to-yellow-600 text-white border-yellow-200', color: 'text-yellow-600' },
-                { id: 'diamond', name: '💎 VIP Kim Cương', min: 50000000, badge: 'diamond-badge text-white border-cyan-200', color: 'text-blue-600' }
+                { id: 'normal',  name: 'Thành viên Thường', min: 0,        badge: null,    barClass: 'bg-gradient-to-r from-red-600 to-red-400',     pill: null },
+                { id: 'silver',  name: '🥈 VIP Bạc',        min: 10000000, badge: 'BẠC',   barClass: 'bg-gradient-to-r from-gray-300 to-gray-500',   pill: 'bg-gray-500/20 text-gray-300 border-gray-500/30' },
+                { id: 'gold',    name: '🥇 VIP Vàng',       min: 30000000, badge: 'VÀNG',  barClass: 'bg-gradient-to-r from-yellow-400 to-yellow-500', pill: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30' },
+                { id: 'diamond', name: '💎 Kim Cương',       min: 50000000, badge: 'K.CƯƠNG', barClass: 'diamond-bar',                                 pill: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/25' }
             ];
 
             let currentTier = tiers[0];
             let nextTier = tiers[1];
-
             for (let i = tiers.length - 1; i >= 0; i--) {
-                if (totalSpent >= tiers[i].min) {
-                    currentTier = tiers[i];
-                    nextTier = tiers[i + 1] || null;
-                    break;
-                }
+                if (totalSpent >= tiers[i].min) { currentTier = tiers[i]; nextTier = tiers[i + 1] || null; break; }
             }
 
             const targetThreshold = nextTier ? nextTier.min : currentTier.min;
             const progress = nextTier ? Math.min((totalSpent / targetThreshold) * 100, 100) : 100;
-            
+
             const container = document.getElementById('vip-progress-container');
             if (container) container.classList.remove('hidden');
-            
+
             const bar = document.getElementById('vip-progress-bar');
             if (bar) {
-                bar.style.width = progress + '%';
-                const barColor = nextTier && nextTier.id === 'silver' ? 'bg-gray-400' : (nextTier && nextTier.id === 'gold' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' : 'diamond-bar');
-                bar.className = `h-2 rounded-full transition-all duration-1000 w-0 ${barColor}`;
+                bar.className = `vip-bar-fill ${currentTier.barClass}`;
+                setTimeout(() => { bar.style.width = progress + '%'; }, 100);
             }
-            
+
             const spentText = document.getElementById('vip-spent-text');
             if (spentText) spentText.textContent = `${totalSpent.toLocaleString('vi-VN')}₫ / ${targetThreshold.toLocaleString('vi-VN')}₫`;
-            
+
             const rankText = document.getElementById('member-rank');
+            if (rankText) rankText.textContent = currentTier.name;
+
             const hintText = document.getElementById('vip-hint-text');
-            const vipBadge = document.getElementById('profile-vip-badge');
-            const privTitle = document.getElementById('vip-privilege-title');
-            
-            if (rankText) {
-                rankText.textContent = currentTier.name;
-                rankText.className = `${currentTier.color} font-extrabold text-base`;
-            }
-
-            if (currentTier.id !== 'normal') {
-                if (vipBadge) {
-                    vipBadge.className = `absolute -bottom-1 -right-1 ${currentTier.badge.includes('diamond') ? currentTier.badge : 'bg-gradient-to-r ' + currentTier.badge} text-[10px] font-extrabold px-2 py-0.5 rounded-full border-2 border-white shadow-md transform rotate-[-10deg] tracking-wider z-10`;
-                    vipBadge.textContent = currentTier.id === 'diamond' ? 'K.CƯƠNG' : currentTier.id.toUpperCase();
-                }
-                if (privTitle) privTitle.textContent = `ĐẶC QUYỀN ${currentTier.name.toUpperCase()} CỦA BẠN:`;
-            } else {
-                if (vipBadge) vipBadge.classList.add('hidden');
-                if (privTitle) privTitle.textContent = 'ĐẶC QUYỀN KHI ĐẠT HẠNG VIP:';
-            }
-
             if (nextTier) {
                 const remaining = nextTier.min - totalSpent;
-                if (hintText) hintText.innerHTML = `Mua thêm <span class="font-bold text-[#9b111e]">${remaining.toLocaleString('vi-VN')}₫</span> để lên hạng <span class="font-bold">${nextTier.name}</span>.`;
+                if (hintText) hintText.innerHTML = `Mua thêm <strong class="text-red-400">${remaining.toLocaleString('vi-VN')}₫</strong> để lên hạng <strong class="text-white">${nextTier.name}</strong>.`;
             } else {
-                if (hintText) hintText.innerHTML = '✨ Chúc mừng! Bạn đã đạt hạng cao nhất <span class="font-bold text-blue-600">💎 VIP Kim Cương</span>.';
+                if (hintText) hintText.innerHTML = '✨ Chúc mừng! Bạn đã đạt hạng cao nhất <strong class="text-cyan-300">💎 VIP Kim Cương</strong>.';
             }
-            
-            // Logic kiểm tra và Gửi thông báo khi Thăng hạng
+
+            // VIP Badge trong sidebar
+            const vipBadge = document.getElementById('profile-vip-badge');
+            if (currentTier.badge && vipBadge) {
+                vipBadge.classList.remove('hidden');
+                if (currentTier.id === 'diamond') {
+                    vipBadge.className = 'absolute -bottom-1 -right-1 diamond-badge text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border-2 border-[#0f1117] shadow-lg tracking-wider z-10';
+                } else if (currentTier.id === 'gold') {
+                    vipBadge.className = 'absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border-2 border-[#0f1117] shadow-lg tracking-wider z-10';
+                } else {
+                    vipBadge.className = 'absolute -bottom-1 -right-1 bg-gradient-to-r from-gray-300 to-gray-500 text-gray-900 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border-2 border-[#0f1117] shadow-lg tracking-wider z-10';
+                }
+                vipBadge.textContent = currentTier.badge;
+            }
+
+            // Rank pill
+            const pill = document.getElementById('profile-rank-pill');
+            if (pill && currentTier.pill) {
+                pill.className = `mt-2 text-[11px] font-bold px-3 py-1 rounded-full border ${currentTier.pill}`;
+                pill.textContent = currentTier.name;
+                pill.classList.remove('hidden');
+            }
+
+            // VIP privilege title
+            const privTitle = document.getElementById('vip-privilege-title');
+            if (privTitle) privTitle.textContent = currentTier.id !== 'normal' ? `ĐẶC QUYỀN ${currentTier.name.toUpperCase()} CỦA BẠN:` : 'ĐẶC QUYỀN KHI ĐẠT HẠNG VIP:';
+
+            // Rank up notification
             const lastNotifiedTier = localStorage.getItem('lastNotifiedTier_' + window.userInfo._id);
             if (currentTier.id !== 'normal' && lastNotifiedTier !== currentTier.id) {
                 const tierLevels = { 'normal': 0, 'silver': 1, 'gold': 2, 'diamond': 3 };
-                // Chỉ thông báo nếu là "lên hạng" (hoặc lần đầu ghi nhận hạng)
                 if ((tierLevels[currentTier.id] || 0) > (tierLevels[lastNotifiedTier] || 0)) {
-                    const notification = {
-                        id: Date.now().toString(),
-                        type: 'vip',
-                        title: '🎉 THĂNG HẠNG THÀNH VIÊN',
-                        message: `Chúc mừng! Bạn đã chính thức đạt hạng ${currentTier.name}. Hãy tận hưởng ngay các đặc quyền mới dành riêng cho bạn!`,
-                        time: new Date().toISOString(),
-                        isRead: false,
-                        targetUrl: 'profile.html',
-                        userId: window.userInfo._id
-                    };
-                    
+                    const notification = { id: Date.now().toString(), type: 'vip', title: '🎉 THĂNG HẠNG THÀNH VIÊN', message: `Chúc mừng! Bạn đã đạt hạng ${currentTier.name}!`, time: new Date().toISOString(), isRead: false, targetUrl: 'profile.html', userId: window.userInfo._id };
                     let notifs = JSON.parse(localStorage.getItem('notifications')) || [];
                     notifs.unshift(notification);
                     localStorage.setItem('notifications', JSON.stringify(notifs));
-                    
                     if (typeof window.renderCustomerNotifications === 'function') window.renderCustomerNotifications();
-                    
-                    // Bắn Socket API (nếu Backend có hỗ trợ)
                     fetch('http://localhost:5000/api/notifications/emit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(notification) }).catch(() => {});
-
-                    // Hiển thị Toast ngay lập tức
                     if (window.showToast && lastNotifiedTier) window.showToast(`Chúc mừng bạn đã lên hạng ${currentTier.name} 💎`, 'success');
                 }
                 localStorage.setItem('lastNotifiedTier_' + window.userInfo._id, currentTier.id);
@@ -399,19 +656,18 @@
         function updatePrivilegesList(tierId) {
             const list = document.getElementById('vip-perks-list');
             if (!list) return;
-            let items = list.querySelectorAll('li');
-            
-            if (tierId === 'silver' || tierId === 'gold' || tierId === 'diamond') {
-                items[0].innerHTML = items[0].innerHTML.replace('text-green-600', 'text-[#9b111e]').replace('<span>', '<span class="font-bold text-[#9b111e]">');
-            }
-            if (tierId === 'gold' || tierId === 'diamond') {
-                items[1].innerHTML = items[1].innerHTML.replace('text-green-600', 'text-[#9b111e]').replace('<span>', '<span class="font-bold text-[#9b111e]">');
-            }
-            if (tierId === 'diamond') {
-                items[2].innerHTML = items[2].innerHTML.replace('text-green-600', 'text-[#9b111e]').replace('<span>', '<span class="font-bold text-[#9b111e]">');
-            }
+            const items = list.querySelectorAll('li');
+            const activate = (item) => {
+                const svg = item.querySelector('svg');
+                if (svg) svg.className = 'w-4 h-4 text-red-500 shrink-0 mt-0.5';
+                const strongs = item.querySelectorAll('strong');
+                strongs.forEach(s => s.classList.add('text-red-400'));
+            };
+            if (tierId === 'silver' || tierId === 'gold' || tierId === 'diamond') activate(items[0]);
+            if (tierId === 'gold' || tierId === 'diamond') activate(items[1]);
+            if (tierId === 'diamond') activate(items[2]);
         }
-        
+
         let cropper = null;
 
         function previewAvatar(event) {
@@ -421,29 +677,12 @@
                 reader.onload = (e) => {
                     const imageToCrop = document.getElementById('image-to-crop');
                     imageToCrop.src = e.target.result;
-                    
                     const modal = document.getElementById('crop-modal');
                     const content = document.getElementById('crop-modal-content');
-                    
                     modal.classList.remove('hidden');
                     setTimeout(() => { content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
-
-                    if (cropper) cropper.destroy(); // Hủy cropper cũ nếu có
-                    
-                    // Khởi tạo Cropper.js
-                    cropper = new Cropper(imageToCrop, {
-                        aspectRatio: 1, // Bắt buộc cắt theo hình vuông (1:1)
-                        viewMode: 1,    // Giới hạn khung cắt không lọt ra ngoài ảnh
-                        dragMode: 'move',
-                        autoCropArea: 0.8,
-                        restore: false,
-                        guides: true,
-                        center: true,
-                        highlight: false,
-                        cropBoxMovable: true,
-                        cropBoxResizable: true,
-                        toggleDragModeOnDblclick: false,
-                    });
+                    if (cropper) cropper.destroy();
+                    cropper = new Cropper(imageToCrop, { aspectRatio: 1, viewMode: 1, dragMode: 'move', autoCropArea: 0.8, restore: false, guides: true, center: true, highlight: false, cropBoxMovable: true, cropBoxResizable: true, toggleDragModeOnDblclick: false });
                 };
                 reader.readAsDataURL(file);
             }
@@ -452,37 +691,30 @@
         function cancelCrop() {
             const modal = document.getElementById('crop-modal');
             const content = document.getElementById('crop-modal-content');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
+            content.classList.remove('scale-100'); content.classList.add('scale-95');
             setTimeout(() => { modal.classList.add('hidden'); }, 200);
-            
             if (cropper) { cropper.destroy(); cropper = null; }
             document.getElementById('profile-avatar-input').value = '';
         }
 
         function applyCrop() {
             if (!cropper) return;
-            
-            // Lấy ảnh sau khi cắt với kích thước chuẩn 300x300
             const canvas = cropper.getCroppedCanvas({ width: 300, height: 300 });
             if (canvas) {
-                const base64Url = canvas.toDataURL('image/jpeg', 0.8); // Giảm dung lượng ảnh
+                const base64Url = canvas.toDataURL('image/jpeg', 0.8);
                 document.getElementById('profile-avatar-preview').src = base64Url;
                 window.currentAvatarBase64 = base64Url;
-                cancelCrop(); // Đóng modal
+                cancelCrop();
             }
         }
 
         function selectPredefinedAvatar(url) {
             document.getElementById('profile-avatar-preview').src = url;
-            window.currentAvatarBase64 = url; // Lưu URL ảnh mẫu thay vì mã Base64
+            window.currentAvatarBase64 = url;
         }
 
         function toggleAvatarPanel() {
-            const panel = document.getElementById('avatar-selection-panel');
-            if (panel) {
-                panel.classList.toggle('hidden');
-            }
+            document.getElementById('avatar-selection-panel').classList.toggle('hidden');
         }
 
         function removeAvatar() {
@@ -498,316 +730,175 @@
             document.getElementById('profile-avatar-preview').src = url;
             window.currentAvatarBase64 = url;
         }
+
         function switchSection(sectionName) {
-            // Hide all sections
             document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
             document.getElementById(sectionName + '-section').classList.remove('hidden');
-            
-            // Update menu active state
-            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('menu-active'));
-            document.querySelector(`[data-section="${sectionName}"]`).classList.add('menu-active');
-            
+            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
             if (sectionName === 'orders') fetchMyOrders();
         }
 
-        // Lưu thông tin tài khoản
         async function saveProfile() {
             const btn = document.getElementById('save-profile-btn');
-            const originalText = btn ? btn.innerHTML : 'Lưu';
-            
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ĐANG LƯU...`;
-                btn.classList.add('opacity-70', 'cursor-not-allowed');
-            }
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang lưu...`;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            const restoreBtn = () => { btn.disabled = false; btn.innerHTML = orig; btn.classList.remove('opacity-70', 'cursor-not-allowed'); };
 
-            const restoreBtn = () => {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
-                }
-            };
-
-            const phone = document.getElementById('profile-phone').value.trim();
+            const phone   = document.getElementById('profile-phone').value.trim();
             const address = document.getElementById('profile-address').value.trim();
 
             if (phone && !/^\d{10}$/.test(phone)) {
-                window.showToast('Số điện thoại phải là 10 chữ số!', 'warning');
-                restoreBtn();
-                return;
+                window.showToast('Số điện thoại phải là 10 chữ số!', 'warning'); restoreBtn(); return;
             }
 
             let currentUser = window.userInfo;
-            if (!currentUser) {
-                restoreBtn();
-                return;
-            }
+            if (!currentUser) { restoreBtn(); return; }
 
-            // Lấy thông tin avatar mới
             let newAvatar = currentUser.avatar;
-            if (window.currentAvatarBase64) {
-                newAvatar = window.currentAvatarBase64;
-            }
+            if (window.currentAvatarBase64) newAvatar = window.currentAvatarBase64;
 
             try {
-                // Gọi API để lưu lên MongoDB
                 const response = await fetch(`http://localhost:5000/api/users/${currentUser._id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        phone: phone,
-                        address: address,
-                        avatar: newAvatar
-                    })
+                    body: JSON.stringify({ phone, address, avatar: newAvatar })
                 });
-
                 if (response.ok) {
                     const updatedUser = await response.json();
-                    
-                    // Cập nhật lại trình duyệt
                     localStorage.setItem('userInfo', JSON.stringify(updatedUser));
                     window.userInfo = updatedUser;
-
-                    const profileData = { phone: updatedUser.phone, address: updatedUser.address };
-                    localStorage.setItem('userProfile_' + updatedUser._id, JSON.stringify(profileData));
-
+                    localStorage.setItem('userProfile_' + updatedUser._id, JSON.stringify({ phone: updatedUser.phone, address: updatedUser.address }));
                     window.showToast('Lưu thông tin thành công!', 'success');
                     setTimeout(() => window.location.reload(), 1000);
-                    return; // Dừng lại nếu API lưu thành công
-                } else {
-                    console.warn('API trả về lỗi, sẽ thử lưu bằng LocalStorage...');
-                }
-            } catch (error) {
-                console.warn('Không kết nối được Server, tự động lưu bằng LocalStorage...');
-            }
-
-            // CƠ CHẾ DỰ PHÒNG: LƯU VÀO LOCALSTORAGE NẾU BACKEND BỊ LỖI HOẶC CHƯA CHẠY API
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            
-            if (phone) {
-                const isPhoneExists = users.some(user => user.phone === phone && user.email !== currentUser.email);
-                if (isPhoneExists) {
-                    window.showToast("Số điện thoại này đã được liên kết với một tài khoản khác!", "error");
-                    restoreBtn();
                     return;
                 }
-            }
+            } catch (e) { console.warn('Không kết nối server, lưu localStorage...'); }
 
-            const userIndex = users.findIndex(user => user.email === currentUser.email);
-            if (userIndex !== -1) {
-                users[userIndex].phone = phone;
-                if (newAvatar) { if (newAvatar === 'REMOVE') delete users[userIndex].avatar; else users[userIndex].avatar = newAvatar; }
+            // Fallback localStorage
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (phone) {
+                const dup = users.some(u => u.phone === phone && u.email !== currentUser.email);
+                if (dup) { window.showToast('Số điện thoại này đã được liên kết với tài khoản khác!', 'error'); restoreBtn(); return; }
+            }
+            const idx = users.findIndex(u => u.email === currentUser.email);
+            if (idx !== -1) {
+                users[idx].phone = phone;
+                if (newAvatar === 'REMOVE') delete users[idx].avatar; else if (newAvatar) users[idx].avatar = newAvatar;
             } else {
-                let newUser = { ...currentUser, phone: phone };
-                if (newAvatar === 'REMOVE') delete newUser.avatar; else if (newAvatar) newUser.avatar = newAvatar;
-                users.push(newUser);
+                let newU = { ...currentUser, phone };
+                if (newAvatar === 'REMOVE') delete newU.avatar; else if (newAvatar) newU.avatar = newAvatar;
+                users.push(newU);
             }
             localStorage.setItem('users', JSON.stringify(users));
-            
-            currentUser.phone = phone;
-            currentUser.address = address;
-            if (newAvatar) { if (newAvatar === 'REMOVE') delete currentUser.avatar; else currentUser.avatar = newAvatar; }
+            currentUser.phone = phone; currentUser.address = address;
+            if (newAvatar === 'REMOVE') delete currentUser.avatar; else if (newAvatar) currentUser.avatar = newAvatar;
             localStorage.setItem('userInfo', JSON.stringify(currentUser));
             window.userInfo = currentUser;
-
-            const profileData = { phone, address };
-            localStorage.setItem('userProfile_' + currentUser._id, JSON.stringify(profileData));
+            localStorage.setItem('userProfile_' + currentUser._id, JSON.stringify({ phone, address }));
             window.showToast('Lưu thông tin thành công!', 'success');
             setTimeout(() => window.location.reload(), 1000);
         }
 
-        // Đổi mật khẩu
         async function changePassword() {
             const btn = document.getElementById('change-password-btn');
-            const originalText = btn ? btn.innerHTML : 'Cập nhật';
-            
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ĐANG CẬP NHẬT...`;
-                btn.classList.add('opacity-70', 'cursor-not-allowed');
-            }
-
-            const restoreBtn = () => {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
-                }
-            };
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang cập nhật...`;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            const restoreBtn = () => { btn.disabled = false; btn.innerHTML = orig; btn.classList.remove('opacity-70', 'cursor-not-allowed'); };
 
             const oldPwd = document.getElementById('old-password').value;
             const newPwd = document.getElementById('new-password').value;
             const confirmPwd = document.getElementById('confirm-password').value;
 
-            if (!oldPwd || !newPwd || !confirmPwd) {
-                window.showToast('Vui lòng điền đầy đủ thông tin!', 'warning');
-                restoreBtn();
-                return;
-            }
-
-            if (newPwd !== confirmPwd) {
-                window.showToast('Mật khẩu mới không khớp!', 'error');
-                restoreBtn();
-                return;
-            }
-
-            if (newPwd.length < 6) {
-                window.showToast('Mật khẩu mới phải ít nhất 6 ký tự!', 'warning');
-                restoreBtn();
-                return;
-            }
+            if (!oldPwd || !newPwd || !confirmPwd) { window.showToast('Vui lòng điền đầy đủ thông tin!', 'warning'); restoreBtn(); return; }
+            if (newPwd !== confirmPwd) { window.showToast('Mật khẩu mới không khớp!', 'error'); restoreBtn(); return; }
+            if (newPwd.length < 6) { window.showToast('Mật khẩu mới phải ít nhất 6 ký tự!', 'warning'); restoreBtn(); return; }
 
             try {
-                // Gọi API đổi mật khẩu (giả định backend có hỗ trợ)
                 const response = await fetch(`http://localhost:5000/api/users/${window.userInfo._id}/password`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ oldPassword: oldPwd, newPassword: newPwd })
                 });
-
                 if (response.ok) {
                     window.showToast('Đổi mật khẩu thành công!', 'success');
-                    document.getElementById('old-password').value = '';
-                    document.getElementById('new-password').value = '';
-                    document.getElementById('confirm-password').value = '';
+                    ['old-password','new-password','confirm-password'].forEach(id => document.getElementById(id).value = '');
                     restoreBtn();
                 } else {
                     const data = await response.json();
-                    window.showToast(data.message || 'Mật khẩu cũ không chính xác!', 'error');
-                    restoreBtn();
+                    window.showToast(data.message || 'Mật khẩu cũ không chính xác!', 'error'); restoreBtn();
                 }
-            } catch (error) {
-                // Fallback nếu backend API chưa hoàn thiện
+            } catch (e) {
                 let users = JSON.parse(localStorage.getItem('users')) || [];
-                let userIndex = users.findIndex(u => u.email === window.userInfo.email);
-                
-                if (userIndex !== -1) {
-                    if (users[userIndex].password && users[userIndex].password !== oldPwd) {
-                        window.showToast('Mật khẩu cũ không chính xác!', 'error');
-                        restoreBtn();
-                        return;
-                    }
-                    users[userIndex].password = newPwd;
+                let idx = users.findIndex(u => u.email === window.userInfo.email);
+                if (idx !== -1) {
+                    if (users[idx].password && users[idx].password !== oldPwd) { window.showToast('Mật khẩu cũ không chính xác!', 'error'); restoreBtn(); return; }
+                    users[idx].password = newPwd;
                     localStorage.setItem('users', JSON.stringify(users));
                     window.showToast('Đổi mật khẩu thành công!', 'success');
-                    document.getElementById('old-password').value = '';
-                    document.getElementById('new-password').value = '';
-                    document.getElementById('confirm-password').value = '';
+                    ['old-password','new-password','confirm-password'].forEach(id => document.getElementById(id).value = '');
                     restoreBtn();
                 } else {
-                    window.showToast('Không thể đổi mật khẩu lúc này!', 'error');
-                    restoreBtn();
+                    window.showToast('Không thể đổi mật khẩu lúc này!', 'error'); restoreBtn();
                 }
             }
         }
 
-        // Lưu ưu tiên
-        function savePreferences() {
-            window.showToast('Lưu ưu tiên thành công!', 'success');
-        }
+        function savePreferences() { window.showToast('Lưu ưu tiên thành công!', 'success'); }
 
-        // Custom checkbox handlers
-        document.getElementById('pref-newsletter').addEventListener('change', function() {
-            const checkIcon = document.getElementById('check-1');
-            if (this.checked) {
-                checkIcon.classList.remove('hidden');
-            } else {
-                checkIcon.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('pref-sms').addEventListener('change', function() {
-            const checkIcon = document.getElementById('check-2');
-            if (this.checked) {
-                checkIcon.classList.remove('hidden');
-            } else {
-                checkIcon.classList.add('hidden');
-            }
-        });
-
-        // Xóa tài khoản
         async function deleteAccount() {
-            if (confirm('BẠN CÓ CHẮC CHẮN MUỐN XÓA TÀI KHOẢN? Hành động này sẽ xóa vĩnh viễn tất cả dữ liệu của bạn và không thể hoàn tác!')) {
-                try {
-                    const response = await fetch(`http://localhost:5000/api/users/${window.userInfo._id}`, {
-                        method: 'DELETE',
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        window.showToast('Tài khoản của bạn đã được xóa thành công. Cảm ơn bạn đã sử dụng dịch vụ.', 'success');
-                        // Đăng xuất và chuyển về trang chủ
-                        localStorage.removeItem('userInfo');
-                        setTimeout(() => window.location.replace('index.html'), 1500);
-                    } else {
-                        window.showToast(`Lỗi khi xóa tài khoản: ${data.message}`, 'error');
-                    }
-                } catch (error) {
-                    window.showToast('Không thể kết nối tới server để xóa tài khoản. Vui lòng thử lại sau.', 'error');
+            if (!confirm('BẠN CÓ CHẮC CHẮN MUỐN XÓA TÀI KHOẢN?\nHành động này sẽ xóa vĩnh viễn tất cả dữ liệu!')) return;
+            try {
+                const response = await fetch(`http://localhost:5000/api/users/${window.userInfo._id}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (response.ok) {
+                    window.showToast('Tài khoản đã được xóa thành công.', 'success');
+                    localStorage.removeItem('userInfo');
+                    setTimeout(() => window.location.replace('index.html'), 1500);
+                } else {
+                    window.showToast(`Lỗi: ${data.message}`, 'error');
                 }
-            }
+            } catch (e) { window.showToast('Không thể kết nối server!', 'error'); }
         }
 
-        // Lấy lịch sử đơn hàng
         async function fetchMyOrders() {
             try {
                 const response = await fetch(`http://localhost:5000/api/orders/myorders/${window.userInfo._id}`);
                 const orders = await response.json();
-                
-                if (!Array.isArray(orders)) throw new Error('Dữ liệu API không hợp lệ');
+                if (!Array.isArray(orders)) throw new Error();
 
                 const tableBody = document.getElementById('orders-table');
-                
                 if (orders.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Bạn chưa có đơn hàng nào.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-14 text-slate-500"><svg class="w-10 h-10 mx-auto mb-3 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Bạn chưa có đơn hàng nào.</td></tr>`;
                     return;
                 }
 
+                const statusConfig = {
+                    'pending':   { text: 'Chờ xử lý', badge: 'badge badge-pending' },
+                    'shipping':  { text: 'Đang giao',  badge: 'badge badge-shipping' },
+                    'delivered': { text: 'Đã giao',    badge: 'badge badge-delivered' },
+                    'cancelled': { text: 'Đã hủy',     badge: 'badge badge-cancelled' }
+                };
+
                 tableBody.innerHTML = orders.map(order => {
                     const date = new Date(order.createdAt).toLocaleDateString('vi-VN');
-                    const statusConfig = {
-                        'pending': { text: 'Chờ xử lý', color: 'text-yellow-700' },
-                        'shipping': { text: 'Đang giao', color: 'text-blue-700' },
-                        'delivered': { text: 'Đã giao', color: 'text-green-700' },
-                        'cancelled': { text: 'Đã hủy', color: 'text-red-700' }
-                    };
-                    const config = statusConfig[order.status] || { text: order.status, color: 'text-gray-700' };
-                    
+                    const cfg = statusConfig[order.status] || { text: order.status, badge: 'badge badge-pending' };
                     return `
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="px-4 py-3 font-mono text-sm text-blue-600">${order._id?.slice(-8) || 'N/A'}</td>
-                            <td class="px-4 py-3">${date}</td>
-                            <td class="px-4 py-3 font-bold text-red-600">${order.totalPrice.toLocaleString('vi-VN')}₫</td>
-                            <td class="px-4 py-3 font-bold ${config.color}">${config.text}</td>
-                        </tr>
-                    `;
+                        <tr class="order-row">
+                            <td class="font-mono text-sm text-blue-400 font-bold">#${order._id?.slice(-8) || 'N/A'}</td>
+                            <td class="text-slate-400 text-sm">${date}</td>
+                            <td class="font-bold text-red-400">${order.totalPrice.toLocaleString('vi-VN')}₫</td>
+                            <td><span class="${cfg.badge}"><span class="w-1.5 h-1.5 rounded-full bg-current inline-block"></span>${cfg.text}</span></td>
+                        </tr>`;
                 }).join('');
-            } catch (error) {
-                console.error("Lỗi khi tải lịch sử đơn hàng:", error);
-                document.getElementById('orders-table').innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Không thể tải lịch sử đơn hàng. Vui lòng thử lại sau.</td></tr>`;
+            } catch (e) {
+                document.getElementById('orders-table').innerHTML = `<tr><td colspan="4" class="text-center py-10 text-red-400">Không thể tải lịch sử đơn hàng.</td></tr>`;
             }
         }
     </script>
-
-    <!-- Modal Cắt Ảnh Avatar (Cropper Modal) -->
-    <div id="crop-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-75 p-4 transition-all duration-300">
-        <div id="crop-modal-content" class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform scale-95 transition-all duration-300">
-            <div class="p-6 border-b">
-                <h3 class="font-sport text-xl font-bold text-gray-800 uppercase tracking-wider">Cắt ảnh đại diện</h3>
-                <p class="text-xs text-gray-500 mt-1">Vui lòng điều chỉnh khung hình vuông để có ảnh đại diện đẹp nhất.</p>
-            </div>
-            <div class="p-6 flex justify-center bg-gray-50">
-                <div class="max-h-[300px] max-w-[300px] overflow-hidden rounded-lg border">
-                    <img id="image-to-crop" class="max-w-full" src="" alt="Ảnh để cắt">
-                </div>
-            </div>
-            <div class="p-6 border-t flex justify-end gap-3 bg-white">
-                <button type="button" onclick="cancelCrop()" class="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition outline-none">Hủy bỏ</button>
-                <button type="button" onclick="applyCrop()" class="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-red-700 text-white rounded-lg hover:bg-red-800 transition outline-none shadow-md">Đồng ý</button>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

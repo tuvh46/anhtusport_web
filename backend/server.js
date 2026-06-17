@@ -13,6 +13,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const voucherRoutes = require('./routes/voucherRoutes'); // Thêm route voucher
 const settingRoutes = require('./routes/settingRoutes'); // Route cài đặt hệ thống
+const standingRoutes = require('./routes/standingRoutes'); // Route BXH Ngoại Hạng Anh
 
 // Cấu hình biến môi trường
 dotenv.config({ path: path.join(__dirname, '.env') });
@@ -34,6 +35,7 @@ app.use('/api/notifications', notificationRoutes); // Sử dụng notificationRo
 app.use('/api/vouchers', voucherRoutes); // Sử dụng voucherRoutes
 app.use('/api/settings', settingRoutes); // Route cài đặt hệ thống (welcome-voucher, v.v.)
 app.use('/api/upload', uploadRoutes);    // API Upload File
+app.use('/api/standings', standingRoutes); // API BXH Ngoại Hạng Anh
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Cấp quyền đọc file tĩnh
 app.use('/video', express.static(path.join(__dirname, '../video'))); // Serve video assets
 app.use('/banner', express.static(path.join(__dirname, '../banner'))); // Serve banner images

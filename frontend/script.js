@@ -295,10 +295,10 @@ function renderProducts(products) {
 
         let badge = '';
         if ((product.stock === 0 || product.countInStock === 0) && product.stock !== undefined) {
-            badge = `<span class="absolute top-3 left-3 z-30 bg-black text-white text-[10px] font-bold px-2.5 py-1 uppercase tracking-widest shadow-sm">Hết hàng</span>`;
+            badge = `<span class="absolute top-3 left-3 z-30 bg-black/85 backdrop-blur-sm text-white text-[9px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-md">Hết hàng</span>`;
         // The condition `product.stock !== undefined` is added because `countInStock` might be missing for older products and `stock` might default to 0 if not present.
         } else if (isNewArrival(product, index)) {
-            badge = `<span class="absolute top-3 left-3 z-30 bg-[#9b111e] text-white text-[10px] font-bold px-2.5 py-1 uppercase tracking-widest shadow-sm">Mới</span>`;
+            badge = `<span class="absolute top-3 left-3 z-30 bg-gradient-to-r from-[#9b111e] to-[#cc1c2f] text-white text-[9px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-md">Mới</span>`;
         }
         const reviews = product.reviews || [];
         const actualRatings = reviews.filter(r => (Number(r.rating) || 0) > 0); // Filter out 0, 1, 2-star ratings/questions
@@ -327,36 +327,39 @@ function renderProducts(products) {
         const compareIconColor = isCompared ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600';
 
         const card = `
-            <div class="product-card group border border-gray-100 p-2 hover:border-black transition-all relative">
+            <div class="product-card group relative bg-white border border-gray-100 hover:border-red-600/20 shadow-sm hover:shadow-2xl rounded-2xl p-3 transition-all duration-500 flex flex-col justify-between overflow-hidden">
+                <!-- Badges & Buttons container -->
+                <div class="relative aspect-[3/4] w-full bg-gray-50 rounded-xl overflow-hidden mb-4 [perspective:1000px]">
+                    <a href="product.html?id=${product._id}" class="block w-full h-full cursor-pointer">
+                        <div class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                            <img src="${product.image}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover z-10 rounded-xl" style="-webkit-backface-visibility: hidden; backface-visibility: hidden;">
+                            <img src="${product.hoverImage || product.image}" alt="Back View" class="absolute inset-0 w-full h-full object-cover rounded-xl" style="-webkit-backface-visibility: hidden; backface-visibility: hidden; -webkit-transform: rotateY(180deg); transform: rotateY(180deg);" onerror="this.src='${product.image}'">
+                        </div>
+                    </a>
+                    ${badge}
+                    <!-- Floating interactive buttons -->
+                    <button onclick="toggleFavorite('${product._id}')" class="absolute top-3 right-3 z-20 backdrop-blur-md bg-white/80 p-2.5 rounded-full shadow-md hover:bg-red-50 hover:scale-110 active:scale-95 transition-all">
+                        ${heartIcon}
+                    </button>
+                    <button onclick="toggleCompare('${product._id}')" class="absolute top-14 right-3 z-20 backdrop-blur-md bg-white/80 p-2.5 rounded-full shadow-md hover:bg-blue-50 hover:scale-110 active:scale-95 transition-all ${compareIconColor} outline-none" title="${isCompared ? 'Bỏ so sánh' : 'Thêm vào so sánh'}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6m12-3H9m12 3v13m0 0H9m12 0l-3-3m0 6l3-3m-9-6H3m0 0l3-3m-3 3l3 3M3 19V6m0 0h6"></path></svg>
+                    </button>
+                </div>
                 
-                ${badge}
-                <a href="product.html?id=${product._id}" class="block relative aspect-[3/4] w-full [perspective:1000px] cursor-pointer bg-gray-100 mb-4">
-                    <div class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                        <img src="${product.image}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover z-10" style="-webkit-backface-visibility: hidden; backface-visibility: hidden;">
-                        <img src="${product.hoverImage || product.image}" alt="Back View" class="absolute inset-0 w-full h-full object-cover" style="-webkit-backface-visibility: hidden; backface-visibility: hidden; -webkit-transform: rotateY(180deg); transform: rotateY(180deg);" onerror="this.src='${product.image}'">
+                <div class="px-2 flex-1 flex flex-col justify-between">
+                    <div>
+                        <p class="text-[#9b111e]/80 text-[10px] font-bold tracking-widest uppercase mb-1">${product.category}</p>
+                        <h4 class="font-sport text-base font-bold text-gray-800 hover:text-[#9b111e] uppercase truncate mb-1">
+                            <a href="product.html?id=${product._id}">${product.name}</a>
+                        </h4>
+                        ${ratingHtml}
                     </div>
-                </a>
-                
-                <button onclick="toggleFavorite('${product._id}')" class="absolute top-3 right-3 z-20 bg-white p-2 rounded-full shadow-md hover:scale-110 transition-transform">
-                    ${heartIcon}
-                </button>
-                
-                <button onclick="toggleCompare('${product._id}')" class="absolute top-14 right-3 z-20 bg-white p-2 rounded-full shadow-md hover:scale-110 transition-transform ${compareIconColor} outline-none" title="${isCompared ? 'Bỏ so sánh' : 'Thêm vào so sánh'}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6m12-3H9m12 3v13m0 0H9m12 0l-3-3m0 6l3-3m-9-6H3m0 0l3-3m-3 3l3 3M3 19V6m0 0h6"></path></svg>
-                </button>
-                
-                <div class="px-2">
-                    <h4 class="font-sport text-lg font-bold uppercase truncate">
-                        <a href="product.html?id=${product._id}" class="hover:text-red-700">${product.name}</a>
-                    </h4>
-                    <p class="text-gray-400 text-xs mb-1 uppercase">${product.category}</p>
-                    ${ratingHtml}
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-xl">${(product.price || 0).toLocaleString('vi-VN')}₫</span>
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
+                        <span class="font-extrabold text-[#111827] text-lg">${(product.price || 0).toLocaleString('vi-VN')}₫</span>
                         <button onclick="window.location.href='product.html?id=${product._id}'" title="Xem chi tiết"
-                                class="bg-black text-white p-2 hover:bg-red-700 transition shadow-lg relative z-10 outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                class="bg-[#111827] group-hover:bg-[#9b111e] text-white p-2.5 rounded-full hover:scale-110 active:scale-95 transition-all shadow-md hover:shadow-lg outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                             </svg>
                         </button>
                     </div>
@@ -373,11 +376,22 @@ function renderProducts(products) {
     }
 }
 
+window.loadMoreProducts = function() {
+    currentDisplayCount += 8;
+    renderProducts(allFilteredProducts);
+    // Smooth scroll to newly loaded area
+    const loadMoreContainer = document.getElementById('load-more-container');
+    if (loadMoreContainer) {
+        loadMoreContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+};
+
 function normalizeText(text) {
     return (text || '')
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd');
 }
 
 function isNewArrival(product, index) {
@@ -390,18 +404,27 @@ function isNewArrival(product, index) {
 }
 
 function matchesTag(product, index) {
+    // Chỉ tìm trong name và category, KHÔNG tìm trong description
+    // vì description thường đề cập sản phẩm phối kèm gây nhầm lẫn
+    const catNorm  = normalizeText(product.category || '');
+    const nameNorm = normalizeText(product.name || '');
+    const searchable = `${nameNorm} ${catNorm}`;
+
+    // Dùng haystack đầy đủ (kể cả description) chỉ cho filter bộ sưu tập/new
     const haystack = normalizeText(`${product.name} ${product.category} ${product.description || ''}`);
 
     if (activeTag === 'all') return true;
-    if (activeTag === 'collection-all') return /25\/26|2025-2026|26\/27|2026-2027|retro|classic|original|kit/.test(haystack);
+    if (activeTag === 'collection-all') return /25\/26|2025-2026|26\/27|2026-2027|retro|classic|original/.test(haystack);
     if (activeTag === 'collection-25-26') return /25\/26|2025-2026/.test(haystack);
     if (activeTag === 'collection-26-27') return /26\/27|2026-2027/.test(haystack);
     if (activeTag === 'collection-retro') return /retro|classic|original/.test(haystack);
     if (activeTag === 'new') return isNewArrival(product, index);
-    if (activeTag === 'shirt') return /ao|shirt|jersey|kit/.test(haystack);
-    if (activeTag === 'pants') return /quan|short|pant|trouser/.test(haystack);
-    if (activeTag === 'shoes') return /giay|shoe|sneaker|boot|dep|sandal|slide/.test(haystack);
-    if (activeTag === 'accessory') return /phu kien|accessor|sock|cap|hat|ball|bag/.test(haystack);
+
+    // Dùng \b (word boundary) để tránh khớp một phần từ (VD: "ao" trong "thao")
+    if (activeTag === 'shirt')     return /\bao\b|\bshirts?\b|\bjerseys?\b/.test(searchable);
+    if (activeTag === 'pants')     return /\bquan\b|\bshorts?\b|\bpants?\b|\btrousers?\b/.test(searchable);
+    if (activeTag === 'shoes')     return /\bgiay\b|\bshoes?\b|\bsneakers?\b|\bboots?\b|\bdeps?\b|\bsandals?\b|\bslides?\b/.test(searchable);
+    if (activeTag === 'accessory') return /phu kien|accessor(y|ies)?|\bsocks?\b|\bcaps?\b|\bhats?\b|\bballs?\b|\bbags?\b|\bmu\b|\btat\b/.test(searchable);
 
     return true;
 }
@@ -434,25 +457,189 @@ function updateSearchFeedback(total) {
     feedback.innerText = `${total} kết quả • ${parts.join(' • ')}`;
 }
 
-function applyProductFilters() {
-    allFilteredProducts = productsData
-        .map((product, index) => ({ product, index }))
-        .filter(({ product, index }) => matchesTag(product, index))
-        .filter(({ product }) => {
-            if (!searchKeyword) return true;
-            const haystack = normalizeText(`${product.name} ${product.category}`);
-            return haystack.includes(normalizeText(searchKeyword));
-        })
-        .map(({ product }) => product);
+// Helper to render products in a specific section
+function renderSection(containerId, products) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    if (products.length === 0) {
+        container.innerHTML = `<p class="col-span-full text-center text-gray-400 py-10 font-sport text-lg">Chưa có sản phẩm trong mục này</p>`;
+        return;
+    }
+    
+    products.forEach((product, index) => {
+        const isFav = favorites.includes(product._id);
+        const heartIcon = isFav 
+            ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`
+            : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`;
 
-    currentDisplayCount = 8; // Reset khi đổi filter
-    renderProducts(allFilteredProducts);
-    updateSearchFeedback(allFilteredProducts.length);
+        let badge = '';
+        const currentStock = product.stock !== undefined ? product.stock : (product.countInStock || 0);
+        if (currentStock <= 0) {
+            badge = `<span class="absolute top-3 left-3 z-30 bg-black/85 backdrop-blur-sm text-white text-[9px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-md">Hết hàng</span>`;
+        } else if (isNewArrival(product, index)) {
+            badge = `<span class="absolute top-3 left-3 z-30 bg-gradient-to-r from-[#9b111e] to-[#cc1c2f] text-white text-[9px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-md">Mới</span>`;
+        }
+        
+        const reviews = product.reviews || [];
+        const actualRatings = reviews.filter(r => (Number(r.rating) || 0) > 0);
+        const totalActualRatings = actualRatings.length;
+        const avgRating = totalActualRatings > 0 ? (actualRatings.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / totalActualRatings).toFixed(1) : 0;
+        const ratingPercent = (avgRating / 5) * 100;
+        
+        let ratingHtml = '';
+        if (totalActualRatings > 0) {
+            ratingHtml = `
+                <div class="flex flex-col gap-1 mb-3 mt-1">
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span class="font-bold text-gray-700 flex items-center">${avgRating} <span class="text-yellow-400 text-[10px] ml-0.5 mb-0.5">★</span></span>
+                        <span class="text-gray-400 font-medium">(${totalActualRatings} đánh giá)</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1 shadow-inner">
+                        <div class="bg-gradient-to-r from-yellow-300 to-yellow-500 h-1 rounded-full" style="width: ${ratingPercent}%"></div>
+                    </div>
+                </div>
+            `;
+        } else {
+            ratingHtml = `<p class="text-[10px] text-gray-400 italic mb-3 mt-1">Chưa có đánh giá</p>`;
+        }
+
+        const isCompared = window.compareList && window.compareList.includes(product._id);
+        const compareIconColor = isCompared ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600';
+
+        const card = `
+            <div class="product-card group relative bg-white border border-gray-100 hover:border-red-600/20 shadow-sm hover:shadow-2xl rounded-2xl p-3 transition-all duration-500 flex flex-col justify-between overflow-hidden">
+                <!-- Badges & Buttons container -->
+                <div class="relative aspect-[3/4] w-full bg-gray-50 rounded-xl overflow-hidden mb-4 [perspective:1000px]">
+                    <a href="product.html?id=${product._id}" class="block w-full h-full cursor-pointer">
+                        <div class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                            <img src="${product.image}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover z-10 rounded-xl" style="-webkit-backface-visibility: hidden; backface-visibility: hidden;">
+                            <img src="${product.hoverImage || product.image}" alt="Back View" class="absolute inset-0 w-full h-full object-cover rounded-xl" style="-webkit-backface-visibility: hidden; backface-visibility: hidden; -webkit-transform: rotateY(180deg); transform: rotateY(180deg);" onerror="this.src='${product.image}'">
+                        </div>
+                    </a>
+                    ${badge}
+                    <!-- Floating interactive buttons -->
+                    <button onclick="toggleFavorite('${product._id}')" class="absolute top-3 right-3 z-20 backdrop-blur-md bg-white/80 p-2.5 rounded-full shadow-md hover:bg-red-50 hover:scale-110 active:scale-95 transition-all">
+                        ${heartIcon}
+                    </button>
+                    <button onclick="toggleCompare('${product._id}')" class="absolute top-14 right-3 z-20 backdrop-blur-md bg-white/80 p-2.5 rounded-full shadow-md hover:bg-blue-50 hover:scale-110 active:scale-95 transition-all ${compareIconColor} outline-none" title="${isCompared ? 'Bỏ so sánh' : 'Thêm vào so sánh'}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6m12-3H9m12 3v13m0 0H9m12 0l-3-3m0 6l3-3m-9-6H3m0 0l3-3m-3 3l3 3M3 19V6m0 0h6"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="px-2 flex-1 flex flex-col justify-between">
+                    <div>
+                        <p class="text-[#9b111e]/80 text-[10px] font-bold tracking-widest uppercase mb-1">${product.category}</p>
+                        <h4 class="font-sport text-base font-bold text-gray-800 hover:text-[#9b111e] uppercase truncate mb-1">
+                            <a href="product.html?id=${product._id}">${product.name}</a>
+                        </h4>
+                        ${ratingHtml}
+                    </div>
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
+                        <span class="font-extrabold text-[#111827] text-lg">${(product.price || 0).toLocaleString('vi-VN')}₫</span>
+                        <button onclick="window.location.href='product.html?id=${product._id}'" title="Xem chi tiết"
+                                class="bg-[#111827] group-hover:bg-[#9b111e] text-white p-2.5 rounded-full hover:scale-110 active:scale-95 transition-all shadow-md hover:shadow-lg outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
 }
 
-window.loadMoreProducts = function() {
-    currentDisplayCount += 8;
-    renderProducts(allFilteredProducts);
+window.setFilterTag = function(tag) {
+    activeTag = tag;
+    
+    // Highlight navbar button
+    const tagButtons = document.querySelectorAll('.header-tag-btn');
+    tagButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.tag === tag) {
+            btn.classList.add('active');
+        }
+    });
+
+    if (tag.startsWith('collection-')) {
+        const parentBtn = document.getElementById('collection-parent-btn');
+        if (parentBtn) parentBtn.classList.add('active');
+    }
+    
+    applyProductFilters();
+    document.getElementById('product-list-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+function applyProductFilters() {
+    if (!document.getElementById('product-list-section')) return;
+
+    const multiSections = document.getElementById('homepage-multi-sections');
+    const unifiedView = document.getElementById('homepage-unified-view');
+
+    // If tag is 'all' and searchKeyword is empty, show multi-section view!
+    if (activeTag === 'all' && !searchKeyword) {
+        if (multiSections) multiSections.classList.remove('hidden');
+        if (unifiedView) unifiedView.classList.add('hidden');
+
+        // Render separate sections
+        renderSection('new-arrivals-list', productsData.filter((p, idx) => isNewArrival(p, idx)).slice(0, 4));
+        
+        renderSection('collection-25-26-list', productsData.filter(p => {
+            const haystack = normalizeText(`${p.name} ${p.category} ${p.description || ''}`);
+            return /25\/26|2025-2026/.test(haystack);
+        }).slice(0, 4));
+        
+        renderSection('collection-26-27-list', productsData.filter(p => {
+            const haystack = normalizeText(`${p.name} ${p.category} ${p.description || ''}`);
+            return /26\/27|2026-2027/.test(haystack);
+        }).slice(0, 4));
+
+        renderSection('shirts-list', productsData.filter(p => normalizeText(p.category) === 'ao dau').slice(0, 4));
+        renderSection('pants-list', productsData.filter(p => normalizeText(p.category) === 'quan').slice(0, 4));
+        renderSection('accessories-list', productsData.filter(p => normalizeText(p.category) === 'phu kien').slice(0, 4));
+
+        updateSearchFeedback(productsData.length);
+    } else {
+        // Show unified filtered view
+        if (multiSections) multiSections.classList.add('hidden');
+        if (unifiedView) unifiedView.classList.remove('hidden');
+
+        allFilteredProducts = productsData
+            .map((product, index) => ({ product, index }))
+            .filter(({ product, index }) => matchesTag(product, index))
+            .filter(({ product }) => {
+                if (!searchKeyword) return true;
+                const haystack = normalizeText(`${product.name} ${product.category}`);
+                return haystack.includes(normalizeText(searchKeyword));
+            })
+            .map(({ product }) => product);
+
+        currentDisplayCount = 8;
+        
+        // Update section title based on activeTag
+        const titleEl = document.getElementById('unified-section-title');
+        if (titleEl) {
+            const tagLabels = {
+                'collection-all': 'Tất cả Bộ sưu tập',
+                'collection-25-26': 'Bộ sưu tập 2025/26',
+                'collection-26-27': 'Bộ sưu tập 2026/27',
+                'collection-retro': 'Dòng Retro / Originals',
+                new: 'Hàng mới về',
+                shirt: 'Áo đấu official',
+                pants: 'Quần thi đấu & tập luyện',
+                shoes: 'Giày & Dép',
+                accessory: 'Phụ kiện & Thể thao',
+                all: 'Tất cả sản phẩm'
+            };
+            titleEl.textContent = tagLabels[activeTag] || 'Kết quả tìm kiếm';
+        }
+
+        renderProducts(allFilteredProducts);
+        updateSearchFeedback(allFilteredProducts.length);
+    }
 }
 
 function setupHeaderFilters() {
@@ -461,12 +648,10 @@ function setupHeaderFilters() {
     const searchInput = document.getElementById('header-search-input');
 
     tagButtons.forEach((button) => {
-        // Tự động kích hoạt tab active tương ứng khi load trang (nếu có activeTag từ URL)
         if (button.dataset.tag === activeTag) {
             tagButtons.forEach((item) => item.classList.remove('active'));
             button.classList.add('active');
 
-            // Nổi bật nút Bộ sưu tập cha nếu đang active một bộ sưu tập con
             if (activeTag.startsWith('collection-')) {
                 const parentBtn = document.getElementById('collection-parent-btn');
                 if (parentBtn) parentBtn.classList.add('active');
@@ -478,7 +663,6 @@ function setupHeaderFilters() {
             tagButtons.forEach((item) => item.classList.remove('active'));
             button.classList.add('active');
 
-            // Nổi bật nút Bộ sưu tập cha nếu đang active một bộ sưu tập con
             if (activeTag.startsWith('collection-')) {
                 const parentBtn = document.getElementById('collection-parent-btn');
                 if (parentBtn) parentBtn.classList.add('active');

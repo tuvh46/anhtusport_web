@@ -1,0 +1,73 @@
+product_id,name,category,price,stock,num_reviews,avg_rating,created_at
+69ec674e7fb179301d9a2db5,Quần short tập luyện,Quần,1100000,10,9,4.22,2026-04-25T07:03:42.844Z
+69ec674e7fb179301d9a2db6,Tất sân nhà Arsenal 2025-2026,Phụ kiện,750000,4,10,4.30,2026-04-25T07:03:42.844Z
+69ec674e7fb179301d9a2db7,Dép Adilette Shower Arsenal,Giày & Dép,750000,0,9,4.22,2026-04-25T07:03:42.844Z
+69ec674e7fb179301d9a2db8,Áo đấu sân nhà Arsenal trẻ em 2025-2026,Áo đấu,1500000,0,9,4.22,2026-04-25T07:03:42.844Z
+69ec674e7fb179301d9a2db9,Mũ Lưỡi Trai Arsenal,Phụ kiện,450000,25,9,4.56,2026-04-25T07:03:42.844Z
+6a1850ea1a7b2fdb0ae87393,Áo Đấu Sân Nhà Arsenal 25/26 – Authentic,Áo đấu,3000000,20,10,4.30,2026-05-28T14:27:54.951Z
+6a1850ea1a7b2fdb0ae87396,Áo Đấu Sân Nhà Arsenal 25/26 – Fan Version,Áo đấu,2200000,40,10,4.30,2026-05-28T14:27:54.998Z
+6a1850eb1a7b2fdb0ae87399,Áo Đấu Sân Khách Arsenal 25/26 – Fan Version,Áo đấu,2200000,35,9,4.22,2026-05-28T14:27:55.001Z
+6a1850eb1a7b2fdb0ae8739c,Áo Đấu Sân Khách Arsenal 25/26 – Authentic,Áo đấu,3000000,15,9,4.22,2026-05-28T14:27:55.003Z
+6a1850eb1a7b2fdb0ae8739f,Áo Đấu Thứ Ba Arsenal 25/26 – Fan Version,Áo đấu,2200000,30,10,4.30,2026-05-28T14:27:55.007Z
+6a1850eb1a7b2fdb0ae873a2,Áo Đấu Sân Nhà Arsenal 25/26 Nữ,Áo đấu,2200000,25,10,4.30,2026-05-28T14:27:55.010Z
+6a1850eb1a7b2fdb0ae873a5,Áo Tập Arsenal 25/26 – Training Jersey,Áo đấu,1800000,30,3,4.67,2026-05-28T14:27:55.012Z
+6a1850eb1a7b2fdb0ae873a8,Áo Khoác Anthem Arsenal Z.N.E. 25/26,Áo đấu,2300000,20,3,4.67,2026-05-28T14:27:55.015Z
+6a1850eb1a7b2fdb0ae873ab,Áo Hoodie Arsenal Essentials 25/26,Áo đấu,1900000,25,3,4.67,2026-05-28T14:27:55.017Z
+6a1850eb1a7b2fdb0ae873ae,Quần Tập Luyện Arsenal 25/26 – Training Pants,Quần,1600000,30,9,4.22,2026-05-28T14:27:55.019Z
+6a1850eb1a7b2fdb0ae873b1,Balo Arsenal FC 25/26 – Backpack,Phụ kiện,1200000,35,3,4.67,2026-05-28T14:27:55.021Z
+6a1850eb1a7b2fdb0ae873b4,Mũ Bóng Chày Arsenal FC 25/26 – Cap,Phụ kiện,600000,50,9,4.56,2026-05-28T14:27:55.024Z
+6a1850eb1a7b2fdb0ae873b7,Găng Tay Thủ Môn Arsenal Predator 25/26,Phụ kiện,1500000,15,3,4.67,2026-05-28T14:27:55.025Z
+6a1850eb1a7b2fdb0ae873ba,Bóng Đá Arsenal FC adidas 25/26,Phụ kiện,800000,40,3,4.67,2026-05-28T14:27:55.027Z
+6a1850eb1a7b2fdb0ae873bd,Tất Sân Khách Arsenal 25/26 – Away Socks,Phụ kiện,350000,60,9,4.22,2026-05-28T14:27:55.029Z
+6a1856198db103285a259c82,Arsenal adidas Womens 26/27 Authentic Home Shirt,Áo đấu,3840000,21,3,4.67,2026-05-28T14:50:01.615Z
+6a1856198db103285a259c85,Arsenal adidas Kids 26/27 Authentic Home Shirt,Áo đấu,2560000,11,9,4.22,2026-05-28T14:50:01.621Z
+6a1856198db103285a259c91,Arsenal adidas 26/27 Home Mini Kit,Áo đấu,1600000,19,3,4.67,2026-05-28T14:50:01.633Z
+6a1856198db103285a259c94,Arsenal adidas Womens 26/27 Crop Home Shirt,Áo đấu,2400000,22,3,4.67,2026-05-28T14:50:01.635Z
+6a1856198db103285a259c97,Arsenal adidas 26/27 Authentic Home Long Sleeved Shirt,Áo đấu,4160000,21,3,4.67,2026-05-28T14:50:01.639Z
+6a1856198db103285a259c9a,Arsenal adidas Womens 26/27 Authentic Home Long Sleeved Shirt,Áo đấu,4160000,10,3,4.67,2026-05-28T14:50:01.643Z
+6a1856198db103285a259c9d,Arsenal adidas 26/27 Home Long Sleeved Shirt,Áo đấu,2880000,24,3,4.67,2026-05-28T14:50:01.645Z
+6a1856198db103285a259ca0,Arsenal adidas Kids 26/27 Long Sleeved Home Shirt,Áo đấu,2080000,15,9,4.22,2026-05-28T14:50:01.647Z
+6a1856198db103285a259ca3,Arsenal adidas 26/27 Home Baby Kit,Áo đấu,1280000,15,3,4.67,2026-05-28T14:50:01.649Z
+6a1856198db103285a259ca9,Arsenal adidas Kids 26/27 Home Shorts,Quần,960000,14,9,4.22,2026-05-28T14:50:01.656Z
+6a1856198db103285a259cac,Arsenal adidas 26/27 Authentic Home Shorts,Quần,1440000,22,9,4.22,2026-05-28T14:50:01.658Z
+6a1856198db103285a259caf,Arsenal adidas 26/27 Authentic Alternate Home Shorts,Quần,1440000,22,9,4.22,2026-05-28T14:50:01.661Z
+6a1856198db103285a259cb5,Arsenal adidas Kids 26/27 Home Socks,Phụ kiện,512000,12,9,4.22,2026-05-28T14:50:01.666Z
+6a1856198db103285a259cb8,Arsenal adidas 26/27 Home Goalkeeper Shirt,Áo đấu,2720000,23,3,4.67,2026-05-28T14:50:01.669Z
+6a1856198db103285a259cbb,Arsenal adidas Kids 26/27 Long Sleeved Home Goalkeeper Shirt,Áo đấu,2080000,26,9,4.22,2026-05-28T14:50:01.673Z
+6a1856198db103285a259cbe,Arsenal adidas 26/27 Home Goalkeeper Shorts,Quần,1216000,15,9,4.22,2026-05-28T14:50:01.676Z
+6a1856198db103285a259cc1,Arsenal adidas Kids 26/27 Home Goalkeeper Shorts,Quần,960000,12,9,4.22,2026-05-28T14:50:01.678Z
+6a1856198db103285a259cc4,Arsenal adidas 26/27 Home Goalkeeper Socks,Phụ kiện,640000,19,9,4.22,2026-05-28T14:50:01.679Z
+6a1856198db103285a259cc7,Arsenal adidas Kids 26/27 Home Goalkeeper Socks,Phụ kiện,512000,24,9,4.22,2026-05-28T14:50:01.681Z
+6a1856198db103285a259ccd,Arsenal adidas 26/27 Red Backpack,Phụ kiện,1280000,10,3,4.67,2026-05-28T14:50:01.684Z
+6a1856198db103285a259cd3,Arsenal adidas 26/27 Mini Home Football Size 1,Phụ kiện,480000,15,3,4.67,2026-05-28T14:50:01.688Z
+6a1856198db103285a259cd6,Arsenal adidas 26/27 Home Scarf,Phụ kiện,736000,28,3,4.67,2026-05-28T14:50:01.690Z
+6a1856198db103285a259cdf,Arsenal adidas 26/27 Home Water Bottle,Phụ kiện,320000,19,3,4.67,2026-05-28T14:50:01.695Z
+6a1856198db103285a259ce2,Arsenal adidas 26/27 Home Knitted Gloves,Phụ kiện,736000,21,3,4.67,2026-05-28T14:50:01.697Z
+6a1856198db103285a259ce5,Arsenal adidas 26/27 Home Beanie,Phụ kiện,736000,19,3,4.67,2026-05-28T14:50:01.698Z
+6a1856198db103285a259ceb,Arsenal adidas 25/26 Away Mini Kit,Áo đấu,1600000,25,9,4.22,2026-05-28T14:50:01.701Z
+6a1856198db103285a259cf1,Arsenal adidas Kids 25/26 Away Shirt,Áo đấu,1920000,21,9,4.22,2026-05-28T14:50:01.704Z
+6a1856198db103285a259cfa,Arsenal adidas 25/26 Away Shorts,Quần,1216000,30,9,4.22,2026-05-28T14:50:01.708Z
+6a1856198db103285a259cfd,Arsenal adidas 25/26 Authentic Alternate Away Shorts,Quần,1440000,19,9,4.22,2026-05-28T14:50:01.709Z
+6a1856198db103285a259d03,Arsenal adidas Kids 25/26 Third Shirt,Áo đấu,1920000,25,9,4.22,2026-05-28T14:50:01.712Z
+6a1856198db103285a259d06,Arsenal adidas 25/26 Third Shorts,Quần,1216000,16,10,4.30,2026-05-28T14:50:01.713Z
+6a1856198db103285a259d09,Arsenal adidas 25/26 Third Mini Kit,Áo đấu,1600000,29,10,4.30,2026-05-28T14:50:01.715Z
+6a1856198db103285a259d0c,Arsenal 25/26 Third Goalkeeper Shirt,Áo đấu,1632000,13,10,4.30,2026-05-28T14:50:01.716Z
+6a1856198db103285a259d0f,Arsenal adidas Kids 25/26 Third Shorts,Quần,960000,28,9,4.22,2026-05-28T14:50:01.718Z
+6a1856198db103285a259d12,Arsenal adidas 25/26 Third Authentic Alternate Shorts,Quần,1440000,11,10,4.30,2026-05-28T14:50:01.719Z
+6a1856198db103285a259d15,Arsenal adidas Kids 25/26 Third Goalkeeper Shirt,Áo đấu,1920000,17,9,4.22,2026-05-28T14:50:01.721Z
+6a1856198db103285a259d18,Arsenal adidas 25/26 Third Socks,Phụ kiện,640000,21,10,4.30,2026-05-28T14:50:01.722Z
+6a18590b2bc10bb7e5e8643c,Arsenal adidas 26/27 Authentic Home Shirt,Áo đấu,3840000,15,3,4.67,2026-05-28T15:02:35.830Z
+6a18590b2bc10bb7e5e86443,Arsenal adidas 26/27 Home Shirt,Áo đấu,2720000,17,3,4.67,2026-05-28T15:02:35.844Z
+6a18590b2bc10bb7e5e86446,Arsenal adidas Womens 26/27 Home Shirt,Áo đấu,2720000,17,3,4.67,2026-05-28T15:02:35.846Z
+6a18590b2bc10bb7e5e86449,Arsenal adidas Kids 26/27 Home Shirt,Áo đấu,1920000,10,9,4.22,2026-05-28T15:02:35.848Z
+6a18590b2bc10bb7e5e8645a,Arsenal adidas 26/27 Home Shorts,Quần,1216000,13,9,4.22,2026-05-28T15:02:35.865Z
+6a18590b2bc10bb7e5e86463,Arsenal adidas 26/27 Home Socks,Phụ kiện,640000,23,9,4.22,2026-05-28T15:02:35.874Z
+6a18590b2bc10bb7e5e86474,Arsenal adidas 26/27 Home Black Backpack,Phụ kiện,1280000,30,3,4.67,2026-05-28T15:02:35.891Z
+6a18590b2bc10bb7e5e86479,Arsenal adidas 26/27 Home Football Size 5,Phụ kiện,640000,13,3,4.67,2026-05-28T15:02:35.896Z
+6a18590b2bc10bb7e5e86480,Arsenal adidas 26/27 Red Home Cap,Phụ kiện,640000,18,9,4.56,2026-05-28T15:02:35.908Z
+6a18590b2bc10bb7e5e86483,Arsenal adidas 26/27 White Home Cap,Phụ kiện,640000,16,9,4.56,2026-05-28T15:02:35.911Z
+6a18590b2bc10bb7e5e8648c,Arsenal adidas 25/26 Away Shirt,Áo đấu,2720000,14,9,4.22,2026-05-28T15:02:35.920Z
+6a18590b2bc10bb7e5e86491,Arsenal adidas 25/26 Authentic Away Shirt,Áo đấu,3840000,17,9,4.22,2026-05-28T15:02:35.925Z
+6a18590b2bc10bb7e5e86496,Arsenal adidas Kids 25/26 Away Shorts,Quần,960000,23,9,4.22,2026-05-28T15:02:35.929Z
+6a18590b2bc10bb7e5e86499,Arsenal adidas Kids 25/26 Away Socks,Phụ kiện,512000,15,9,4.22,2026-05-28T15:02:35.931Z
+6a18590b2bc10bb7e5e864a0,Arsenal adidas 25/26 Third Shirt,Áo đấu,2720000,18,10,4.30,2026-05-28T15:02:35.938Z

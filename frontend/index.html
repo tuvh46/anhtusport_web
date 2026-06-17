@@ -67,6 +67,35 @@
             text-decoration: underline;
             text-underline-offset: 4px;
         }
+        .category-filter-btn {
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            border: 2px solid #e5e7eb;
+            background-color: #f9fafb;
+            color: #374151;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            outline: none;
+        }
+        .category-filter-btn:hover {
+            border-color: #9b111e;
+            background-color: #9b111e;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(155, 17, 30, 0.2);
+            transform: translateY(-1px);
+        }
+        .category-filter-btn.active {
+            border-color: #9b111e;
+            background-color: #9b111e;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(155, 17, 30, 0.25);
+        }
         .header-search {
             display: flex;
             align-items: center;
@@ -113,6 +142,121 @@
         .group-hover\:block { display: none; }
         .group:hover .group-hover\:block { display: block; }
 
+        /* ── Product Section ── */
+        #product-list-section {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f7f5 40%, #f2f0ec 100%);
+        }
+        .section-header-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #9b111e;
+            margin-bottom: 10px;
+        }
+        .section-header-label::before {
+            content: '';
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: linear-gradient(90deg, #9b111e, #cc1c2f);
+            border-radius: 2px;
+        }
+        .product-section-wrapper {
+            position: relative;
+            padding: 60px 0;
+        }
+        .product-section-wrapper:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(155,17,30,0.15) 30%, rgba(155,17,30,0.3) 50%, rgba(155,17,30,0.15) 70%, transparent);
+        }
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 28px;
+            border: 1.5px solid rgba(0,0,0,0.12);
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #374151;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .view-all-btn:hover {
+            border-color: #9b111e;
+            color: #9b111e;
+            box-shadow: 0 6px 20px rgba(155,17,30,0.12);
+            transform: translateY(-1px);
+        }
+        .view-all-btn .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        .view-all-btn:hover .arrow-icon {
+            transform: translateX(4px);
+        }
+        .load-more-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 52px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: white;
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border: none;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+        .load-more-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #9b111e 0%, #cc1c2f 100%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            border-radius: inherit;
+        }
+        .load-more-btn:hover::before {
+            opacity: 1;
+        }
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(155,17,30,0.3);
+        }
+        .load-more-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        .load-more-btn:active {
+            transform: translateY(0);
+        }
+        /* Product grid animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ── Marquee ── */
         @keyframes marquee {
             0% {
@@ -127,6 +271,54 @@
             animation: marquee 22s linear infinite;
             white-space: nowrap;
             display: inline-block;
+        }
+
+        /* ── Parallax Video Banner & Watermark ── */
+        #index-hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+        #hero-parallax-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            will-change: transform;
+        }
+        #hero-parallax-content {
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+        
+        #product-list-section {
+            position: relative;
+            overflow: hidden;
+        }
+        .index-watermark-bg {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 750px;
+            height: 750px;
+            background: url('https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/1200px-Arsenal_FC.svg.png') no-repeat center/contain;
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        /* ── Scroll Reveal ── */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -164,7 +356,7 @@
                 <button class="header-tag-btn" data-tag="pants">Quần</button>
                 <button class="header-tag-btn" data-tag="shoes">Giày & Dép</button>
                 <button class="header-tag-btn" data-tag="accessory">Phụ kiện</button>
-                <a href="blog.html" class="header-tag-btn hover:text-[#9b111e] transition-colors">Blog / Tin tức</a>
+
                 <a href="about.html" class="header-tag-btn hover:text-[#9b111e] transition-colors">ABOUT US</a>
             </div>
 
@@ -221,11 +413,10 @@
             </div>
         </div>
     </nav>
-
     <!-- ════════════ HERO (VIDEO BANNER) ════════════ -->
-    <section class="relative w-full aspect-video flex items-center justify-center py-20 overflow-hidden">
+    <section class="relative w-full aspect-video flex items-center justify-center py-20 overflow-hidden" id="index-hero-section">
         <!-- Video background -->
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover" id="hero-parallax-video">
             <source src="http://localhost:5000/video/video.mp4" type="video/mp4">
             <source src="http://127.0.0.1:5000/video/video.mp4" type="video/mp4">
             <source src="video/video.mp4" type="video/mp4">
@@ -234,7 +425,7 @@
         </video>
         <div class="absolute inset-0 bg-black/60"></div>
 
-        <div class="relative z-10 container mx-auto px-8 max-w-6xl text-center flex flex-col items-center justify-center">
+        <div class="relative z-10 container mx-auto px-8 max-w-6xl text-center flex flex-col items-center justify-center" id="hero-parallax-content">
             <h1 class="font-sport text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.02] mb-4 uppercase tracking-wider drop-shadow-2xl">
                 ANHTU STORE
             </h1>
@@ -255,7 +446,6 @@
             <div class="w-px h-8 bg-gradient-to-b from-white/40 to-transparent group-hover:from-white group-hover:to-transparent transition-all duration-300"></div>
         </a>
     </section>
-
     <!-- ════════════ MARQUEE ════════════ -->
     <div class="bg-[#9b111e] py-3.5 overflow-hidden">
         <div class="marquee-content">
@@ -268,17 +458,142 @@
         </div>
     </div>
 
-    <main id="product-list-section" class="container mx-auto py-16 px-4">
-        <div class="flex justify-between items-end mb-12 border-b-2 border-black pb-4">
-            <h3 class="font-sport text-4xl font-bold uppercase">Sản phẩm mới</h3>
-            <span id="search-feedback" class="text-sm font-bold uppercase text-gray-400">Shop all</span>
+    <main id="product-list-section" class="w-full py-16 px-4 relative overflow-hidden">
+        <div class="index-watermark-bg" id="index-watermark"></div>
+        <!-- ── Thin accent line top ── -->
+        <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-[#9b111e]/20 to-transparent mb-12"></div>
+
+        <!-- 1. MULTI-SECTION VIEW (Show by default when tag is 'all' and search is empty) -->
+        <div id="homepage-multi-sections" class="max-w-[96%] mx-auto space-y-0">
+
+            <!-- Section: New Arrivals -->
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <p class="section-header-label">Xu hướng nổi bật</p>
+                        <h3 class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Hàng Mới Về</h3>
+                    </div>
+                    <button onclick="setFilterTag('new')" class="view-all-btn mt-5 md:mt-0">
+                        Xem tất cả
+                        <svg class="arrow-icon w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="new-arrivals-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+            </div>
+
+            <!-- Section: Collection 2025-2026 -->
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <p class="section-header-label">Đại chiến đương đại</p>
+                        <h3 class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Bộ Sưu Tập 2025/26</h3>
+                    </div>
+                    <button onclick="setFilterTag('collection-25-26')" class="view-all-btn mt-5 md:mt-0">
+                        Xem tất cả
+                        <svg class="arrow-icon w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="collection-25-26-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+            </div>
+
+            <!-- Section: Collection 2026-2027 -->
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <p class="section-header-label">Thời đại mới</p>
+                        <h3 class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Bộ Sưu Tập 2026/27</h3>
+                    </div>
+                    <button onclick="setFilterTag('collection-26-27')" class="view-all-btn mt-5 md:mt-0">
+                        Xem tất cả
+                        <svg class="arrow-icon w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="collection-26-27-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+            </div>
+
+            <!-- Section: Shirts -->
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <p class="section-header-label">Đẳng cấp pháo thủ</p>
+                        <h3 class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Áo Đấu Arsenal</h3>
+                    </div>
+                    <button onclick="setFilterTag('shirt')" class="view-all-btn mt-5 md:mt-0">
+                        Xem tất cả
+                        <svg class="arrow-icon w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="shirts-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+            </div>
+
+            <!-- Section: Pants -->
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <p class="section-header-label">Thi đấu &amp; tập luyện</p>
+                        <h3 class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Quần Đấu &amp; Tập</h3>
+                    </div>
+                    <button onclick="setFilterTag('pants')" class="view-all-btn mt-5 md:mt-0">
+                        Xem tất cả
+                        <svg class="arrow-icon w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="pants-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+            </div>
+
+            <!-- Section: Accessories -->
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <p class="section-header-label">Hoàn thiện phong cách</p>
+                        <h3 class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Phụ Kiện &amp; Đồ Tập</h3>
+                    </div>
+                    <button onclick="setFilterTag('accessory')" class="view-all-btn mt-5 md:mt-0">
+                        Xem tất cả
+                        <svg class="arrow-icon w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="accessories-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+            </div>
+
         </div>
-        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <p class="col-span-full text-center py-20 font-sport text-xl animate-pulse">Đang tải sản phẩm...</p>
+
+        <!-- 2. UNIFIED FILTER VIEW (Show when a category filter is active or search is entered) -->
+        <div id="homepage-unified-view" class="hidden max-w-[96%] mx-auto">
+            <div class="product-section-wrapper scroll-reveal">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                    <div>
+                        <span id="search-feedback" class="section-header-label">Shop all</span>
+                        <h3 id="unified-section-title" class="font-sport text-4xl md:text-[52px] font-black uppercase tracking-wide text-gray-900 leading-none">Danh sách sản phẩm</h3>
+                    </div>
+                </div>
+                <div id="product-list" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7"></div>
+                <div id="load-more-container" class="text-center mt-16 hidden">
+                    <button onclick="loadMoreProducts()" class="load-more-btn">
+                        <span>Xem thêm sản phẩm</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="relative z-10 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <p class="text-xs text-gray-400 mt-4 font-sans tracking-widest uppercase">Tải thêm sản phẩm phù hợp</p>
+                </div>
+            </div>
         </div>
-        <div id="load-more-container" class="text-center mt-12 hidden">
-            <button onclick="loadMoreProducts()" class="bg-transparent border-2 border-black text-black px-10 py-3 font-bold uppercase tracking-widest hover:bg-black hover:text-white transition outline-none">Xem thêm</button>
-        </div>
+
+        <!-- ── Thin accent line bottom ── -->
+        <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-[#9b111e]/20 to-transparent mt-8"></div>
     </main>
 
     <!-- Mini Slider Banner -->
@@ -374,10 +689,7 @@
                             class="text-gray-400 hover:text-white text-sm group flex items-center gap-2 transition-all duration-200"><span
                                 class="w-1 h-1 rounded-full bg-[#9b111e] group-hover:w-3 transition-all duration-300 inline-block"></span>Giới
                             thiệu về Arsenal Direct</a></li>
-                    <li><a href="blog.html"
-                            class="text-gray-400 hover:text-white text-sm group flex items-center gap-2 transition-all duration-200"><span
-                                class="w-1 h-1 rounded-full bg-[#9b111e] group-hover:w-3 transition-all duration-300 inline-block"></span>Blog
-                            / Tin tức bóng đá</a></li>
+
                     <li><a href="about.html#stores"
                             class="text-gray-400 hover:text-white text-sm group flex items-center gap-2 transition-all duration-200"><span
                                 class="w-1 h-1 rounded-full bg-[#9b111e] group-hover:w-3 transition-all duration-300 inline-block"></span>Hệ
@@ -472,8 +784,7 @@
                     <a href="index.html" class="hover:text-gray-300 transition-colors">Trang chủ</a>
                     <span class="text-gray-700">·</span>
                     <a href="about.html" class="hover:text-gray-300 transition-colors">Giới thiệu</a>
-                    <span class="text-gray-700">·</span>
-                    <a href="blog.html" class="hover:text-gray-300 transition-colors">Blog</a>
+
                     <span class="text-gray-700">·</span>
                     <a href="profile.html" class="hover:text-gray-300 transition-colors">Tài khoản</a>
                 </div>
@@ -627,6 +938,61 @@
                     sessionStorage.setItem('welcomePopupShown', 'true');
                 }, 3000); // Đợi 3 giây
             }
+
+            // --- SCROLL REVEAL INTERSECTION OBSERVER ---
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.05,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // --- INDEX PARALLAX SCROLL CONTROLLER ---
+            let indexScrollY = 0;
+            const video = document.getElementById('hero-parallax-video');
+            const content = document.getElementById('hero-parallax-content');
+            const watermark = document.getElementById('index-watermark');
+
+            window.addEventListener('scroll', () => {
+                indexScrollY = window.scrollY;
+                requestAnimationFrame(updateIndexParallax);
+            });
+
+            function updateIndexParallax() {
+                // Parallax video banner
+                if (video) {
+                    video.style.transform = `translate3d(0, ${indexScrollY * 0.35}px, 0)`;
+                }
+
+                // Hero content drift & fade
+                if (content) {
+                    const opacity = Math.max(0, 1 - indexScrollY / 450);
+                    const scale = 1 - indexScrollY / 2200;
+                    content.style.opacity = opacity;
+                    content.style.transform = `translate3d(0, ${indexScrollY * 0.2}px, 0) scale(${scale})`;
+                }
+
+                // Subtle watermark parallax drift
+                if (watermark) {
+                    const rect = watermark.parentElement.getBoundingClientRect();
+                    const viewportHeight = window.innerHeight;
+                    if (rect.top < viewportHeight && rect.bottom > 0) {
+                        const offset = (viewportHeight / 2 - rect.top) * 0.08;
+                        watermark.style.transform = `translate3d(-50%, calc(-50% + ${offset}px), 0)`;
+                    }
+                }
+            }
+            // Trigger once initially
+            updateIndexParallax();
         });
 
         function closeWelcomePopup() {

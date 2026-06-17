@@ -1,238 +1,213 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const path = require('path');
-const connectDB = require('./config/db');
-const User = require('./models/User');
-const Notification = require('./models/Notification'); // Thêm Notification model
-const Order = require('./models/Order');
-const Product = require('./models/Product');
-const Voucher = require('./models/Voucher'); // Thêm Voucher model
+// ─── Imports ──────────────────────────────────────────────────────────────────
+const mongoose    = require('mongoose');
+const dotenv      = require('dotenv');
+const path        = require('path');
+const https       = require('https');
+const connectDB   = require('./config/db');
+const User        = require('./models/User');
+const Notification = require('./models/Notification');
+const Order       = require('./models/Order');
+const Product     = require('./models/Product');
+const Voucher     = require('./models/Voucher');
 
-// Nạp biến môi trường
 dotenv.config({ path: path.join(__dirname, '.env') });
-
-// Kết nối Database
 connectDB();
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+const FOOTBALL_API = {
+    hostname: 'api.football-data.org',
+    path:     '/v4/teams/57/matches?status=FINISHED&season=2025&limit=100',
+    headers:  { 'X-Auth-Token': '216307f036cd4ba0b20305ec3c1317b2' }
+};
+
+const CITIES = {
+    'Hà Nội':      { 'Quận Đống Đa':    ['Phường Ngã Tư Sở', 'Phường Ô Chợ Dừa', 'Phường Trung Liệt'],
+                     'Quận Cầu Giấy':   ['Phường Dịch Vọng', 'Phường Quan Hoa', 'Phường Trung Hòa'],
+                     'Quận Thanh Xuân': ['Phường Thanh Xuân Bắc', 'Phường Thanh Xuân Nam', 'Phường Thượng Đình'] },
+    'Hồ Chí Minh': { 'Quận 1':          ['Phường Bến Nghé', 'Phường Bến Thành', 'Phường Phạm Ngũ Lão'],
+                     'Quận 3':          ['Phường 1', 'Phường 2', 'Phường 3'],
+                     'Quận Bình Thạnh': ['Phường 1', 'Phường 3', 'Phường 5'] },
+    'Đà Nẵng':     { 'Quận Hải Châu':   ['Phường Hải Châu 1', 'Phường Hải Châu 2', 'Phường Thạch Thang'],
+                     'Quận Sơn Trà':    ['Phường An Hải Bắc', 'Phường An Hải Tây', 'Phường An Hải Đông'] }
+};
+
+const STREETS = ['Đường Nguyễn Trãi', 'Đường Lê Lợi', 'Đường Trần Hưng Đạo',
+                 'Đường Hai Bà Trưng', 'Đường Phan Đình Phùng', 'Đường Lý Thường Kiệt',
+                 'Đường Hoàng Diệu', 'Đường Quang Trung'];
+
+const NAMES = {
+    last:         ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương', 'Lý'],
+    maleMiddle:   ['Văn', 'Hữu', 'Công', 'Quang', 'Minh', 'Xuân', 'Đình', 'Đức', 'Ngọc', 'Hải'],
+    femaleMiddle: ['Thị', 'Ngọc', 'Thu', 'Phương', 'Thanh', 'Hồng', 'Mỹ', 'Thúy', 'Lan', 'Bích'],
+    maleFirst:    ['Dũng', 'Hùng', 'Mạnh', 'Thắng', 'Đạt', 'Tuấn', 'Kiên', 'Cường', 'Khoa', 'Thành', 'Long', 'Phúc', 'Bảo', 'Phong', 'Quân'],
+    femaleFirst:  ['Hoa', 'Hương', 'Linh', 'Trang', 'Nga', 'Anh', 'Nhung', 'Trà', 'My', 'Vy', 'Yến', 'Hà', 'Nhi', 'Ly', 'Dung']
+};
+
+const PHONE_PREFIXES  = ['03', '05', '07', '08', '09'];
+const PAYMENT_METHODS = ['COD', 'Banking', 'Momo', 'VNPay'];
+const SIZES           = ['S', 'M', 'L', 'XL'];
+const ORDER_STATUSES  = ['delivered','delivered','delivered','delivered','delivered','shipping','shipping','pending','cancelled'];
+const RESULT_MULTS    = { WIN: [4.0, 3.5, 2.5, 1.8], DRAW: [2.0, 1.5, 1.2, 1.0], LOSS: [1.0, 0.8, 0.7, 0.6] };
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+const pick    = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const randPhone = () => `${pick(PHONE_PREFIXES)}${Math.floor(Math.random() * 1e8).toString().padStart(8, '0')}`;
+
+const randFullName = () => {
+    const male = Math.random() > 0.5;
+    return `${pick(NAMES.last)} ${pick(male ? NAMES.maleMiddle : NAMES.femaleMiddle)} ${pick(male ? NAMES.maleFirst : NAMES.femaleFirst)}`;
+};
+
+const randAddress = () => {
+    const city     = pick(Object.keys(CITIES));
+    const district = pick(Object.keys(CITIES[city]));
+    const ward     = pick(CITIES[city][district]);
+    return `Số ${randInt(1, 200)} ${pick(STREETS)}, ${ward}, ${district}, ${city}`;
+};
+
+// Tạo object user giả
+const makeFakeUser = (index) => ({
+    name: randFullName(), email: `khachhang${Date.now() + index}@gmail.com`,
+    password: 'password123', phone: randPhone(), address: randAddress(), isAdmin: false
+});
+
+// Fetch trận đấu Arsenal từ football-data.org API
+const fetchArsenalMatches = () => new Promise((resolve, reject) => {
+    https.get(FOOTBALL_API, (res) => {
+        let raw = '';
+        res.on('data', chunk => raw += chunk);
+        res.on('end', () => {
+            try {
+                const { matches = [] } = JSON.parse(raw);
+                resolve(matches.map(m => {
+                    const isHome = m.homeTeam.name === 'Arsenal FC';
+                    const winner = m.score?.winner;
+                    const result = winner === 'DRAW'                                      ? 'DRAW'
+                                 : (isHome && winner === 'HOME_TEAM') ||
+                                   (!isHome && winner === 'AWAY_TEAM')                    ? 'WIN' : 'LOSS';
+                    return { date: m.utcDate.slice(0, 10), result };
+                }));
+            } catch (e) { reject(e); }
+        });
+    }).on('error', reject);
+});
+
+// Xây dựng map: ngày → multiplier đơn hàng dựa trên kết quả trận đấu
+const buildDateMultiplier = (matches) => {
+    const map = {};
+    for (const { date, result } of matches) {
+        const mults = RESULT_MULTS[result];
+        for (let d = 0; d < 4; d++) {
+            const day = new Date(date);
+            day.setDate(day.getDate() + d);
+            const key = day.toISOString().slice(0, 10);
+            map[key] = Math.max(map[key] || 0, mults[d]);
+        }
+    }
+    return map;
+};
+
+// Tạo danh sách orderItems từ sản phẩm còn hàng
+const makeOrderItems = (products) => {
+    let totalPrice = 0;
+    const items = Array.from({ length: randInt(1, 2) }, () => {
+        const prod = pick(products);
+        const qty  = randInt(1, 2);
+        totalPrice += prod.price * qty;
+        return { id: prod._id, name: prod.name, image: prod.image, price: prod.price, qty, size: pick(SIZES) };
+    });
+    return { items, totalPrice };
+};
+
+// Tạo một document đơn hàng
+const makeOrder = (user, products, date) => {
+    const { items, totalPrice } = makeOrderItems(products);
+    const parts = user.address.split(', ');
+    const city  = parts.pop();
+    return {
+        user: user._id,
+        orderItems: items,
+        shippingAddress: { fullname: user.name, phone: user.phone, address: parts.join(', '), city },
+        paymentMethod: pick(PAYMENT_METHODS),
+        totalPrice,
+        shippingFee: Math.random() > 0.35 ? 30000 : 0,
+        discount: 0, note: '',
+        status: pick(ORDER_STATUSES),
+        createdAt: date, updatedAt: date
+    };
+};
+
+// Sinh toàn bộ đơn hàng cho mùa giải dựa trên multiplier
+const generateSeasonOrders = (users, products, dateMultiplier) => {
+    const orders = [];
+    for (let d = new Date('2025-08-01'); d <= new Date('2026-06-05'); d.setDate(d.getDate() + 1)) {
+        const mult = dateMultiplier[d.toISOString().slice(0, 10)] || 0.3;
+        const n    = Math.max(1, Math.round(2 * mult) + randInt(0, 1));
+        for (let i = 0; i < n; i++) orders.push(makeOrder(pick(users), products, new Date(d)));
+    }
+    return orders;
+};
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 const importMockData = async () => {
     try {
         console.log('⏳ Đang tạo dữ liệu khách hàng và đơn hàng giả...');
 
-        // 0. Làm sạch dữ liệu: Tìm và xóa khách hàng giả cũ cùng toàn bộ đơn hàng của họ
-        const fakeUsers = await User.find({ email: { $regex: '^khachhang' } });
-        const existingAdmin = await User.findOne({ isAdmin: true }); // Tìm admin thật
-        const fakeUserIds = fakeUsers.map(u => u._id);
+        // 0. Làm sạch dữ liệu cũ
+        const fakeUsers    = await User.find({ email: { $regex: '^khachhang' } });
+        const existingAdmin = await User.findOne({ isAdmin: true });
+        const fakeUserIds  = fakeUsers.map(u => u._id);
 
-        const deletedOrders = await Order.deleteMany({ 
-            $or: [
-                { user: { $in: fakeUserIds } },
-                { user: null }, 
-                { user: { $exists: false } }, 
-                { totalPrice: 0 }
-            ] 
-        });
-        const deletedUsers = await User.deleteMany({ _id: { $in: fakeUserIds } });
-        // Xóa tất cả reviews cũ của sản phẩm
-        await Product.updateMany({}, { $set: { reviews: [] } });
-        // Xóa tất cả notifications cũ
-        await Notification.deleteMany({});
-        // Xóa tất cả vouchers cũ
-        await Voucher.deleteMany({});
-
+        const [deletedOrders, deletedUsers] = await Promise.all([
+            Order.deleteMany({ $or: [{ user: { $in: fakeUserIds } }, { user: null }, { user: { $exists: false } }, { totalPrice: 0 }] }),
+            User.deleteMany({ _id: { $in: fakeUserIds } }),
+            Product.updateMany({}, { $set: { reviews: [] } }),
+            Notification.deleteMany({}),
+            Voucher.deleteMany({})
+        ]);
         console.log(`Đã xóa ${deletedUsers.deletedCount} khách hàng giả cũ, ${deletedOrders.deletedCount} đơn hàng cũ/rác, tất cả reviews, notifications và vouchers.`);
 
-        // 1. Lấy danh sách TẤT CẢ sản   phẩm (cho Reviews)
+        // 1. Lấy sản phẩm
         const allProducts = await Product.find();
-        if (allProducts.length === 0) {
-            console.log('⚠️ Không có sản phẩm nào. Vui lòng chạy file seeder.js trước!');
-            process.exit();
-        }
-        // Lọc sản phẩm còn hàng (cho Orders)
-        const stockedProducts = allProducts.filter(p => (p.stock !== undefined ? p.stock > 0 : p.countInStock > 0));
-        if (stockedProducts.length === 0) {
-            console.log('Không có sản phẩm nào còn hàng để tạo đơn hàng. Vui lòng kiểm tra lại!');
-        }
+        if (!allProducts.length) { console.log('⚠️ Không có sản phẩm nào. Vui lòng chạy file seeder.js trước!'); return process.exit(); }
+        const stockedProducts = allProducts.filter(p => (p.stock ?? p.countInStock) > 0);
 
-        const citiesData = {
-            'Hà Nội': {
-                'Quận Đống Đa': ['Phường Ngã Tư Sở', 'Phường Ô Chợ Dừa', 'Phường Trung Liệt'],
-                'Quận Cầu Giấy': ['Phường Dịch Vọng', 'Phường Quan Hoa', 'Phường Trung Hòa'],
-                'Quận Thanh Xuân': ['Phường Thanh Xuân Bắc', 'Phường Thanh Xuân Nam', 'Phường Thượng Đình']
-            },
-            'Hồ Chí Minh': {
-                'Quận 1': ['Phường Bến Nghé', 'Phường Bến Thành', 'Phường Phạm Ngũ Lão'],
-                'Quận 3': ['Phường 1', 'Phường 2', 'Phường 3'],
-                'Quận Bình Thạnh': ['Phường 1', 'Phường 3', 'Phường 5']
-            },
-            'Đà Nẵng': {
-                'Quận Hải Châu': ['Phường Hải Châu 1', 'Phường Hải Châu 2', 'Phường Thạch Thang'],
-                'Quận Sơn Trà': ['Phường An Hải Bắc', 'Phường An Hải Tây', 'Phường An Hải Đông']
-            }
-        };
-        const streetNames = ['Đường Nguyễn Trãi', 'Đường Lê Lợi', 'Đường Trần Hưng Đạo', 'Đường Hai Bà Trưng', 'Đường Phan Đình Phùng', 'Đường Lý Thường Kiệt', 'Đường Hoàng Diệu', 'Đường Quang Trung'];
-
-        // 2. Tạo 20 khách hàng giả
-        const usersToInsert = [];
-        const vnPrefixes = ['03', '05', '07', '08', '09'];
-        
-        const lastNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương', 'Lý'];
-        const maleMiddleNames = ['Văn', 'Hữu', 'Công', 'Quang', 'Minh', 'Xuân', 'Đình', 'Đức', 'Ngọc', 'Hải'];
-        const femaleMiddleNames = ['Thị', 'Ngọc', 'Thu', 'Phương', 'Thanh', 'Hồng', 'Mỹ', 'Thúy', 'Lan', 'Bích'];
-        const maleFirstNames = ['Dũng', 'Hùng', 'Mạnh', 'Thắng', 'Đạt', 'Tuấn', 'Kiên', 'Cường', 'Khoa', 'Thành', 'Long', 'Phúc', 'Bảo', 'Phong', 'Quân'];
-        const femaleFirstNames = ['Hoa', 'Hương', 'Linh', 'Trang', 'Nga', 'Anh', 'Nhung', 'Trà', 'My', 'Vy', 'Yến', 'Hà', 'Nhi', 'Ly', 'Dung'];
-
-        for (let i = 1; i <= 20; i++) {
-            const prefix = vnPrefixes[Math.floor(Math.random() * vnPrefixes.length)];
-            const suffix = Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
-            
-            // Sinh ngẫu nhiên giới tính và tên
-            const isMale = Math.random() > 0.5;
-            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-            const middleName = isMale ? maleMiddleNames[Math.floor(Math.random() * maleMiddleNames.length)] : femaleMiddleNames[Math.floor(Math.random() * femaleMiddleNames.length)];
-            const firstName = isMale ? maleFirstNames[Math.floor(Math.random() * maleFirstNames.length)] : femaleFirstNames[Math.floor(Math.random() * femaleFirstNames.length)];
-            const fullName = `${lastName} ${middleName} ${firstName}`;
-
-            // Sinh địa chỉ ngẫu nhiên cho khách hàng
-            const cityNames = Object.keys(citiesData);
-            const randomCity = cityNames[Math.floor(Math.random() * cityNames.length)];
-            const districtNames = Object.keys(citiesData[randomCity]);
-            const randomDistrict = districtNames[Math.floor(Math.random() * districtNames.length)];
-            const wards = citiesData[randomCity][randomDistrict];
-            const randomWard = wards[Math.floor(Math.random() * wards.length)];
-            const randomStreet = streetNames[Math.floor(Math.random() * streetNames.length)];
-            const houseNumber = Math.floor(Math.random() * 200) + 1;
-
-            const uniqueId = Date.now() + i; // Sinh ID độc nhất để tránh trùng lặp email
-            usersToInsert.push({
-                name: fullName,
-                email: `khachhang${uniqueId}@gmail.com`,
-                password: 'password123', // Mật khẩu giả
-                phone: `${prefix}${suffix}`,
-                address: `Số ${houseNumber} ${randomStreet}, ${randomWard}, ${randomDistrict}, ${randomCity}`,
-                isAdmin: false
-            });
-        }
-        
-        const createdUsers = await User.insertMany(usersToInsert); // Tạo 20 khách hàng giả
+        // 2. Tạo khách hàng giả
+        const createdUsers = await User.insertMany(Array.from({ length: 20 }, (_, i) => makeFakeUser(i)));
         console.log(`Đã tạo ${createdUsers.length} khách hàng giả.`);
 
-        // 3. Tạo các đơn hàng ngẫu nhiên từ tháng 1 đến tháng 4
-        const ordersToInsert = [];
-        // Phân bổ trạng thái ngẫu nhiên (nhiều đơn đã giao hơn)
-        const statuses = ['delivered', 'delivered', 'delivered', 'delivered', 'delivered', 'delivered', 'shipping', 'shipping', 'pending', 'cancelled'];
-        
-        // Sử dụng năm hiện tại (hoặc có thể tuỳ chỉnh năm)
-        const currentYear = new Date().getFullYear(); 
-
-        for (const user of createdUsers) {
-            // Mỗi khách hàng mua 1 - 4 đơn
-            const numOrders = Math.floor(Math.random() * 4) + 1; 
-            
-            for (let j = 0; j < numOrders; j++) {
-                // Random tháng 1, 2, 3, 4 (chỉ số 0 đến 3 trong object Date)
-                const month = Math.floor(Math.random() * 4); 
-                const day = Math.floor(Math.random() * 28) + 1;
-                const orderDate = new Date(currentYear, month, day, Math.floor(Math.random() * 23), Math.floor(Math.random() * 59));
-                
-                const orderItems = [];
-                const numItems = Math.floor(Math.random() * 3) + 1;
-                let totalPrice = 0;
-                
-                for (let k = 0; k < numItems; k++) {
-                    const randomProduct = stockedProducts[Math.floor(Math.random() * stockedProducts.length)]; // Chỉ chọn sản phẩm còn hàng
-                    const qty = Math.floor(Math.random() * 2) + 1;
-                    
-                    orderItems.push({
-                        id: randomProduct._id,
-                        name: randomProduct.name,
-                        image: randomProduct.image,
-                        price: randomProduct.price,
-                        qty: qty,
-                        size: ['S', 'M', 'L', 'XL'][Math.floor(Math.random() * 4)]
-                    });
-                    
-                    totalPrice += randomProduct.price * qty;
-                }
-
-                // Tách địa chỉ của khách hàng để điền vào đơn hàng
-                const addressParts = user.address.split(', ');
-                const orderCity = addressParts.pop(); // Lấy thành phố ra
-                const orderAddress = addressParts.join(', '); // Phần còn lại là địa chỉ
-
-                // Số điện thoại dự phòng (nếu User Schema không lưu phone dẫn đến bị undefined)
-                const fallbackPhone = `${vnPrefixes[Math.floor(Math.random() * vnPrefixes.length)]}${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`;
-
-                // 10% cơ hội khách hàng có thêm ghi chú
-                const notes = ['Giao vào giờ hành chính', 'Gọi trước khi giao nhé', 'Vui lòng giao cho bảo vệ', 'Giao ngoài giờ hành chính', 'Đóng gói cẩn thận giúp mình'];
-                const orderNote = Math.random() < 0.1 ? notes[Math.floor(Math.random() * notes.length)] : '';
-
-                ordersToInsert.push({
-                    user: user._id,
-                    orderItems: orderItems,
-                    shippingAddress: {
-                        fullname: user.name,
-                        phone: user.phone || fallbackPhone,
-                        address: orderAddress,
-                        city: orderCity
-                    },
-                    paymentMethod: 'COD',
-                    totalPrice: totalPrice,
-                    shippingFee: 30000,
-                    discount: 0,
-                    note: orderNote,
-                    status: statuses[Math.floor(Math.random() * statuses.length)],
-                    createdAt: orderDate,
-                    updatedAt: orderDate
-                });
-            }
-        }
-
-        // Chèn vào Database
+        // 3. Fetch lịch thi đấu Arsenal → sinh đơn hàng theo ngày thi đấu thật
+        console.log('⚽ Đang fetch lịch thi đấu Arsenal từ football-data.org API...');
+        const arsenalMatches  = await fetchArsenalMatches();
+        console.log(`   ✅ Fetched ${arsenalMatches.length} trận đấu thật từ API`);
+        const ordersToInsert  = generateSeasonOrders(createdUsers, stockedProducts, buildDateMultiplier(arsenalMatches));
         await Order.insertMany(ordersToInsert);
-        console.log(`Đã tạo ${ordersToInsert.length} đơn hàng giả rải rác trong tháng 1, 2, 3 và 4.`);
+        console.log(`✅ Đã tạo ${ordersToInsert.length} đơn hàng theo lịch thi đấu Arsenal 2025/26.`);
 
-        // --- TẠO VOUCHER MẶC ĐỊNH ---
+        // 4. Tạo Voucher mặc định
         const expiryDate = new Date();
-        expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Hết hạn sau 1 năm
-
-        await Voucher.create({
-            code: 'ARSENALNEW',
-            discount: 10,
-            type: 'percent',
-            uses: 9999,
-            expires: expiryDate,
-            category: ''
-        });
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+        await Voucher.create({ code: 'ARSENALNEW', discount: 10, type: 'percent', uses: 9999, expires: expiryDate, category: '' });
         console.log('✅ Đã tạo voucher ARSENALNEW mới, hết hạn sau 1 năm.');
 
-
-        // --- Bắt đầu phần sinh Reviews và Replies ---
-
-        // 4. Sinh dữ liệu đánh giá (Reviews) và phản hồi (Replies)
+        // 5. Sinh Reviews và Replies
         console.log(' Đang tạo dữ liệu đánh giá và phản hồi giả...');
-
-        const allReviewers = [...createdUsers];
+        const allReviewers      = [...createdUsers];
         const customerReviewers = [...createdUsers];
-        let adminForReplies = existingAdmin;
+        let adminForReplies     = existingAdmin;
 
         if (existingAdmin) {
             allReviewers.push(existingAdmin);
-        } else {
-            // Nếu chưa có admin thật, tạo một admin tạm thời từ fake user đầu tiên
-            if (createdUsers.length > 0) {
-                createdUsers[0].isAdmin = true;
-                createdUsers[0].name = 'Admin Cửa Hàng';
-                createdUsers[0].email = 'admin@sportstore.com';
-                await createdUsers[0].save();
-                adminForReplies = createdUsers[0];
-            }
+        } else if (createdUsers.length > 0) {
+            createdUsers[0].isAdmin = true;
+            createdUsers[0].name   = 'Admin Cửa Hàng';
+            createdUsers[0].email  = 'admin@sportstore.com';
+            await createdUsers[0].save();
+            adminForReplies = createdUsers[0];
         }
-        
-        // Nếu vẫn không có reviewer nào, dừng lại
-        if (allReviewers.length === 0) {
-            console.log(' Không có người dùng nào để tạo đánh giá. Vui lòng kiểm tra lại!');
-            process.exit();
-        }
+        if (!allReviewers.length) { console.log(' Không có người dùng nào để tạo đánh giá.'); process.exit(); }
+
 
         // ============================================================
         // DỮ LIỆU ĐÁNH GIÁ THỦ CÔNG – Mỗi sản phẩm 9-10 review logic
